@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@layer theme {
+  :root {
+    --font-family: "Open Sans", sans-serif;
+    --app-color: #0A62D0;
+    --page-bg: #F0F2F5;
+
+    --sidebar-bg: white;
+    --sidebar-link-color: #5B616A;
+    --sidebar-link-hover-bg: #F5F5F5;
+
+    --navbar-color: var(--sidebar-link-color);
+    --navbar-mode-button-bg: #E6E6E6;
+    --navbar-mode-button-border-color: #9398A3;
+    --navbar-mode-button-round-bg: white;
+    --navbar-mode-button-icon-color: var(--sidebar-link-color);
+    --navbar-mode-button-hover-border-color: #484E59;
+
+    --section-container-color: var(--sidebar-link-color);
+    --section-container-bg: white;
+    --section-container-border-color: white;
+
+    --table-label-color: var(--sidebar-link-color);
+    --table-data-color: var(--sidebar-link-color);
+    --table-data-bg: #FAFAFA;
+  }
+
+  .dark {
+    --font-family: "Open Sans", sans-serif;
+    --app-color: #8980AB;
+    --page-bg: #131314;
+    
+    --sidebar-bg: #1A191C;
+    --sidebar-link-color: #E3E1EB;
+    --sidebar-link-hover-bg: #2B2B33;
+    --sidebar-link-hover-border-color: #3E384A;
+
+    --navbar-color: var(--sidebar-link-color);
+    --navbar-mode-button-bg: #222730;
+    --navbar-mode-button-border-color: #484E59;
+    --navbar-mode-button-round-bg: #101318;
+    --navbar-mode-button-icon-color: var(--sidebar-link-color);
+    --navbar-mode-button-hover-border-color: #787E8A;
+
+    --section-container-color: var(--sidebar-link-color);
+    --section-container-bg: #1A191C;
+    --section-container-border-color: #242129;
+
+    --table-label-color: var(--sidebar-link-color);
+    --table-data-color: var(--sidebar-link-color);
+    --table-data-bg: #222024;
+  }
+}
