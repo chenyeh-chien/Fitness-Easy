@@ -8,7 +8,7 @@ const value = 2700;
 
 <template>
   <div class="flex flex-wrap gap-10">
-    <div class="flex gap-10 md:flex-col">
+    <div class="flex flex-wrap gap-10 md:flex-col">
       <div>
         <DigitScroller
           :data="value"
@@ -23,8 +23,8 @@ const value = 2700;
         <RemainNutrients />
       </div>
     </div>
-    <div class="flex justify-center">
-      <div class="h-30 w-100">
+    <div class="w-full flex justify-center md:w-auto">
+      <div class="w-full max-w-100 h-30 md:w-100"> <!-- h-30 w-100 -->
         <NutrientsPercentage />
       </div>
     </div>
