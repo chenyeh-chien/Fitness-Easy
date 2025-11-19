@@ -12,13 +12,13 @@ document.documentElement.className = "dark";
 <template>
   <div 
     :class="clsx(
-      'w-full h-screen bg-(--page-bg)',
+      'w-full h-max min-h-screen bg-(--page-bg)',
       'flex font-(family-name:--font-family)'
     )">
     <SidebarMain />
     <div class="flex flex-col w-full">
       <NavbarMain />
-      <main class="p-4">
+      <main class="p-4 mt-10 ml-(--sidebar-width) md:ml-(--sidebar-md-width)">
         <RouterView />
       </main>
     </div>

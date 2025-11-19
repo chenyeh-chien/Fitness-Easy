@@ -31,7 +31,8 @@ const navInfos = [
 <template>
   <aside 
     :class="clsx(
-      'md:w-60 h-screen bg-(--sidebar-bg) flex justify-center p-2'
+      'fixed w-(--sidebar-width) z-10',
+      'md:w-(--sidebar-md-width) h-screen bg-(--sidebar-bg) flex justify-center p-2'
     )">
     <nav 
       class="flex flex-col gap-10 pt-1"

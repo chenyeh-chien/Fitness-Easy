@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import { clsx } from 'clsx'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ModeButton from './ModeButton.vue';
 </script>
 
 <template>
-  <div class="p-3 flex justify-end gap-4">
+  <div 
+    :class="clsx(
+      'fixed z-9 w-full p-3 flex justify-end gap-4',
+      'bg-(--navbar-bg)'
+    )">
     <div>
       <button 
         class="w-max text-(--navbar-color) hover:cursor-pointer">
