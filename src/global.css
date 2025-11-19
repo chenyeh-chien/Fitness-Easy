@@ -4,10 +4,11 @@
   :root {
     --font-family: "Open Sans", sans-serif;
     --app-color: #0A62D0;
+    --app-name-color: var(--sidebar-link-color);
     --page-bg: #F0F2F5;
 
     --sidebar-width: 60px;
-    --sidebar-md-width: 240px;
+    --sidebar-md-width: 200px;
     --sidebar-bg: white;
     --sidebar-link-color: #5B616A;
     --sidebar-link-hover-bg: #F5F5F5;
@@ -32,10 +33,11 @@
   .dark {
     --font-family: "Open Sans", sans-serif;
     --app-color: #8980AB;
+    --app-name-color: var(--sidebar-link-color);
     --page-bg: #131314;
     
     --sidebar-width: 50px;
-    --sidebar-md-width: 240px;
+    --sidebar-md-width: 200px;
     --sidebar-bg: #1A191C;
     --sidebar-link-color: #E3E1EB;
     --sidebar-link-hover-bg: #2B2B33;

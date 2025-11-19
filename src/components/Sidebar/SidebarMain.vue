@@ -39,7 +39,7 @@ const navInfos = [
       aria-label="Main navigation">
       <RouterLink
         :class="clsx(
-          'w-9 h-9 text-white px-3 py-1 rounded-lg duration-500',
+          'w-9 h-9 text-(--app-name-color) px-3 py-1 rounded-lg duration-500',
           'flex justify-center items-center gap-3',
           'md:w-full md:justify-start',
           'hover:bg-(--sidebar-link-hover-bg) hover:cursor-pointer'
