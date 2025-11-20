@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { toRefs } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import { clsx } from "clsx"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
 import type { SidebarLinkInfo } from "./Sidebar.types"
 
 interface Props {
@@ -12,6 +11,7 @@ interface Props {
 
 const props = defineProps<Props>();
 const { info } = toRefs(props);
+const route = useRoute();
 
 </script>
 
@@ -21,8 +21,8 @@ const { info } = toRefs(props);
       'w-9 h-9 text-(--sidebar-link-color) text-sm px-3 py-1 rounded-lg',
       'flex justify-center items-center gap-3',
       'md:w-full md:justify-start',
-      'hover:bg-(--sidebar-link-hover-bg) hover:cursor-pointer',
-      'duration-500'
+      'hover:bg-(--sidebar-link-hover-bg) hover:cursor-pointer duration-500',
+      route.path === info.link && 'bg-(--sidebar-link-hover-bg)'
     )"
     :to="info.link">
     <div>

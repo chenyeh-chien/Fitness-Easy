@@ -7,7 +7,7 @@
     --app-name-color: var(--sidebar-link-color);
     --page-bg: #F0F2F5;
 
-    --sidebar-width: 60px;
+    --sidebar-width: 50px;
     --sidebar-md-width: 200px;
     --sidebar-bg: white;
     --sidebar-link-color: #5B616A;
@@ -23,11 +23,22 @@
 
     --section-container-color: var(--sidebar-link-color);
     --section-container-bg: white;
-    --section-container-border-color: white;
+    --section-container-border-color: #EBEEF2;
 
     --table-label-color: var(--sidebar-link-color);
     --table-data-color: var(--sidebar-link-color);
     --table-data-bg: #FAFAFA;
+
+    --login-bg: var(--sidebar-bg);
+    --login-border-color: var(--section-container-border-color);
+
+    --button-color: var(--sidebar-link-color);
+    --button-bg: var(--section-container-bg);
+    --button-border: var(--section-container-border-color);
+    --button-box-shadow: 0 0 4px rgba(0,0,0,0.3);
+
+    --textbox-bg: #F7F8FA;
+    --textbox-color: var(--sidebar-link-color);
   }
 
   .dark {
@@ -58,5 +69,16 @@
     --table-label-color: var(--sidebar-link-color);
     --table-data-color: var(--sidebar-link-color);
     --table-data-bg: #222024;
+
+    --login-bg: var(--sidebar-bg);
+    --login-border-color: var(--section-container-border-color);
+
+    --button-color: var(--sidebar-link-color);
+    --button-bg: var(--section-container-bg);
+    --button-border: var(--section-container-border-color);
+    --button-box-shadow: 0 0 4px rgba(255,255,255,0.3);
+
+    --textbox-bg: #2A2930;
+    --textbox-color: var(--sidebar-link-color);
   }
 }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { RouterView } from "vue-router";
-import { clsx } from "clsx";
-import NavbarMain from "./components/Navbar/NavbarMain.vue";
-import SidebarMain from "./components/Sidebar/SidebarMain.vue";
+import { RouterView } from "vue-router"
+import { clsx } from "clsx"
+import NavbarMain from "./components/Navbar/NavbarMain.vue"
+import SidebarMain from "./components/Sidebar/SidebarMain.vue"
 
 
 // dark mode
@@ -16,15 +16,16 @@ document.documentElement.className = "dark";
       'flex font-(family-name:--font-family)'
     )">
     <SidebarMain />
-    <div class="flex flex-col w-full">
+    <div 
+      class="w-full">
       <NavbarMain />
-      <main class="p-4 mt-10 ml-(--sidebar-width) md:ml-(--sidebar-md-width)">
+      <main 
+        :class="clsx(
+          'p-4 mt-10 ml-(--sidebar-width) md:ml-(--sidebar-md-width)',
+          'h-[calc(100vh-40px)]'
+        )">
         <RouterView />
       </main>
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>
