@@ -16,7 +16,8 @@ const { name } = toRefs(props);
   <input 
     :class="clsx(
       'bg-(--textbox-bg) rounded-md outline-none text-xs px-3 py-1.5',
-      'text-(--textbox-color)'
+      'text-(--textbox-color) md:w-70',
+      'focus:shadow-(--textbox-box-shadow)'
     )"
     :name="name"/>
 </template>

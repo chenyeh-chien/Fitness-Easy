@@ -16,7 +16,7 @@ const { title } = toRefs(props);
 <template>
   <section 
     :class="clsx(
-      'p-4 rounded-lg flex flex-col gap-2',
+      'p-4 rounded-lg flex flex-col gap-4',
       'bg-(--section-container-bg) border border-(--section-container-border-color)'
     )">
     <h2 

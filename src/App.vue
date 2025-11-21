@@ -22,7 +22,7 @@ document.documentElement.className = "dark";
       <main 
         :class="clsx(
           'p-4 mt-10 ml-(--sidebar-width) md:ml-(--sidebar-md-width)',
-          'h-[calc(100vh-40px)]'
+          'min-h-[calc(100vh-40px)]'
         )">
         <RouterView />
       </main>

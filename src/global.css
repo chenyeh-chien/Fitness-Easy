@@ -36,9 +36,20 @@
     --button-bg: var(--section-container-bg);
     --button-border: var(--section-container-border-color);
     --button-box-shadow: 0 0 4px rgba(0,0,0,0.3);
+    --button-focus-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    --button-hover-bg: #EDEDF5;
 
     --textbox-bg: #F7F8FA;
     --textbox-color: var(--sidebar-link-color);
+    --textbox-box-shadow: var(--button-box-shadow);
+    --textbox-label-color: var(--sidebar-link-color);
+
+    --dropdown-bg: var(--textbox-bg);
+    --dropdown-color: var(--textbox-color);
+    --dropdown-box-shadow: var(--textbox-box-shadow);
+    --dropdown-hover-bg: var(--textbox-bg);
+    --dropdown-scrollbar-track: white;
+    --dropdown-scrollbar-thumb: #E1E5EB;
   }
 
   .dark {
@@ -77,8 +88,19 @@
     --button-bg: var(--section-container-bg);
     --button-border: var(--section-container-border-color);
     --button-box-shadow: 0 0 4px rgba(255,255,255,0.3);
+    --button-focus-box-shadow:  0 0 8px rgba(255,255,255,0.3);
+    --button-hover-bg: #242329;
 
     --textbox-bg: #2A2930;
     --textbox-color: var(--sidebar-link-color);
+    --textbox-box-shadow: var(--button-box-shadow);
+    --textbox-label-color: var(--sidebar-link-color);
+    
+    --dropdown-bg: var(--textbox-bg);
+    --dropdown-color: var(--textbox-color);
+    --dropdown-box-shadow: var(--textbox-box-shadow);
+    --dropdown-hover-bg: #252429;
+    --dropdown-scrollbar-track: #373642;
+    --dropdown-scrollbar-thumb: #242226;
   }
 }

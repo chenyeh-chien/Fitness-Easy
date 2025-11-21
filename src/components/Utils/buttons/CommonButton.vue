@@ -20,7 +20,8 @@ const { icon, text } = toRefs(props);
       'text-(--button-color) text-xs bg-(--button-bg) w-max px-5 py-1.5',
       'border border-(--button-border) rounded-md',
       'flex gap-2 shadow-(--button-box-shadow)',
-      'hover:cursor-pointer'
+      'hover:cursor-pointer hover:bg-(--button-hover-bg)',
+      'focus:shadow-(--button-focus-box-shadow) focus:outline-none'
     )">
     <div v-if="icon !== undefined" >
       <FontAwesomeIcon 
