@@ -8,7 +8,7 @@ import './global.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { 
   faDumbbell, faScaleBalanced, faUtensils, faWeightScale, faCubes,
-  faArrowRightToBracket, faPlus, faAngleDown
+  faArrowRightToBracket, faPlus, faAngleDown, faChevronLeft, faChevronRight
 } from '@fortawesome/free-solid-svg-icons'
 import { 
   faBell, faSun, faMoon
@@ -20,7 +20,7 @@ import {
 library.add(
   faDumbbell, faScaleBalanced, faUtensils, faWeightScale, faCubes,
   faBell, faSun, faMoon, faArrowRightToBracket, faGoogle, faPlus,
-  faAngleDown
+  faAngleDown, faChevronLeft, faChevronRight
 )
 
 const app = createApp(App)

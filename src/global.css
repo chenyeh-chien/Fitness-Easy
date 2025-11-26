@@ -35,21 +35,32 @@
     --button-color: var(--sidebar-link-color);
     --button-bg: var(--section-container-bg);
     --button-border: var(--section-container-border-color);
-    --button-box-shadow: 0 0 4px rgba(0,0,0,0.3);
-    --button-focus-box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    --button-box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    --button-focus-box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     --button-hover-bg: #EDEDF5;
 
-    --textbox-bg: #F7F8FA;
+    --textbox-bg: #EDEFF5;
     --textbox-color: var(--sidebar-link-color);
     --textbox-box-shadow: var(--button-box-shadow);
     --textbox-label-color: var(--sidebar-link-color);
+    --textbox-readonly-bg: #F7F8FA;
 
     --dropdown-bg: var(--textbox-bg);
     --dropdown-color: var(--textbox-color);
     --dropdown-box-shadow: var(--textbox-box-shadow);
+    --dropdown-label-color: var(--textbox-label-color);
     --dropdown-hover-bg: var(--textbox-bg);
     --dropdown-scrollbar-track: white;
     --dropdown-scrollbar-thumb: #E1E5EB;
+
+    --datetime-color: var(--textbox-color);
+    --datetime-bg: var(--textbox-bg);
+    --datetime-box-shadow: var(--textbox-box-shadow);
+    --datetime-label-color: var(--textbox-label-color);
+    --datetime-day-sat-color: #4699de;
+    --datetime-day-sun-color: #db7449;
+    --datetime-day-hover-color: white;
+    --datetime-day-hover-bg: var(--app-color);
   }
 
   .dark {
@@ -57,7 +68,7 @@
     --app-color: #8980AB;
     --app-name-color: var(--sidebar-link-color);
     --page-bg: #131314;
-    
+
     --sidebar-width: 50px;
     --sidebar-md-width: 200px;
     --sidebar-bg: #1A191C;
@@ -87,20 +98,31 @@
     --button-color: var(--sidebar-link-color);
     --button-bg: var(--section-container-bg);
     --button-border: var(--section-container-border-color);
-    --button-box-shadow: 0 0 4px rgba(255,255,255,0.3);
-    --button-focus-box-shadow:  0 0 8px rgba(255,255,255,0.3);
+    --button-box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+    --button-focus-box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
     --button-hover-bg: #242329;
 
-    --textbox-bg: #2A2930;
+    --textbox-bg: #32313B;
     --textbox-color: var(--sidebar-link-color);
     --textbox-box-shadow: var(--button-box-shadow);
     --textbox-label-color: var(--sidebar-link-color);
-    
+    --textbox-readonly-bg: #222126;
+
     --dropdown-bg: var(--textbox-bg);
     --dropdown-color: var(--textbox-color);
     --dropdown-box-shadow: var(--textbox-box-shadow);
+    --dropdown-label-color: var(--textbox-label-color);
     --dropdown-hover-bg: #252429;
     --dropdown-scrollbar-track: #373642;
     --dropdown-scrollbar-thumb: #242226;
+
+    --datetime-color: var(--textbox-color);
+    --datetime-bg: var(--textbox-bg);
+    --datetime-box-shadow: var(--textbox-box-shadow);
+    --datetime-label-color: var(--textbox-label-color);
+    --datetime-day-sat-color: #6fb6f1;
+    --datetime-day-sun-color: #f1956f;
+    --datetime-day-hover-color: var(--accent-color);
+    --datetime-day-hover-bg: var(--app-color);
   }
 }

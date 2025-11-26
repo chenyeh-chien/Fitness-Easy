@@ -3,26 +3,10 @@ import { clsx } from "clsx";
 import { GoogleAuthProvider, signInWithPopup, type User } from "firebase/auth"
 import { auth } from "@/components/Utils/Firebase/firebase"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import type { UserInfo } from "@/types/common";
-
-function serializeUserData(user: User): UserInfo {
-  return {
-    uid: user.uid,
-    email: user.email,
-    name: user.displayName,
-    avatar: user.photoURL,
-    provider: user.providerData?.[0]?.providerId,
-    emailVerified: user.emailVerified,
-  }
-}
 
 async function handleSigninToGoogle() {
   const provider = new GoogleAuthProvider();
-  const result = await signInWithPopup(auth, provider);
-  const user = result.user;
-  const serializedData = serializeUserData(user);
-  
-  localStorage.setItem("userInfo", JSON.stringify(serializedData));
+  await signInWithPopup(auth, provider);
 }
 
 </script>

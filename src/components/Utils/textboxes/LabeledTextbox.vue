@@ -4,14 +4,18 @@ import { clsx } from 'clsx'
 import CommonTextbox from './CommonTextbox.vue'
 
 interface Props {
+  name?: string;
   label?: string;
-  name: string;
+  width?: string;
+  readonly?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  label: "Label"
+  label: "Label",
+  name: "Default",
 })
-const { label } = toRefs(props);
+const { name, label, width, readonly } = toRefs(props);
+const text = defineModel<string | number>("text", { required: true });
 </script>
 
 <template>
@@ -22,6 +26,9 @@ const { label } = toRefs(props);
     <label 
       :for="name">{{ label }}</label>
     <CommonTextbox 
-      :name="name"/>
+      v-model:text="text"
+      :name="name"
+      :width="width"
+      :readonly="readonly"/>
   </div>
 </template>

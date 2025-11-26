@@ -4,14 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { clsx } from 'clsx' 
 
 interface Props {
+  buttonType?: "submit" | "button" | "reset";
   icon?: string;
   text?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  text: "Default"
+  buttonType: "button",
+  text: "Default",
 });
-const { icon, text } = toRefs(props);
+const { buttonType, icon, text } = toRefs(props);
 </script>
 
 <template>
@@ -22,7 +24,8 @@ const { icon, text } = toRefs(props);
       'flex gap-2 shadow-(--button-box-shadow)',
       'hover:cursor-pointer hover:bg-(--button-hover-bg)',
       'focus:shadow-(--button-focus-box-shadow) focus:outline-none'
-    )">
+    )"
+    :type="buttonType">
     <div v-if="icon !== undefined" >
       <FontAwesomeIcon 
         :icon="icon" />

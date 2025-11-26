@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
 import { RouterLink } from 'vue-router'
 import { clsx } from "clsx"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SidebarLink from "./SidebarLink.vue"
-import type { UserInfo } from "@/types/common"
+import { useAuth } from '@/composables/useAuth'
 
-
+const { user, isAuthReady } = useAuth();
 const appName = "Fitness Easy"
 const navInfos = [
   {
@@ -29,17 +28,6 @@ const navInfos = [
   icon: "fa-solid fa-weight-scale",
   link: "/physique-progress"
 }]
-const userInfo = ref<UserInfo | null>(null)
-
-onMounted(() => {
-  if (localStorage.getItem('userInfo') === null) return;
-
-  setUserInfo(JSON.parse(localStorage.getItem('userInfo')!));
-})
-
-function setUserInfo(user: UserInfo) {
-  userInfo.value = user;
-}
 </script>
 
 <template>
@@ -81,15 +69,15 @@ function setUserInfo(user: UserInfo) {
         </ul>
       </div>
       <div 
-        v-if="userInfo !== null"
+        v-if="isAuthReady"
         class="flex justify-center items-center">
         <button 
           class="w-max h-max hover:cursor-pointer">
-          <img 
+          <img
             class="object-cover rounded-full"
             width="30"
             height="30"
-            :src="userInfo.avatar!" />
+            :src="user!.photoURL!" />
         </button>
       </div>
       <SidebarLink 

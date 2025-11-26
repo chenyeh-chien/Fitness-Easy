@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toRefs, ref, watch, onMounted, onUnmounted } from 'vue'
+import { toRefs, ref, computed, onMounted, onUnmounted } from 'vue'
 import { clsx } from 'clsx'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { 
@@ -10,14 +10,15 @@ import {
   autoUpdate, 
   size 
 } from '@floating-ui/vue'
+import SelectOptions from './SelectOptions.vue'
 
 interface Props {
-  value?: string | number;
-  options?: (string | number)[];
+  value?: string;
+  options?: string[];
 }
 
 interface Emits {
-  (e: "onChangeValue", value: string | number): void;
+  (e: "onChangeValue", value: string): void;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -28,10 +29,13 @@ const { value, options } = toRefs(props);
 const emits = defineEmits<Emits>();
 const wrapper = ref<HTMLDivElement | null>(null);
 const reference = ref(null);
-const floating = ref(null);
+const floatingComponent = ref<any>(null);
+const floating = computed(() => floatingComponent.value?.$el);
 const isOpened = ref(false);
-const { floatingStyles, update } = useFloating(reference, floating, {
+
+const { floatingStyles } = useFloating(reference, floating, {
   placement: "bottom-start",
+  whileElementsMounted: autoUpdate,
   middleware: [
     offset(8),
     flip(),
@@ -64,26 +68,13 @@ function handleClickOutside(event: MouseEvent) {
   }
 }
 
-function handleClickDropdown(selectedVal?: string | number) {
+function handleClickDropdown(selectedVal?: string) {
   isOpened.value = !isOpened.value;
 
   if (selectedVal !== undefined) {
     emits('onChangeValue', selectedVal);
   }
 }
-
-watch(
-  isOpened,
-  (val) => {
-    if (reference.value === null || floating.value === null) {
-      return;
-    }
-
-    if (val) {
-      autoUpdate(reference.value, floating.value, update);
-    }
-  }
-)
 </script>
 
 <template>
@@ -104,30 +95,13 @@ watch(
         <FontAwesomeIcon icon="fa-solid fa-angle-down" />
       </div>
     </div>
-    <ul 
-      ref="floating"
+    <SelectOptions
+      ref="floatingComponent"
       :style="floatingStyles"
-      :class="clsx(
-        'bg-(--dropdown-bg) rounded-md text-xs text-(--dropdown-color)',
-        'flex flex-col gap-2 shadow-(--dropdown-box-shadow)',
-        'overflow-y-auto [&::-webkit-scrollbar]:w-2',
-        '[&::-webkit-scrollbar-thumb]:rounded-full',
-        '[&::-webkit-scrollbar-track]:bg-(--dropdown-scrollbar-track)',
-        '[&::-webkit-scrollbar-thumb]:bg-(--dropdown-scrollbar-thumb)',
-        !isOpened && 'hidden'  
-      )">
-      <li 
-        v-for="option in options"
-        tabindex="0"
-        :class="clsx(
-          'px-3 py-1.5',
-          'hover:bg-(--dropdown-hover-bg)',
-          'focus:outline-none'
-        )"
-        @click="handleClickDropdown(option)">
-        {{ option }}
-      </li>
-    </ul>
+      :options="options"
+      :is-opened="isOpened"
+      :selected-value="value"
+      @on-click-dropdown="handleClickDropdown" />
   </div>
 </template>
 

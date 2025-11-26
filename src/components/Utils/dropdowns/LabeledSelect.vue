@@ -6,12 +6,12 @@ import CommonSelect from './CommonSelect.vue'
 interface Props {
   label?: string;
   name: string;
-  value?: string | number;
-  options?: (string | number)[];
+  value?: string;
+  options?: string[];
 }
 
 interface Emits {
-  (e: "onChangeValue", value: string | number): void;
+  (e: "onChangeValue", value: string): void;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -24,7 +24,7 @@ const emits = defineEmits<Emits>();
 <template>
   <div 
     :class="clsx(
-      'flex flex-col gap-1 text-(--textbox-label-color) text-xs',
+      'flex flex-col gap-1 text-(--dropdown-label-color) text-xs',
     )">
     <label 
       :for="name">{{ label }}</label>

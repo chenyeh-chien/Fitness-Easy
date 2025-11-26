@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { clsx } from 'clsx'
-import { toRefs } from 'vue';
+import { toRefs, watch } from 'vue';
 
 interface Props {
   labels: string[];
@@ -9,6 +9,13 @@ interface Props {
 
 const props = defineProps<Props>();
 const { labels, data } = toRefs(props);
+
+watch(
+  data,
+  () => {
+    console.log(data.value)
+  }
+)
 </script>
 
 <template>
@@ -35,8 +42,7 @@ const { labels, data } = toRefs(props);
           :key="index">
           <td 
             v-for="val of item"
-            class="px-2 py-4 whitespace-nowrap"
-            :key="val">
+            class="px-2 py-4 whitespace-nowrap">
             {{ val }}
           </td>
         </tr>
