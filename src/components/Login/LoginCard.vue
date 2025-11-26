@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import { clsx } from "clsx";
-import { GoogleAuthProvider, signInWithPopup, signOut, type User } from "firebase/auth"
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 import { auth } from "@/components/Utils/Firebase/firebase"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { onMounted } from "vue";
-
-onMounted(async () => {
-  await signOut(auth);
-})
 
 async function handleSigninToGoogle() {
   const provider = new GoogleAuthProvider();

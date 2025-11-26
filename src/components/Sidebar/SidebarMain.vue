@@ -4,6 +4,8 @@ import { clsx } from "clsx"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SidebarLink from "./SidebarLink.vue"
 import { useAuth } from '@/composables/useAuth'
+import { signOut } from "firebase/auth"
+import { auth } from "@/components/Utils/Firebase/firebase"
 
 const { user, isAuthReady } = useAuth();
 const appName = "Fitness Easy"
@@ -28,6 +30,10 @@ const navInfos = [
   icon: "fa-solid fa-weight-scale",
   link: "/physique-progress"
 }]
+
+async function handleSignout() {
+  await signOut(auth);
+}
 </script>
 
 <template>
@@ -72,7 +78,8 @@ const navInfos = [
         v-if="user !== null"
         class="flex justify-center items-center">
         <button 
-          class="w-max h-max hover:cursor-pointer">
+          class="w-max h-max hover:cursor-pointer"
+          @click="handleSignout">
           <img
             class="object-cover rounded-full"
             width="30"
