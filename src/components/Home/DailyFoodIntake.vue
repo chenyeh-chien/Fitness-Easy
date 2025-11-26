@@ -43,14 +43,14 @@ async function checkUserDailyMeals() {
         return [
           meal.meal,
           meal.quantity,
-          meal.protein,
-          meal.carbohydrate,
-          meal.fat,
-          meal.quantity * (
+          meal.protein.toFixed(2),
+          meal.carbohydrate.toFixed(2),
+          meal.fat.toFixed(2),
+          (meal.quantity * (
             meal.protein * 4 + 
             meal.carbohydrate * 4 + 
             meal.fat * 9
-          )
+          )).toFixed(2)
         ]
       });
   } catch (error) {
