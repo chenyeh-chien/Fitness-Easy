@@ -69,7 +69,7 @@ const navInfos = [
         </ul>
       </div>
       <div 
-        v-if="isAuthReady"
+        v-if="user !== null"
         class="flex justify-center items-center">
         <button 
           class="w-max h-max hover:cursor-pointer">
