@@ -19,7 +19,10 @@ watch(
 </script>
 
 <template>
-  <div class="w-full overflow-x-auto">
+  <div 
+    :class="clsx(
+      'w-full overflow-x-auto scrollbar-thin',
+    )">
     <table class="min-w-full max-w-max border-collapse">
       <thead class="text-(--table-label-color) text-xs pb-2 border-b">
         <tr>

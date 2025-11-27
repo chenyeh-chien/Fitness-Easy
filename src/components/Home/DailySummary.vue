@@ -5,7 +5,7 @@ import { useDailyMeals } from '@/composables/useDailyMeals'
 import DigitScroller from '../Utils/transitions/DigitScroller.vue'
 // import NutrientsPercentage from './NutrientsPercentage.vue'
 import RemainNutrients from './RemainNutrients.vue'
-import { watch, ref, onMounted } from 'vue';
+import { watch, ref, onMounted, computed } from 'vue';
 
 const { user, isAuthReady } = useAuth();
 const { getDailyTargetsByDate } = useDailyTarget();
@@ -20,8 +20,13 @@ const dailyTarget = ref({
 const dailyIntake = ref<any>({
   protein: 0,
   carbohydrate: 0,
-  fat: 0
+  fat: 0,
+  total: 0
 });
+
+const dailyRemainCalories = computed(() => {
+  return dailyTarget.value.total - dailyIntake.value.total;
+})
 
 onMounted(() => {
   if (isAuthReady.value) {
@@ -29,14 +34,6 @@ onMounted(() => {
     checkUserDailyMeals()
   }
 })
-
-watch(
-  isAuthReady,
-  () => {
-    checkUserDailyTarget();
-    checkUserDailyMeals();
-  }
-)
 
 async function checkUserDailyTarget() {
   if (user.value === null) {
@@ -82,17 +79,28 @@ async function checkUserDailyMeals() {
       acc.protein += item.quantity * item.protein;
       acc.carbohydrate += item.quantity * item.carbohydrate;
       acc.fat += item.quantity * item.fat;
+      acc.total += item.quantity * (
+        item.protein * 4 + item.carbohydrate * 4 + item.fat * 9
+      );
+
       return acc;
-    }, { protein: 0, carbohydrate: 0, fat: 0 });
+    }, { protein: 0, carbohydrate: 0, fat: 0, total: 0 });
 }
 
+watch(
+  isAuthReady,
+  () => {
+    checkUserDailyTarget();
+    checkUserDailyMeals();
+  }
+)
 </script>
 
 <template>
   <div class="flex flex-wrap gap-10">
     <div>
       <DigitScroller
-        :data="dailyTarget.total"
+        :data="dailyRemainCalories"
         :transitionDuration="2"
         :size="'2xl'"
         :font-weight="700"
@@ -103,8 +111,7 @@ async function checkUserDailyMeals() {
     <div class="w-full">
       <RemainNutrients 
         :target="dailyTarget"
-        :intake="dailyIntake"
-        />
+        :intake="dailyIntake" />
     </div>
     <!-- 顯示在當天應該攝取的比例比較適合 -->
     <!-- 

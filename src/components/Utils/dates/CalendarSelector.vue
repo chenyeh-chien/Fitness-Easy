@@ -80,19 +80,18 @@ const setCurrentDate = (date: number) => {
 <template>
   <div
     :class="clsx(
-        'w-auto h-max text-(--datetime-color) bg-(--datetime-bg)',
-        'rounded-[0.3rem] p-4 box-border shadow-(--datetime-box-shadow)'
+      'w-auto h-max text-(--datetime-color) bg-(--datetime-bg)',
+      'rounded-md p-2 box-border shadow-(--datetime-box-shadow)'
     )"
     data-test="calendar-selector">
     <div
       data-test="calendar-selector__labels"
-      class="flex flex-row justify-between"
-    >
+      class="flex flex-row justify-between">
       <div
         v-for="(day, index) in dayLabels"
         :key="index"
         data-test="calendar-selector__label__item"
-        class="flex justify-center items-center w-8 h-8 rounded-full"
+        class="flex justify-center items-center w-6 h-6 rounded-full"
         :class="getDayLabelColorClass(index)">
         <span>{{ day }}</span>
       </div>
@@ -107,7 +106,7 @@ const setCurrentDate = (date: number) => {
           v-for="(date, dateIndex) in list"
           :key="dateIndex"
           data-test="calendar-selector__date"
-          class="flex justify-center items-center w-8 h-8 rounded-full"
+          class="flex justify-center items-center w-6 h-6 rounded-full"
           :class="getDateClass(date)"
           :style="dateStyle(date)"
           @click="setCurrentDate(date)">

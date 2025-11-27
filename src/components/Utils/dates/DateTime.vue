@@ -240,8 +240,7 @@ watch(
           'p-2 box-border shadow-(--datetime-box-shadow) cursor-pointer'
         )"
         data-test="date-time__today"
-        @click="setDatetimeConfig(new Date())"
-      >
+        @click="setDatetimeConfig(new Date())">
         <span>Today</span>
       </div>
     </div>

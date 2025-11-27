@@ -26,10 +26,7 @@ const emits = defineEmits<Emits>();
     :class="clsx(
       'bg-(--dropdown-bg) rounded-md text-xs text-(--dropdown-color)',
       'flex flex-col shadow-(--dropdown-box-shadow)',
-      'overflow-y-auto [&::-webkit-scrollbar]:w-2',
-      '[&::-webkit-scrollbar-thumb]:rounded-full',
-      '[&::-webkit-scrollbar-track]:bg-(--dropdown-scrollbar-track)',
-      '[&::-webkit-scrollbar-thumb]:bg-(--dropdown-scrollbar-thumb)',
+      'overflow-y-auto scrollbar-thin',
       !isOpened && 'hidden'
     )"
     :style="`min-width: ${minWidth};`">

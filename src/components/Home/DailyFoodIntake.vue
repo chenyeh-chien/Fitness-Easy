@@ -1,16 +1,25 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyMeals } from '@/composables/useDailyMeals'
 import TextTable from '../Utils/tables/TextTable.vue'
 
+interface Props {
+  date?: Date;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  date: () => new Date(),
+});
+const { date } = toRefs(props);
+
 const LABELS = [
   "Name",
   "Quantity",
+  "Total (kcal)",
   "Protein (g)",
   "Carbohydrate (g)",
   "Fat (g)",
-  "Total (kcal)"
 ]
 const { user, isAuthReady } = useAuth();
 const { getDailyMeals } = useDailyMeals();
@@ -28,7 +37,7 @@ async function checkUserDailyMeals() {
 
   try {
     const querySnapshot = 
-      await getDailyMeals(user.value.uid, new Date());
+      await getDailyMeals(user.value.uid, date.value);
     
     querySnapshot.forEach((doc) => {
       console.log(doc.id, " => ", doc.data());
@@ -43,14 +52,14 @@ async function checkUserDailyMeals() {
         return [
           meal.meal,
           meal.quantity,
-          meal.protein.toFixed(2),
-          meal.carbohydrate.toFixed(2),
-          meal.fat.toFixed(2),
           (meal.quantity * (
             meal.protein * 4 + 
             meal.carbohydrate * 4 + 
             meal.fat * 9
-          )).toFixed(2)
+          )).toFixed(2),
+          meal.protein.toFixed(2),
+          meal.carbohydrate.toFixed(2),
+          meal.fat.toFixed(2),
         ]
       });
   } catch (error) {
@@ -59,7 +68,7 @@ async function checkUserDailyMeals() {
 }
 
 watch(
-  isAuthReady,
+  [isAuthReady, date],
   () => {
     checkUserDailyMeals();
   }

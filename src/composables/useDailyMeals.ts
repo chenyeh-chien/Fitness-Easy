@@ -24,10 +24,8 @@ export function useDailyMeals() {
       const q = query(
         collection(db, 'daily-meals'),
         where('userId', '==', userId),
-        /*
         where('time', '>=', startOfDay),
         where('time', '<=', endOfDay)
-        */
       );
 
       const querySnapshot = await getDocs(q);
