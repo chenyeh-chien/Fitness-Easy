@@ -11,7 +11,11 @@ import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 import LabeledSelect from '../Utils/dropdowns/LabeledSelect.vue'
 
+interface Emits {
+  (e: 'cancelForm'): void;
+}
 
+const emits = defineEmits<Emits>();
 const { user, isAuthReady } = useAuth();
 const { addDailyMeal } = useDailyMeals();
 const { getMealOptions } = useMealOptions();
@@ -80,6 +84,8 @@ async function handleSubmitForm() {
       note: note.value,
     });
     console.log("Document written with ID: ", docRef.id);
+
+    emits('cancelForm')
   } catch (error) {
     console.error("Error writing document:", error);
   }
@@ -146,7 +152,8 @@ watch(
           <AddButton 
             :button-type="'submit'"/>
           <CommonButton
-            :text="'Cancel'" />
+            :text="'Cancel'" 
+            @click="emits('cancelForm')"/>
         </div>
       </RightAlignContainer>
     </form>

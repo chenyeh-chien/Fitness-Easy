@@ -9,7 +9,11 @@ import RightAlignContainer from '@/components/Utils/containers/RightAlignContain
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 
+interface Emits {
+  (e: 'cancelForm'): void;
+}
 
+const emits = defineEmits<Emits>();
 const { user, isAuthReady } = useAuth();
 const { getMealOptions, addMealOption } = useMealOptions();
 const meal = ref("")
@@ -65,8 +69,10 @@ async function handleSubmitForm() {
       fat: fat.value,
       weight: weight.value,
       note: note.value,
-  });
+    });
     console.log("Document written with ID: ", docRef.id);
+    
+    emits('cancelForm')
   } catch (error) {
     console.error("Error writing document:", error);
   }
@@ -106,7 +112,8 @@ async function handleSubmitForm() {
           <AddButton 
             :button-type="'submit'"/>
           <CommonButton
-            :text="'Cancel'" />
+            :text="'Cancel'" 
+            @click="emits('cancelForm')"/>
         </div>
       </RightAlignContainer>
     </form>
