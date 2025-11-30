@@ -1,14 +1,23 @@
 <script setup lang="ts">
 import { clsx } from 'clsx'
 import { toRefs, watch } from 'vue';
+import type { TableHeader } from '@/types/common';
 
 interface Props {
-  labels: string[];
-  data: (string | number)[][];
+  headers: TableHeader[];
+  data: Record<string, any>[];
+  clickable?: boolean;
 }
 
-const props = defineProps<Props>();
-const { labels, data } = toRefs(props);
+interface Emits {
+  (e: 'selectRow', index: number): void;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  clickable: false,
+});
+const { headers, data, clickable } = toRefs(props);
+const emits = defineEmits<Emits>();
 
 watch(
   data,
@@ -27,10 +36,10 @@ watch(
       <thead class="text-(--table-label-color) text-xs pb-2 border-b">
         <tr>
           <th 
-            v-for="label in labels"
+            v-for="header in headers"
             class="p-2 text-start font-medium"
-            :key="label">
-            {{ label }}
+            :key="header.key">
+            {{ header.label }}
           </th>
         </tr>
       </thead>
@@ -40,13 +49,14 @@ watch(
           :class="clsx(
             'text-(--table-data-color) text-xs px-2 py-4',
             'even:bg-(--table-data-bg)',
-        
+            clickable && 'hover:bg-(--table-data-hover-bg) hover:cursor-pointer',
           )"
-          :key="index">
+          :key="index"
+          @click="clickable && emits('selectRow', index)">
           <td 
-            v-for="val of item"
+            v-for="header in headers"
             class="px-2 py-4 whitespace-nowrap">
-            {{ val }}
+            {{ item[header.key] }}
           </td>
         </tr>
       </tbody>

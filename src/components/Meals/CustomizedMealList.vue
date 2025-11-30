@@ -7,23 +7,31 @@ import { useMealOptions } from '@/composables/useMealOptions'
 const { user, isAuthReady } = useAuth();
 const { getMealOptions } = useMealOptions();
 
-const LABELS = [
-  "Name",
-  "Protein (g)",
-  "Carbohydrate (g)",
-  "Fat (g)",
-  "Weight (g)",
-]
+const LABELS = [{
+  label: "Name",
+  key: "meal",
+}, {
+  label: "Protein (g)",
+  key: "protein",
+}, {
+  label: "Carbohydrate (g)",
+  key: "carbohydrate",
+}, {
+  label: "Fat (g)",
+  key: "fat",
+}, {
+  label: "Weight (g)",
+  key: "weight",
+}]
 const mealsInfo = ref<any[]>([]);
 const mealOptions = computed(() => {
   return mealsInfo.value.map(item => {
-    return [
-      item.meal,
-      item.protein.toFixed(2),
-      item.carbohydrate.toFixed(2),
-      item.fat.toFixed(2),
-      item.weight,
-    ]
+    return {
+      ...item,
+      protein: item.protein.toFixed(2),
+      carbohydrate: item.carbohydrate.toFixed(2),
+      fat: item.fat.toFixed(2),
+    }
   });
 })
 
@@ -57,6 +65,7 @@ watch(
 
 <template>
   <TextTable 
-    :labels="LABELS"
-    :data="mealOptions"/>
+    :headers="LABELS"
+    :data="mealOptions"
+    :clickable="true"/>
 </template> 

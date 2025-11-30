@@ -21,7 +21,7 @@ document.documentElement.className = "dark";
       <NavbarMain />
       <main 
         :class="clsx(
-          'p-4 mt-10 ml-(--sidebar-width) md:ml-(--sidebar-md-width)',
+          'p-4 pb-40 mt-10 ml-(--sidebar-width) md:ml-(--sidebar-md-width)',
           'min-h-[calc(100vh-40px)]'
         )">
         <RouterView />

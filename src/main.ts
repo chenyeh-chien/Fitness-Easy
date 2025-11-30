@@ -6,11 +6,12 @@ import router from './router'
 import './global.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { 
+import {
   faDumbbell, faScaleBalanced, faUtensils, faWeightScale, faCubes,
-  faArrowRightToBracket, faPlus, faAngleDown, faChevronLeft, faChevronRight
+  faArrowRightToBracket, faPlus, faAngleDown, faChevronLeft, faChevronRight,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons'
-import { 
+import {
   faBell, faSun, faMoon
 } from '@fortawesome/free-regular-svg-icons'
 import {
@@ -20,7 +21,7 @@ import {
 library.add(
   faDumbbell, faScaleBalanced, faUtensils, faWeightScale, faCubes,
   faBell, faSun, faMoon, faArrowRightToBracket, faGoogle, faPlus,
-  faAngleDown, faChevronLeft, faChevronRight
+  faAngleDown, faChevronLeft, faChevronRight, faCheck
 )
 
 const app = createApp(App)

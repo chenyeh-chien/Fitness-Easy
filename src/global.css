@@ -38,6 +38,7 @@
     --table-label-color: var(--sidebar-link-color);
     --table-data-color: var(--sidebar-link-color);
     --table-data-bg: #FAFAFA;
+    --table-data-hover-bg: var(--sidebar-link-hover-bg);
 
     --login-bg: var(--sidebar-bg);
     --login-border-color: var(--section-container-border-color);
@@ -101,6 +102,7 @@
     --table-label-color: var(--sidebar-link-color);
     --table-data-color: var(--sidebar-link-color);
     --table-data-bg: #222024;
+    --table-data-hover-bg: var(--sidebar-link-hover-bg);
 
     --login-bg: var(--sidebar-bg);
     --login-border-color: var(--section-container-border-color);

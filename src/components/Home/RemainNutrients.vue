@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, toRefs, ref } from 'vue'
+import { computed, toRefs } from 'vue'
 import TextTable from '../Utils/tables/TextTable.vue'
 
 interface Props {
@@ -32,39 +32,42 @@ const props = withDefaults(defineProps<Props>(), {
   }
 });
 const { target, intake } = toRefs(props);
-const LABELS = [
-  "Nutrients",
-  "Remain (g)",
-  "Intake (g)",
-  "Total (g)"
-]
+const LABELS = [{
+  label: "Nutrients",
+  key: "nutrients",
+}, {
+  label: "Remain (g)",
+  key: "remain",
+}, {
+  label: "Intake (g)",
+  key: "intake",
+}, {
+  label: "Total (g)",
+  key: "total",
+}]
 
 const nutrientsStats = computed(() => {
-  return [
-    [
-      "Protein",
-      (target.value.protein - intake.value.protein).toFixed(2),
-      intake.value.protein.toFixed(2),
-      target.value.protein.toFixed(2)
-    ],
-    [
-      "Carbohydrate",
-      (target.value.carbohydrate - intake.value.carbohydrate).toFixed(2),
-      intake.value.carbohydrate.toFixed(2),
-      target.value.carbohydrate.toFixed(2)
-    ],
-    [
-      "Fat",
-      (target.value.fat - intake.value.fat).toFixed(2),
-      intake.value.fat.toFixed(2),
-      target.value.fat.toFixed(2)
-    ]
-  ]
+  return [{
+    "nutrients": "Protein",
+    "remain": (target.value.protein - intake.value.protein).toFixed(2),
+    "intake": intake.value.protein.toFixed(2),
+    "total": target.value.protein.toFixed(2)
+  }, {
+    "nutrients": "Carbohydrate",
+    "remain": (target.value.carbohydrate - intake.value.carbohydrate).toFixed(2),
+    "intake": intake.value.carbohydrate.toFixed(2),
+    "total": target.value.carbohydrate.toFixed(2)
+  }, {
+    "nutrients": "Fat",
+    "remain": (target.value.fat - intake.value.fat).toFixed(2),
+    "intake": intake.value.fat.toFixed(2),
+    "total": target.value.fat.toFixed(2)
+  }]
 })
 </script>
 
 <template>
   <TextTable 
-    :labels="LABELS"
+    :headers="LABELS"
     :data="nutrientsStats"/>
 </template>

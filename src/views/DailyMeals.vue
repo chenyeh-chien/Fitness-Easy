@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { nextTick, ref, useTemplateRef } from 'vue'
 import MealContentForm from '@/components/Meals/MealContentForm.vue'
 import DailyMealsForm from '@/components/Meals/DailyMealsForm.vue'
 import DailyFoodIntake from '@/components/Home/DailyFoodIntake.vue'
@@ -11,10 +10,13 @@ import RightAlignContainer from '@/components/Utils/containers/RightAlignContain
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 
 
-const router = useRouter()
 const selectedDate = ref(new Date())
 const showAddMealOption = ref(false)
 const showAddDailyMeal = ref(false)
+const componentKey = ref(0)
+const mealContentFormRef = useTemplateRef('mealContentForm')
+const dailyMealsFormRef = useTemplateRef('dailyMealsForm')
+const selectedDailyMeal = ref<Record<string, any> | null>(null);
 
 function changeTime(time: Date) {
   selectedDate.value = time;
@@ -28,14 +30,41 @@ function setShowAddDailyMeal(value: boolean) {
   showAddDailyMeal.value = value;
 }
 
+function setSelectedDailyMeal(value: Record<string, any> | null) {
+  selectedDailyMeal.value = value;
+}
+
+async function handleShowAddMealOption() {
+  setShowAddMealOption(true);
+
+  await nextTick();
+  mealContentFormRef.value?.$el?.scrollIntoView({
+    behavior: 'smooth',
+  });
+}
+
+async function handleShowAddDailyMeal() {
+  setShowAddDailyMeal(true);
+
+  await nextTick();
+  dailyMealsFormRef.value?.$el?.scrollIntoView({
+    behavior: 'smooth',
+  });
+}
+
+function handleSelectDailyMeal(data: Record<string, any>) {
+  setSelectedDailyMeal(data);
+}
+
 function cancelMealOptionForm() {
   setShowAddMealOption(false);
-  router.go(0);
+  componentKey.value++;
 }
 
 function cancelDailyMealForm() {
   setShowAddDailyMeal(false);
-  router.go(0);
+  setSelectedDailyMeal(null);
+  componentKey.value++;
 }
 </script>
 
@@ -46,18 +75,18 @@ function cancelDailyMealForm() {
         <div>
           <CommonButton 
             :text="'Add meal option'"
-            @click="showAddMealOption = true"/>
+            @click="handleShowAddMealOption"/>
         </div>
         <div>
           <CommonButton 
             :text="'Add daily meal'"
-            @click="showAddDailyMeal = true"/>
+            @click="handleShowAddDailyMeal"/>
         </div>
       </div>
     </RightAlignContainer>
     <SectionContainer
       :title="'Meal list'">
-      <MealList/>
+      <MealList :key="componentKey"/>
     </SectionContainer>
     <SectionContainer
       :title="'Daily food intake'">
@@ -67,13 +96,23 @@ function cancelDailyMealForm() {
         :show-time="false"
         @change-time="changeTime"/>
       <DailyFoodIntake 
-        :date="selectedDate"/>
+        :date="selectedDate"
+        :key="componentKey"
+        @select-record="handleSelectDailyMeal"/>
     </SectionContainer>
     <MealContentForm
       v-if="showAddMealOption"
+      ref="mealContentForm"
       @cancel-form="cancelMealOptionForm"/>
     <DailyMealsForm
       v-if="showAddDailyMeal"
+      ref="dailyMealsForm"
+      @cancel-form="cancelDailyMealForm"/>
+    <DailyMealsForm
+      v-if="selectedDailyMeal !== null"
+      ref="dailyMealsForm"
+      :action="'update'"
+      :meal="selectedDailyMeal"
       @cancel-form="cancelDailyMealForm"/>
   </div>
 </template>

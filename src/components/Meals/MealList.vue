@@ -11,7 +11,7 @@ const getMealList = httpsCallable(functions, 'getTfdaFoodData');
 
 <template>
   <div class="flex flex-col gap-4">
-    <div>
+    <div v-if="false">
       <button 
         class="bg-blue-500 hover:bg-blue-600 text-xs text-white font-bold py-2 px-4 rounded w-max"
         @click="getMealList({foodName: '牛肉'})">

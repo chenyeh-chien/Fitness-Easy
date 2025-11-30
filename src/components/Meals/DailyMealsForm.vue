@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, computed, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyMeals } from '@/composables/useDailyMeals'
 import { useMealOptions } from '@/composables/useMealOptions'
@@ -8,33 +8,51 @@ import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelector
 import LabeledTextbox from '@/components/Utils/textboxes/LabeledTextbox.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
+import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 import LabeledSelect from '../Utils/dropdowns/LabeledSelect.vue'
+
+interface Props {
+  action?: "add" | "update";
+  meal?: Record<string, any>;
+}
 
 interface Emits {
   (e: 'cancelForm'): void;
 }
 
+const props = withDefaults(defineProps<Props>(), {
+  action: "add",
+  meal: () => ({
+    meal: "",
+    protein: 0,
+    carbohydrate: 0,
+    fat: 0,
+    weight: 0,
+    quantity: 1,
+    note: "",
+  })
+})
+const { action, meal } = toRefs(props);
 const emits = defineEmits<Emits>();
 const { user, isAuthReady } = useAuth();
-const { addDailyMeal } = useDailyMeals();
+const { 
+  addDailyMeal, 
+  updateDailyMeal, 
+  deleteDailyMeal 
+} = useDailyMeals();
 const { getMealOptions } = useMealOptions();
 const selectedDate = ref(new Date())
-const selectedMeal = ref("")
+const mealInfo = ref<Record<string, any> | null>(null)
 const mealsInfo = ref<any[]>([])
-const quantity = ref("")
-const note = ref("")
+const selectedMeal = ref<string | null>(null);
+
+const formTitle = computed(() => {
+  return action.value === "add" ? "Add daily meal" : "Update daily meal";
+})
 
 const mealOptions = computed(() => {
   return mealsInfo.value.map(item => item.meal);
-})
-
-const mealInfo = computed(() => {
-  if (selectedMeal.value === "") {
-    return null;
-  }
-
-  return mealsInfo.value.find(item => item.meal === selectedMeal.value);
 })
 
 onMounted(() => {
@@ -61,34 +79,94 @@ function changeTime(time: Date) {
   selectedDate.value = time;
 }
 
+function setMealInfo(info: Record<string, any>) {
+  mealInfo.value = info;
+}
+
 function setSelectedMeal(meal: string) {
   selectedMeal.value = meal;
 }
 
 async function handleSubmitForm() {
-  if (user.value === null) {
-    console.error("User not logged in");
-    return;
-  }
-
   try {
-    const docRef = await addDailyMeal({
-      userId: user.value.uid,
-      time: selectedDate.value.getTime(),
-      meal: selectedMeal.value,
-      protein: mealInfo.value.protein,
-      carbohydrate: mealInfo.value.carbohydrate,
-      fat: mealInfo.value.fat,
-      weight: mealInfo.value.weight,
-      quantity: quantity.value,
-      note: note.value,
-    });
-    console.log("Document written with ID: ", docRef.id);
+    action.value === "add" ? await addRecord() : await updateRecord();
 
     emits('cancelForm')
   } catch (error) {
     console.error("Error writing document:", error);
   }
+}
+
+async function handleDeleteForm() {
+  try {
+    await deleteRecord();
+
+    emits('cancelForm')
+  } catch (error) {
+    console.error("Error deleting document:", error);
+  }
+}
+
+async function addRecord() {
+  if (user.value === null) {
+    console.error("User not logged in");
+    return;
+  }
+
+  if (mealInfo.value === null) {
+    console.error("Meal info is null");
+    return;
+  }
+
+  await addDailyMeal({
+    userId: user.value.uid,
+    time: selectedDate.value.getTime(),
+    meal: mealInfo.value.meal,
+    protein: mealInfo.value.protein,
+    carbohydrate: mealInfo.value.carbohydrate,
+    fat: mealInfo.value.fat,
+    weight: mealInfo.value.weight,
+    quantity: mealInfo.value.quantity,
+    note: mealInfo.value.note,
+  });
+}
+
+async function updateRecord() {
+  if (user.value === null) {
+    console.error("User not logged in");
+    return;
+  }
+
+  if (mealInfo.value === null) {
+    console.error("Meal info is null");
+    return;
+  }
+
+  await updateDailyMeal({
+    userId: user.value.uid,
+    time: selectedDate.value.getTime(),
+    meal: mealInfo.value.meal,
+    protein: mealInfo.value.protein,
+    carbohydrate: mealInfo.value.carbohydrate,
+    fat: mealInfo.value.fat,
+    weight: mealInfo.value.weight,
+    quantity: mealInfo.value.quantity,
+    note: mealInfo.value.note,
+  }, meal.value.id);
+}
+
+async function deleteRecord() {
+  if (user.value === null) {
+    console.error("User not logged in");
+    return;
+  }
+
+  if (meal.value === null) {
+    console.error("Meal is null");
+    return;
+  }
+
+  await deleteDailyMeal(meal.value.id);
 }
 
 watch(
@@ -97,11 +175,38 @@ watch(
     setMealOptions();
   }
 )
+
+watch(
+  meal,
+  (newValue) => {
+    if (!newValue) {
+      return;
+    }
+
+    setMealInfo(newValue);
+    setSelectedMeal(newValue.meal);
+  },
+  { immediate: true, deep: true }
+)
+
+watch(
+  selectedMeal,
+  (newValue) => {
+    if (!newValue) {
+      return
+    }
+
+    setMealInfo({
+      ...mealInfo.value,
+      ...mealsInfo.value.find((item) => item.meal === newValue),
+    });
+  }
+)
 </script>
 
 <template>
   <SectionContainer 
-    :title="'Add daily meal'">
+    :title="formTitle">
     <form 
       class="flex flex-col gap-6"
       @submit.prevent="handleSubmitForm">
@@ -111,11 +216,17 @@ watch(
           :time="selectedDate"
           @change-time="changeTime"/>
         <LabeledSelect 
+          v-if="action === 'add'"
           :name="'Meal'"
           :label="'Meal'"
-          :value="selectedMeal"
+          :value="mealInfo!.meal"
           :options="mealOptions" 
           @on-change-value="setSelectedMeal"/>
+        <LabeledTextbox 
+          v-else
+          v-model:text="mealInfo!.meal"
+          :label="'Meal'"
+          :name="'Meal'"/>
         <template v-if="mealInfo">
           <LabeledTextbox 
             v-model:text.number="mealInfo.protein"
@@ -139,17 +250,26 @@ watch(
             :readonly="true"/>
         </template>
         <LabeledTextbox 
-          v-model:text.number="quantity"
+          v-model:text.number="mealInfo!.quantity"
           :label="'Quantity'"
           :name="'Quantity'"/>
         <LabeledTextbox 
-          v-model:text="note"
+          v-model:text="mealInfo!.note"
           :label="'Note'"
           :name="'Note'"/>
       </div>
       <RightAlignContainer>
         <div class="flex flex-wrap gap-2">
+          <template v-if="action === 'update'">
+            <ConfirmButton
+              :text="'Update'"
+              :button-type="'submit'"/>
+            <ConfirmButton
+              :text="'Delete'"
+              @click="handleDeleteForm"/>
+          </template>
           <AddButton 
+            v-else
             :button-type="'submit'"/>
           <CommonButton
             :text="'Cancel'" 

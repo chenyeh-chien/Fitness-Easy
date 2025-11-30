@@ -1,6 +1,15 @@
 import { ref } from 'vue'
 import { db } from "@/components/Utils/Firebase/firebase"
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  where,
+  doc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc
+} from 'firebase/firestore'
 
 export function useDailyMeals() {
   const loading = ref(false);
@@ -43,20 +52,59 @@ export function useDailyMeals() {
     loading.value = true;
     error.value = null;
     try {
-        const docRef = await addDoc(collection(db, "daily-meals"), data);
-        return docRef;
+      const docRef = await addDoc(collection(db, "daily-meals"), data);
+      return docRef;
     } catch (e) {
-        error.value = e;
-        console.error("Error adding daily meal:", e);
-        throw e;
+      error.value = e;
+      console.error("Error adding daily meal:", e);
+      throw e;
     } finally {
-        loading.value = false;
+      loading.value = false;
+    }
+  };
+
+  const updateDailyMeal = async (
+    data: any,
+    id: string
+  ) => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const docRef = await updateDoc(doc(db, "daily-meals", id), data);
+      return docRef;
+    } catch (e) {
+      error.value = e;
+      console.error("Error updating daily meal:", e);
+      throw e;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const deleteDailyMeal = async (
+    id: string
+  ) => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const docRef = await deleteDoc(doc(db, "daily-meals", id));
+      return docRef;
+    } catch (e) {
+      error.value = e;
+      console.error("Error updating daily meal:", e);
+      throw e;
+    } finally {
+      loading.value = false;
     }
   };
 
   return {
     getDailyMeals,
     addDailyMeal,
+    updateDailyMeal,
+    deleteDailyMeal,
     loading,
     error
   };
