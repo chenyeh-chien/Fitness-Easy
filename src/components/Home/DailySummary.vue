@@ -25,7 +25,7 @@ const dailyIntake = ref<any>({
 });
 
 const dailyRemainCalories = computed(() => {
-  return dailyTarget.value.total - dailyIntake.value.total;
+  return Math.round(dailyTarget.value.total - dailyIntake.value.total);
 })
 
 onMounted(() => {

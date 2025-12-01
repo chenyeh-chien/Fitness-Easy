@@ -29,40 +29,46 @@ type SizeOption =
   "2xl"
 
 const props = withDefaults(defineProps<Props>(), {
-    name: "default",
-    data: 0,
-    size: "lg",
-    fontWeight: 500,
-    transitionDuration: 5,
-    showUnit: false,
-    unit: "%",
-    color: "#696969"
+  name: "default",
+  data: 0,
+  size: "lg",
+  fontWeight: 500,
+  transitionDuration: 5,
+  showUnit: false,
+  unit: "%",
+  color: "#696969"
 });
-
-const { data, size, fontWeight, transitionDuration, showUnit,
-        unit, color } = toRefs(props);
+const { 
+  data, 
+  size, 
+  fontWeight, 
+  transitionDuration, 
+  showUnit,
+  unit, 
+  color 
+} = toRefs(props);
+const SIZE_MAP: Record<SizeOption, SizeInfo> = {
+  "2xs": { fontSize: 15, width: 10, height: 20, unitSize: 8 },
+  "xs": { fontSize: 23, width: 14, height: 28, unitSize: 12 },
+  "sm": { fontSize: 31, width: 18, height: 36, unitSize: 14 },
+  "lg": { fontSize: 39, width: 22, height: 44, unitSize: 16 },
+  "xl": { fontSize: 47, width: 26, height: 52, unitSize: 18 },
+  "2xl": { fontSize: 55, width: 30, height: 60, unitSize: 20 }
+}
 const digits = ref<number[]>([]);
-const sizeMap = ref<Record<SizeOption, SizeInfo>>({
-    "2xs": { fontSize: 15, width: 10, height: 20, unitSize: 8 },
-    "xs": { fontSize: 23, width: 14, height: 28, unitSize: 12 },
-    "sm": { fontSize: 31, width: 18, height: 36, unitSize: 14 },
-    "lg": { fontSize: 39, width: 22, height: 44, unitSize: 16 },
-    "xl": { fontSize: 47, width: 26, height: 52, unitSize: 18 },
-    "2xl": { fontSize: 55, width: 30, height: 60, unitSize: 20 }
-})
 
 onMounted(async () => {
-    await arrangeDigits("Init");
+  await arrangeDigits("Init");
 })
 
 const digitsContainerStyle = computed(() => {
-    return `
-        font-size: ${sizeMap.value[size.value].fontSize}px;
-        font-weight: ${fontWeight.value}; 
-        width: ${sizeMap.value[size.value].width}px; 
-        height: ${sizeMap.value[size.value].height}px;
-        color: ${color.value};
-    `;
+  return `
+    font-size: ${SIZE_MAP[size.value].fontSize}px;
+    font-weight: ${fontWeight.value}; 
+    width: ${SIZE_MAP[size.value].width}px; 
+    height: ${SIZE_MAP[size.value].height}px;
+    color: ${color.value};
+  `;
 })
 
 const digitsNumbers = computed(() => {
@@ -70,52 +76,52 @@ const digitsNumbers = computed(() => {
     return `
       transition-duration: ${transitionDuration.value}s; 
       transition-delay: .5s;
-      transform: translate3d(0px, -${sizeMap.value[size.value].height * digits.value[index]!}px, 0px);
-      line-height: ${sizeMap.value[size.value].height}px;
+      transform: translate3d(0px, -${SIZE_MAP[size.value].height * digits.value[index]!}px, 0px);
+      line-height: ${SIZE_MAP[size.value].height}px;
     `;
   }
 })
 
 const digitsUnitStyle = computed(() => {
-    return `
-        font-size: ${sizeMap.value[size.value].unitSize}px;
-        width: max-content;
-        color: ${color.value};
-        margin-bottom: 5px;
-        margin-left: 4px;
-        transition-duration: ${transitionDuration.value}s; 
-        transition-delay: .5s;
-        height: fit-content;
-    `;
+  return `
+    font-size: ${SIZE_MAP[size.value].unitSize}px;
+    width: max-content;
+    color: ${color.value};
+    margin-bottom: 5px;
+    margin-left: 4px;
+    transition-duration: ${transitionDuration.value}s; 
+    transition-delay: .5s;
+    height: fit-content;
+  `;
 })
 
 const arrangeDigits = async (mode: string = "") => {
-    let tempNum = data.value;
-    const tempDigits = [];
+  let tempNum = data.value;
+  const tempDigits = [];
 
-    do {
-        tempDigits.unshift(tempNum % 10);
-        tempNum =  Math.floor(tempNum / 10);
-    } while (tempNum > 0)
+  do {
+    tempDigits.unshift(tempNum % 10);
+    tempNum =  Math.floor(tempNum / 10);
+  } while (tempNum > 0)
 
-    digits.value = tempDigits;
+  digits.value = tempDigits;
 
-    if (mode === "Init") {
-        await delay(1000);
-    }
+  if (mode === "Init") {
+    await delay(1000);
+  }
 }
 
 const delay = (milliseconds: number) => {
-    return new Promise((resolve) => {
-        setTimeout(resolve, milliseconds);
-    });
+  return new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
 }
 watch(
-    data,
-    async () => {
-        await arrangeDigits("Init");
-    },
-    { deep: true }
+  data,
+  async () => {
+    await arrangeDigits("Init");
+  },
+  { deep: true }
 )
 </script>
 
