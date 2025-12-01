@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { toRefs, ref, computed, onMounted, watch } from "vue";
-import { clsx } from "clsx";
+import { toRefs, ref, computed, onMounted, watch } from "vue"
+import { clsx } from "clsx"
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 
 interface Props {
   name?: string;
@@ -57,8 +58,8 @@ const SIZE_MAP: Record<SizeOption, SizeInfo> = {
 }
 const digits = ref<number[]>([]);
 
-onMounted(async () => {
-  await arrangeDigits("Init");
+const isNegative = computed(() => {
+  return data.value < 0;
 })
 
 const digitsContainerStyle = computed(() => {
@@ -95,8 +96,12 @@ const digitsUnitStyle = computed(() => {
   `;
 })
 
+onMounted(async () => {
+  await arrangeDigits("Init");
+})
+
 const arrangeDigits = async (mode: string = "") => {
-  let tempNum = data.value;
+  let tempNum = Math.abs(data.value);
   const tempDigits = [];
 
   do {
@@ -128,6 +133,15 @@ watch(
 <template>
   <span 
     class="relative overflow-hidden whitespace-nowrap">
+    <span
+      v-if="isNegative" 
+      :class="clsx(
+        'relative inline-block overflow-hidden',
+        'h-full text-center'
+      )"
+      :style="digitsContainerStyle">
+      <span>-</span>
+    </span>
     <TransitionGroup 
       name="scroller" 
       appear>
