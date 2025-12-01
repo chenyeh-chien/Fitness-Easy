@@ -24,3 +24,7 @@ export const formatTimeWithSeconds =
 
   return result;
 }
+
+export const roundTo2 = (num: number) => {
+  return Math.round(num * 100) / 100;
+}

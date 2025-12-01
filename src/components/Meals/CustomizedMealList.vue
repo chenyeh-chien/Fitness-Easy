@@ -3,7 +3,13 @@ import { ref, computed, onMounted, watch } from 'vue'
 import TextTable from '../Utils/tables/TextTable.vue'
 import { useAuth } from '@/composables/useAuth'
 import { useMealOptions } from '@/composables/useMealOptions'
+import { roundTo2 } from '@/components/Utils/utilFunctions'
 
+interface Emits {
+  (e: 'selectRecord', data: Record<string, any>): void
+}
+
+const emits = defineEmits<Emits>();
 const { user, isAuthReady } = useAuth();
 const { getMealOptions } = useMealOptions();
 
@@ -13,7 +19,7 @@ const LABELS = [{
 }, {
   label: "Protein (g)",
   key: "protein",
-}, {
+}, {  
   label: "Carbohydrate (g)",
   key: "carbohydrate",
 }, {
@@ -24,16 +30,6 @@ const LABELS = [{
   key: "weight",
 }]
 const mealsInfo = ref<any[]>([]);
-const mealOptions = computed(() => {
-  return mealsInfo.value.map(item => {
-    return {
-      ...item,
-      protein: item.protein.toFixed(2),
-      carbohydrate: item.carbohydrate.toFixed(2),
-      fat: item.fat.toFixed(2),
-    }
-  });
-})
 
 onMounted(() => {
   setMealOptions();
@@ -49,10 +45,28 @@ async function setMealOptions() {
     const querySnapshot = 
       await getMealOptions(user.value.uid);
     
-    mealsInfo.value = querySnapshot.docs.map((doc) => doc.data());
+    mealsInfo.value =
+       querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+
+        return {
+          ...data,
+          protein: roundTo2(data.protein),
+          carbohydrate: roundTo2(data.carbohydrate),
+          fat: roundTo2(data.fat),
+          id: doc.id,
+        }
+       });
+
+    console.log(mealsInfo.value);
   } catch (error) {
     console.error("Error querying daily meals:", error);
   }
+}
+
+function handleSelectRow(index: number) {
+  const data = mealsInfo.value[index];
+  emits('selectRecord', data);
 }
 
 watch(
@@ -66,6 +80,7 @@ watch(
 <template>
   <TextTable 
     :headers="LABELS"
-    :data="mealOptions"
-    :clickable="true"/>
+    :data="mealsInfo"
+    :clickable="true"
+    @select-row="handleSelectRow"/>
 </template> 

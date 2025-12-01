@@ -1,6 +1,15 @@
 import { ref } from 'vue'
 import { db } from "@/components/Utils/Firebase/firebase"
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore'
+import { 
+  collection, 
+  query, 
+  where,
+  doc,
+  getDocs, 
+  addDoc, 
+  updateDoc,
+  deleteDoc
+} from 'firebase/firestore'
 
 export function useMealOptions() {
   const loading = ref(false);
@@ -40,6 +49,39 @@ export function useMealOptions() {
     }
   };
 
+  const updateMealOption = async (
+    data: any, 
+    id: string
+  ) => {
+    loading.value = true;
+    error.value = null;
+    try {
+        const docRef = await updateDoc(doc(db, "meal-options", id), data);
+        return docRef;
+    } catch (e) {
+        error.value = e;
+        console.error("Error updating meal option:", e);
+        throw e;
+    } finally {
+        loading.value = false;
+    }
+  };
+
+  const deleteMealOption = async (id: string) => {
+    loading.value = true;
+    error.value = null;
+    try {
+        const docRef = await deleteDoc(doc(db, "meal-options", id));
+        return docRef;
+    } catch (e) {
+        error.value = e;
+        console.error("Error deleting meal option:", e);
+        throw e;
+    } finally {
+        loading.value = false;
+    }
+  };
+
   const getMealInfoByMeal = async (
     userId: string, 
     meal: string
@@ -66,6 +108,8 @@ export function useMealOptions() {
   return {
     getMealOptions,
     addMealOption,
+    updateMealOption,
+    deleteMealOption,
     getMealInfoByMeal,
     loading,
     error

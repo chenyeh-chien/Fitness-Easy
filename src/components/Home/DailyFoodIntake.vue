@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyMeals } from '@/composables/useDailyMeals'
+import { roundTo2 } from '../Utils/utilFunctions'
 import TextTable from '../Utils/tables/TextTable.vue'
 
 interface Props {
@@ -39,6 +40,7 @@ const LABELS = [{
 }]
 const { user, isAuthReady } = useAuth();
 const { getDailyMeals } = useDailyMeals();
+const originalDailyMeals = ref<any[]>([]);
 const dailyMeals = ref<any[]>([]);
 
 onMounted(() => {
@@ -62,23 +64,28 @@ async function checkUserDailyMeals() {
     if (querySnapshot.empty) {
       console.log("No meals found for this user.");
     }
-
-    // Todo: Set original data and displayed table data
-
-    dailyMeals.value = 
-      querySnapshot.docs.map((doc) => {
+    
+    originalDailyMeals.value = querySnapshot.docs.map((doc) => {
         const data = doc.data();
+
         return {
           ...data,
-          total: (data.quantity * (
-            data.protein * 4 + 
-            data.carbohydrate * 4 + 
-            data.fat * 9
-          )).toFixed(2),
-          protein: (data.protein * data.quantity).toFixed(2),
-          carbohydrate: (data.carbohydrate * data.quantity).toFixed(2),
-          fat: (data.fat * data.quantity).toFixed(2),
           id: doc.id,
+        }
+      });
+
+
+    dailyMeals.value = originalDailyMeals.value.map((meal) => {
+      return {
+        ...meal,
+          total: roundTo2(meal.quantity * (
+            meal.protein * 4 + 
+            meal.carbohydrate * 4 + 
+            meal.fat * 9
+          )),
+          protein: roundTo2(meal.protein * meal.quantity),
+          carbohydrate: roundTo2(meal.carbohydrate * meal.quantity),
+          fat: roundTo2(meal.fat * meal.quantity),
         }
       });
   } catch (error) {
@@ -87,8 +94,7 @@ async function checkUserDailyMeals() {
 }
 
 function handleSelectRow(index: number) {
-  // Need to get docRef to update the row
-  const data = dailyMeals.value[index];
+  const data = originalDailyMeals.value[index];
   emits('selectRecord', data);
 }
 
