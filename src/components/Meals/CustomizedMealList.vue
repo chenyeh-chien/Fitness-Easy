@@ -82,5 +82,6 @@ watch(
     :headers="LABELS"
     :data="mealsInfo"
     :clickable="true"
+    :displayed-data-cnt="4"
     @select-row="handleSelectRow"/>
 </template> 

@@ -7,6 +7,7 @@ interface Props {
   headers: TableHeader[];
   data: Record<string, any>[];
   clickable?: boolean;
+  displayedDataCnt?: number;
 }
 
 interface Emits {
@@ -15,8 +16,9 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   clickable: false,
+  displayedDataCnt: 2,
 });
-const { headers, data, clickable } = toRefs(props);
+const { headers, data, clickable, displayedDataCnt } = toRefs(props);
 const emits = defineEmits<Emits>();
 
 watch(
@@ -43,7 +45,12 @@ watch(
           </th>
         </tr>
       </thead>
-      <tbody class="overflow-y-auto">
+      <tbody  
+        :class="clsx(
+          'overflow-y-auto',
+          //displayedDataCnt && `max-h-[${displayedDataCnt * 48.5}px]`,
+        )"
+        style="max-height: 100px;">
         <tr 
           v-for="(item, index) of data"
           :class="clsx(

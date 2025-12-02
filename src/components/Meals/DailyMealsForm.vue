@@ -25,6 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
   action: "add",
   meal: () => ({
     meal: "",
+    time: new Date().getTime(),
     protein: 0,
     carbohydrate: 0,
     fat: 0,
@@ -42,7 +43,6 @@ const {
   deleteDailyMeal 
 } = useDailyMeals();
 const { getMealOptions } = useMealOptions();
-const selectedDate = ref(new Date())
 const mealInfo = ref<Record<string, any> | null>(null)
 const mealsInfo = ref<any[]>([])
 const selectedMeal = ref<string | null>(null);
@@ -76,7 +76,7 @@ async function setMealOptions() {
 }
 
 function changeTime(time: Date) {
-  selectedDate.value = time;
+  mealInfo.value!.time = time.getTime();
 }
 
 function setMealInfo(info: Record<string, any>) {
@@ -120,7 +120,7 @@ async function addRecord() {
 
   await addDailyMeal({
     userId: user.value.uid,
-    time: selectedDate.value.getTime(),
+    time: mealInfo.value.time,
     meal: mealInfo.value.meal,
     protein: mealInfo.value.protein,
     carbohydrate: mealInfo.value.carbohydrate,
@@ -144,7 +144,7 @@ async function updateRecord() {
 
   await updateDailyMeal({
     userId: user.value.uid,
-    time: selectedDate.value.getTime(),
+    time: mealInfo.value.time,
     meal: mealInfo.value.meal,
     protein: mealInfo.value.protein,
     carbohydrate: mealInfo.value.carbohydrate,
@@ -213,7 +213,7 @@ watch(
       <div class="flex flex-col gap-4">
         <DatetimeSelectorWithLabel 
           :label="'Time'"
-          :time="selectedDate"
+          :time="new Date(mealInfo!.time)"
           @change-time="changeTime"/>
         <LabeledSelect 
           v-if="action === 'add'"
