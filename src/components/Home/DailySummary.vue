@@ -1,16 +1,17 @@
 <script setup lang="ts">
+import { watch, ref, onMounted, computed } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyTarget } from '@/composables/useDailyTarget'
 import { useDailyMeals } from '@/composables/useDailyMeals'
 import DigitScroller from '../Utils/transitions/DigitScroller.vue'
 // import NutrientsPercentage from './NutrientsPercentage.vue'
 import RemainNutrients from './RemainNutrients.vue'
-import { watch, ref, onMounted, computed } from 'vue';
+import { formatDateStr } from '@/components/Utils/utilFunctions'
 
 const { user, isAuthReady } = useAuth();
 const { getDailyTargetsByDate } = useDailyTarget();
 const { getDailyMeals } = useDailyMeals();
-const currentDate = ref(new Date().toISOString().slice(0, 10))
+const currentDate = ref(formatDateStr(new Date(), false))
 const dailyTarget = ref({
   protein: 0,
   carbohydrate: 0,

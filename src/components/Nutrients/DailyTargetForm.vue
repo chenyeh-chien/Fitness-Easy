@@ -8,6 +8,7 @@ import LabeledTextbox from '@/components/Utils/textboxes/LabeledTextbox.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
+import { formatDateStr } from '@/components/Utils/utilFunctions'
 
 
 const { user, isAuthReady } = useAuth();
@@ -16,9 +17,6 @@ const selectedDate = ref(new Date())
 const protein = ref("")
 const carbohydrate = ref("")
 const fat = ref("")
-const dateStr = computed(() => {
-  return selectedDate.value.toISOString().slice(0, 10)
-})
 
 watch(
   isAuthReady,
@@ -62,7 +60,7 @@ async function handleSubmitForm() {
   try {
     const docRef = await addDailyTarget({
       userId: user.value.uid,
-      date: dateStr.value,
+      date: formatDateStr(selectedDate.value, false),
       protein: protein.value,
       carbohydrate: carbohydrate.value,
       fat: fat.value,
@@ -71,7 +69,7 @@ async function handleSubmitForm() {
   } catch (error) {
     console.error("Error writing document:", error);
   }
-}
+} 
 </script>
 
 <template>
@@ -84,6 +82,7 @@ async function handleSubmitForm() {
         <DatetimeSelectorWithLabel 
           :label="'Date'"
           :time="selectedDate"
+          :show-time="false"
           @change-time="changeTime"/>
         <LabeledTextbox 
           v-model:text.number="protein"

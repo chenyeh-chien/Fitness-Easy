@@ -2,8 +2,8 @@
 import { clsx } from "clsx";
 import SectionContainer from '@/components/Utils/containers/SectionContainer.vue';
 import DailySummary from "@/components/Home/DailySummary.vue";
-import TrainingRoutine from "@/components/Home/TrainingRoutine.vue";
 import DailyFoodIntake from "@/components/Home/DailyFoodIntake.vue";
+import DailyWorkoutList from "@/components/Training/DailyWorkoutList.vue";
 </script>
 
 <template>
@@ -24,7 +24,7 @@ import DailyFoodIntake from "@/components/Home/DailyFoodIntake.vue";
     <SectionContainer 
       class="w-full"
       :title="'Training routine'">
-      <TrainingRoutine />
+      <DailyWorkoutList />
     </SectionContainer>
     <SectionContainer 
       class="w-full"

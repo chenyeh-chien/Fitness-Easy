@@ -1,7 +1,9 @@
-export const formatTimeWithSeconds = 
-  (date: Date | number | string | undefined | null, 
-    showTime: boolean = true, showSeconds: boolean = true): string => {
-  if (date === undefined || date === null) {
+export const formatDateStr = (
+  date: Date | number | string | undefined | null, 
+  showTime: boolean = true, 
+  showSeconds: boolean = true
+): string => {
+  if (date == null) {
     return "";
   }
 

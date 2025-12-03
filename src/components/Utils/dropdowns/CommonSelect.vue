@@ -45,7 +45,8 @@ const { floatingStyles } = useFloating(reference, floating, {
         Object.assign(elements.floating.style, {
           width: `${rects.reference.width}px`,
           maxHeight: "140px",
-          overflowY: "auto",  
+          overflowY: "auto",
+          zIndex: 1000  
         });
       }
     })
