@@ -197,7 +197,11 @@ watch(
     }
 
     setWorkoutInfo(newValue);
-    setSelectedWorkout(newValue.exercise);
+
+    if (action.value === 'update') {
+      setSelectedBodyPart(newValue.bodyPart);
+      setSelectedWorkout(newValue.exercise);
+    }
   },
   { immediate: true, deep: true }
 )
@@ -209,21 +213,24 @@ watch(
       return;
     }
 
-    await nextTick();
-
-    setSelectedBodyPart(bodyPartOptions.value[0]);
+    if (action.value === 'add') {
+      await nextTick();
+      setSelectedBodyPart(bodyPartOptions.value[0]);
+    }
   },
   { immediate: true, deep: true }
 )
 
 watch(
   selectedBodyPart,
-  (newValue) => {
+  async (newValue) => {
     if (!newValue || workoutOptions.value.length === 0) {
       return;
     }
 
-    setSelectedWorkout(workoutOptions.value[0]);
+    if (action.value === 'add') {
+      setSelectedWorkout(workoutOptions.value[0]);
+    }
   }
 )
 
@@ -255,30 +262,20 @@ watch(
           :time="new Date(workoutInfo!.date)"
           :show-time="false"
           @change-time="changeDate"/>
-        <LabeledSelect 
-          v-if="action === 'add'"
+        <LabeledSelect
+          v-if="selectedBodyPart !== null"
           :name="'Body part'"
           :label="'Body part'"
-          :value="workoutInfo!.bodyPart"
+          :value="selectedBodyPart"
           :options="bodyPartOptions" 
           @on-change-value="setSelectedBodyPart"/>
-        <LabeledTextbox 
-          v-else
-          v-model:text="workoutInfo!.exercise"
-          :label="'Exercise'"
-          :name="'Exercise'"/>
-        <LabeledSelect 
-          v-if="action === 'add'"
+        <LabeledSelect
+          v-if="selectedWorkout !== null"
           :name="'Exercise'"
           :label="'Exercise'"
-          :value="workoutInfo!.exercise"
+          :value="selectedWorkout"
           :options="workoutOptions" 
           @on-change-value="setSelectedWorkout"/>
-        <LabeledTextbox 
-          v-else
-          v-model:text="workoutInfo!.exercise"
-          :label="'Exercise'"
-          :name="'Exercise'"/>
         <LabeledTextbox 
           v-model:text.number="workoutInfo!.weight"
           :label="'Weight (kg)'"
