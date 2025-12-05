@@ -1,4 +1,4 @@
-import {onCall, HttpsError, CallableRequest} from "firebase-functions/v2/https";
+import { onCall, HttpsError, CallableRequest } from "firebase-functions/v2/https";
 import axios from "axios";
 
 const TFDA_API_URL = "https://data.fda.gov.tw/api/v2/FoodNutrient";

@@ -16,7 +16,7 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   clickable: false,
-  displayedDataCnt: 2,
+  displayedDataCnt: 10,
 });
 const { headers, data, clickable, displayedDataCnt } = toRefs(props);
 const emits = defineEmits<Emits>();
@@ -32,7 +32,7 @@ watch(
 <template>
   <div 
     :class="clsx(
-      'w-full overflow-x-auto scrollbar-thin',
+      'w-full overflow-x-auto scrollbar-thin'
     )">
     <table class="min-w-full max-w-max border-collapse">
       <thead class="text-(--table-label-color) text-xs pb-2 border-b">
@@ -45,12 +45,7 @@ watch(
           </th>
         </tr>
       </thead>
-      <tbody  
-        :class="clsx(
-          'overflow-y-auto',
-          //displayedDataCnt && `max-h-[${displayedDataCnt * 48.5}px]`,
-        )"
-        style="max-height: 100px;">
+      <tbody>
         <tr 
           v-for="(item, index) of data"
           :class="clsx(
