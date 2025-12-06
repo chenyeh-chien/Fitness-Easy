@@ -112,12 +112,6 @@ function hideForms() {
       </div>
     </RightAlignContainer>
     <SectionContainer
-      :title="'Exercise list'">
-      <ExerciseList
-        :key="componentKey"
-        @select-record="handleSelectExercise"/>
-    </SectionContainer>
-    <SectionContainer
       :title="'Daily workout list'">
       <DatetimeSelectorWithLabel 
         :label="'Date'"
@@ -128,6 +122,12 @@ function hideForms() {
         :key="componentKey"
         :date="selectedDate"
         @select-record="handleSelectDailyWorkout"/>
+    </SectionContainer>
+    <SectionContainer
+      :title="'Exercise list'">
+      <ExerciseList
+        :key="componentKey"
+        @select-record="handleSelectExercise"/>
     </SectionContainer>
     <ExerciseForm
       v-if="showAddExercise"

@@ -32,10 +32,14 @@ watch(
 <template>
   <div 
     :class="clsx(
-      'w-full overflow-x-auto scrollbar-thin'
+      'w-full max-h-120 overflow-x-auto scrollbar-thin'
     )">
     <table class="min-w-full max-w-max border-collapse">
-      <thead class="text-(--table-label-color) text-xs pb-2 border-b">
+      <thead 
+        :class="clsx(
+          'text-(--table-label-color) text-xs pb-2 shadow-(--table-label-box-shadow)',
+          'sticky top-0 bg-(--table-label-bg) z-10'
+        )">
         <tr>
           <th 
             v-for="header in headers"

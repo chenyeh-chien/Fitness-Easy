@@ -111,12 +111,6 @@ function hideForms() {
       </div>
     </RightAlignContainer>
     <SectionContainer
-      :title="'Meal list'">
-      <CustomizedMealList 
-        :key="componentKey"
-        @select-record="handleSelectMealOption"/>
-    </SectionContainer>
-    <SectionContainer
       :title="'Daily food intake'">
       <DatetimeSelectorWithLabel 
         :label="'Date'"
@@ -127,6 +121,12 @@ function hideForms() {
         :date="selectedDate"
         :key="componentKey"
         @select-record="handleSelectDailyMeal"/>
+    </SectionContainer>
+    <SectionContainer
+      :title="'Meal list'">
+      <CustomizedMealList 
+        :key="componentKey"
+        @select-record="handleSelectMealOption"/>
     </SectionContainer>
     <MealContentForm
       v-if="showAddMealOption"
