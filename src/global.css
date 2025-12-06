@@ -37,7 +37,7 @@
 
     --table-label-color: var(--sidebar-link-color);
     --table-label-bg: var(--section-container-bg);
-    --table-label-box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    --table-label-box-shadow: 0 0 2px rgba(0, 0, 0, 1);
     --table-data-color: var(--sidebar-link-color);
     --table-data-bg: #FAFAFA;
     --table-data-hover-bg: var(--sidebar-link-hover-bg);
@@ -106,7 +106,7 @@
     --table-data-bg: #222024;
     --table-data-hover-bg: var(--sidebar-link-hover-bg);
     --table-label-bg: var(--section-container-bg);
-    --table-label-box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+    --table-label-box-shadow: 0 0 2px rgba(255, 255, 255, 1);
 
     --login-bg: var(--sidebar-bg);
     --login-border-color: var(--section-container-border-color);
