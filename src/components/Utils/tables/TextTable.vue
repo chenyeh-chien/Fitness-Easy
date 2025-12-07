@@ -37,8 +37,8 @@ watch(
     <table class="min-w-full max-w-max border-collapse">
       <thead 
         :class="clsx(
-          'text-(--table-label-color) text-xs pb-2 shadow-(--table-label-box-shadow)',
-          'sticky top-0 bg-(--table-label-bg) z-10'
+          'text-(--table-label-color) text-xs pb-2 border-b-(--table-label-border-color)',
+          'shadow-(--table-label-box-shadow) sticky top-0 bg-(--table-label-bg) z-10'
         )">
         <tr>
           <th 

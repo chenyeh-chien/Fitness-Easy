@@ -1,11 +1,13 @@
 import { ref } from "vue";
 import { db } from "@/components/Utils/Firebase/firebase";
-import { 
-  collection, 
-  query, 
-  where, 
+import {
+  collection,
+  orderBy,
+  documentId,
+  query,
+  where,
   doc,
-  getDocs, 
+  getDocs,
   addDoc,
   updateDoc,
   deleteDoc
@@ -21,7 +23,8 @@ export function useDailyProgress() {
     try {
       const q = query(
         collection(db, 'daily-progress'),
-        where('userId', '==', userId)
+        where('userId', '==', userId),
+        orderBy(documentId(), "desc")
       );
       const querySnapshot = await getDocs(q);
       return querySnapshot;

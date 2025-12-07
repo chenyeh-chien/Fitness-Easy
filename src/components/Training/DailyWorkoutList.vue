@@ -3,6 +3,7 @@ import { ref, watch, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyWorkouts } from '@/composables/useDailyWorkouts'
 import TextTable from '../Utils/tables/TextTable.vue'
+import { formatMinutesStr } from '../Utils/utilFunctions'
 
 interface Props {
   date?: Date;
@@ -34,7 +35,7 @@ const LABELS = [{
   label: "Sets",
   key: "sets",
 }, {
-  label: "Set time (s)",
+  label: "Set time (m)",
   key: "setTime",
 }, {
   label: "Note",
@@ -42,6 +43,7 @@ const LABELS = [{
 }]
 const { user, isAuthReady } = useAuth();
 const { getDailyWorkouts } = useDailyWorkouts();
+const originalDailyWorkouts = ref<any[]>([]);
 const dailyWorkouts = ref<any[]>([]);
 
 onMounted(() => {
@@ -66,7 +68,7 @@ async function checkUserDailyWorkouts() {
       console.log("No workouts found for this user.");
     }
     
-    dailyWorkouts.value = querySnapshot.docs.map((doc) => {
+    originalDailyWorkouts.value = querySnapshot.docs.map((doc) => {
         const data = doc.data();
 
         return {
@@ -74,13 +76,20 @@ async function checkUserDailyWorkouts() {
           id: doc.id,
         }
       });
+
+    dailyWorkouts.value = originalDailyWorkouts.value.map((workout) => {
+      return {
+        ...workout,
+        setTime: formatMinutesStr(workout.setTime),
+      }
+    })
   } catch (error) {
     console.error("Error querying daily workouts:", error);
   }
 }
 
 function handleSelectRow(index: number) {
-  const data = dailyWorkouts.value[index];
+  const data = originalDailyWorkouts.value[index];
   emits('selectRecord', data);
 }
 

@@ -97,20 +97,6 @@ function hideForms() {
 
 <template>
   <div class="flex flex-col gap-4">
-    <RightAlignContainer>
-      <div class="flex gap-2">
-        <div>
-          <CommonButton 
-            :text="'Add exercise'"
-            @click="handleShowAddExercise"/>
-        </div>
-        <div>
-          <CommonButton 
-            :text="'Add daily workout'"
-            @click="handleShowAddDailyWorkout"/>
-        </div>
-      </div>
-    </RightAlignContainer>
     <SectionContainer
       :title="'Daily workout list'">
       <DatetimeSelectorWithLabel 
@@ -122,12 +108,30 @@ function hideForms() {
         :key="componentKey"
         :date="selectedDate"
         @select-record="handleSelectDailyWorkout"/>
+      <RightAlignContainer>
+        <div class="flex gap-2">
+          <div>
+            <CommonButton 
+              :text="'Add daily workout'"
+              @click="handleShowAddDailyWorkout"/>
+          </div>
+        </div>
+      </RightAlignContainer>
     </SectionContainer>
     <SectionContainer
       :title="'Exercise list'">
       <ExerciseList
         :key="componentKey"
         @select-record="handleSelectExercise"/>
+      <RightAlignContainer>
+        <div class="flex gap-2">
+          <div>
+            <CommonButton 
+              :text="'Add exercise'"
+              @click="handleShowAddExercise"/>
+          </div>
+        </div>
+      </RightAlignContainer>
     </SectionContainer>
     <ExerciseForm
       v-if="showAddExercise"

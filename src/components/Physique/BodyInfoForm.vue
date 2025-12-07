@@ -10,6 +10,7 @@ import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelector
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
+import { formatDateStr } from '../Utils/utilFunctions'
 
 interface Props {
   action?: "add" | "update";
@@ -25,14 +26,14 @@ const props = withDefaults(defineProps<Props>(), {
   info: () => ({
     firstName: "",
     lastName: "",
-    birthDate: new Date().getTime(),
+    birthDate: formatDateStr(new Date(), false),
     gender: "M",
     height: 175,
   })
 })
 const { action, info } = toRefs(props);
 const emits = defineEmits<Emits>();
-const { user, isAuthReady } = useAuth();
+const { user } = useAuth();
 const { 
   addBodyInfo, 
   updateBodyInfo, 
@@ -52,7 +53,7 @@ function setGender(gender: string) {
 }
 
 function changeTime(time: Date) {
-  bodyInfo.value!.birthDate = time.getTime();
+  bodyInfo.value!.birthDate = formatDateStr(time, false);
 }
 
 async function handleSubmitForm() {

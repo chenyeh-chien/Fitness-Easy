@@ -1,6 +1,6 @@
 export const formatDateStr = (
-  date: Date | number | string | undefined | null, 
-  showTime: boolean = true, 
+  date: Date | number | string | undefined | null,
+  showTime: boolean = true,
   showSeconds: boolean = true
 ): string => {
   if (date == null) {
@@ -20,12 +20,23 @@ export const formatDateStr = (
     result += ` ${hours}:${minutes}`;
 
     if (showSeconds) {
-        result += `:${seconds}`;
+      result += `:${seconds}`;
     }
   }
 
   return result;
 }
+
+export const formatMinutesStr = (
+  minutes: number
+) => {
+  const minuteInt = Math.floor(minutes);
+  const secondInt = Math.floor((minutes % 1) * 60);
+
+  return `${String(minuteInt).padStart(2, '0')}:${String(secondInt).padStart(2, '0')}`;
+}
+
+
 
 export const roundTo2 = (num: number) => {
   return Math.round(num * 100) / 100;

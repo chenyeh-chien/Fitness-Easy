@@ -9,6 +9,7 @@ import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelector
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
+import { formatDateStr } from '@/components/Utils/utilFunctions';
 
 
 interface Props {
@@ -23,7 +24,7 @@ interface Emits {
 const props = withDefaults(defineProps<Props>(), {
   action: "add",
   progress: () => ({
-    date: new Date().getTime(),
+    date: formatDateStr(new Date(), false),
     weight: 75,
   })
 })
@@ -45,7 +46,7 @@ function setDailyProgress(progress: Record<string, any>) {
 }
 
 function changeTime(time: Date) {
-  dailyProgress.value!.date = time.getTime();
+  dailyProgress.value!.date = formatDateStr(time, false);
 }
 
 async function handleSubmitForm() {
@@ -81,6 +82,7 @@ async function addRecord() {
 
   await addDailyProgress({
     userId: user.value!.uid,
+    date: dailyProgress.value!.date,
     weight: dailyProgress.value!.weight,
   });
 }
@@ -98,6 +100,7 @@ async function updateRecord() {
 
   await updateDailyProgress({
     userId: user.value!.uid,
+    date: dailyProgress.value!.date,
     weight: dailyProgress.value!.weight,
   }, progress.value!.id);
 }

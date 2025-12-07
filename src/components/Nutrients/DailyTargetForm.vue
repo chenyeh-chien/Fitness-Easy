@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { toRefs, ref, watch, computed } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyTarget } from '@/composables/useDailyTarget'
 import SectionContainer from '@/components/Utils/containers/SectionContainer.vue'
@@ -7,23 +7,45 @@ import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelector
 import LabeledTextbox from '@/components/Utils/textboxes/LabeledTextbox.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
+import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 import { formatDateStr } from '@/components/Utils/utilFunctions'
 
+interface Props {
+  action?: "add" | "update";
+  target?: Record<string, any>;
+}
 
+interface Emits {
+  (e: 'cancelForm'): void;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  action: "add",
+  target: () => ({
+    date: formatDateStr(new Date(), false),
+    protein: 0,
+    carbohydrate: 0,
+    fat: 0,
+  })
+})
+const { action, target } = toRefs(props);
+const emits = defineEmits<Emits>();
 const { user, isAuthReady } = useAuth();
-const { getDailyTargets, addDailyTarget } = useDailyTarget();
-const selectedDate = ref(new Date())
-const protein = ref("")
-const carbohydrate = ref("")
-const fat = ref("")
+const { 
+  getDailyTargets, 
+  addDailyTarget,
+  updateDailyTarget,
+  deleteDailyTarget,
+} = useDailyTarget();
+const targetInfo = ref<Record<string, any> | null>(props.target);
+const formTitle = computed(() => {
+  return action.value === "add" ? "Add daily target" : "Update daily target";
+})
 
-watch(
-  isAuthReady,
-  () => {
-    checkUserDailyTarget();
-  }
-)
+function setTargetInfo(info: Record<string, any>) {
+  targetInfo.value = info;
+}
 
 async function checkUserDailyTarget() {
   if (user.value === null) {
@@ -48,61 +70,144 @@ async function checkUserDailyTarget() {
 }
 
 function changeTime(time: Date) {
-  selectedDate.value = time;
+  targetInfo.value!.date = formatDateStr(time, false);
 }
 
 async function handleSubmitForm() {
+  try {
+    action.value === "add" ? await addRecord() : await updateRecord();
+
+    emits('cancelForm')
+  } catch (error) {
+    console.error("Error writing document:", error);
+  }
+}
+
+async function handleDeleteForm() {
+  try {
+    await deleteRecord();
+
+    emits('cancelForm')
+  } catch (error) {
+    console.error("Error deleting document:", error);
+  }
+}
+
+async function addRecord() {
   if (user.value === null) {
     console.error("User not logged in");
     return;
   }
 
-  try {
-    const docRef = await addDailyTarget({
-      userId: user.value.uid,
-      date: formatDateStr(selectedDate.value, false),
-      protein: protein.value,
-      carbohydrate: carbohydrate.value,
-      fat: fat.value,
-    });
-    console.log("Document written with ID: ", docRef.id);
-  } catch (error) {
-    console.error("Error writing document:", error);
+  if (targetInfo.value === null) {
+    console.error("Target info is null");
+    return;
   }
-} 
+
+  await addDailyTarget({
+    userId: user.value.uid,
+    date: targetInfo.value.date,
+    protein: targetInfo.value.protein,
+    carbohydrate: targetInfo.value.carbohydrate,
+    fat: targetInfo.value.fat,
+  });
+}
+
+async function updateRecord() {
+  if (user.value === null) {
+    console.error("User not logged in");
+    return;
+  }
+
+  if (targetInfo.value === null) {
+    console.error("Target info is null");
+    return;
+  }
+
+  await updateDailyTarget({
+    userId: user.value.uid,
+    date: targetInfo.value.date,
+    protein: targetInfo.value.protein,
+    carbohydrate: targetInfo.value.carbohydrate,
+    fat: targetInfo.value.fat,
+  }, targetInfo.value.id);
+}
+
+async function deleteRecord() {
+  if (user.value === null) {
+    console.error("User not logged in");
+    return;
+  }
+
+  if (targetInfo.value === null) {
+    console.error("Target info is null");
+    return;
+  }
+
+  await deleteDailyTarget(targetInfo.value.id);
+}
+
+watch(
+  isAuthReady,
+  () => {
+    checkUserDailyTarget();
+  }
+)
+
+watch(
+  target,
+  (newValue) => {
+    if (!newValue) {
+      return;
+    }
+
+    setTargetInfo(newValue);
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <template>
   <SectionContainer 
-    :title="'Add daily target'">
+    :title="formTitle">
     <form 
       class="flex flex-col gap-6"
       @submit.prevent="handleSubmitForm">
       <div class="flex flex-col gap-4">
         <DatetimeSelectorWithLabel 
           :label="'Date'"
-          :time="selectedDate"
+          :time="new Date(targetInfo!.date)"
           :show-time="false"
           @change-time="changeTime"/>
         <LabeledTextbox 
-          v-model:text.number="protein"
+          v-model:text.number="targetInfo!.protein"
           :label="'Protein'"
           :name="'Protein'"/>
         <LabeledTextbox 
-          v-model:text.number="carbohydrate"
+          v-model:text.number="targetInfo!.carbohydrate"
           :label="'Carbohydrate'"
           :name="'Carbohydrate'"/>
         <LabeledTextbox 
-          v-model:text.number="fat"
+          v-model:text.number="targetInfo!.fat"
           :label="'Fat'"
           :name="'Fat'"/>
       </div>
       <RightAlignContainer>
         <div class="flex flex-wrap gap-2">
+          <template v-if="action === 'update'">
+            <ConfirmButton
+              :text="'Update'"
+              :button-type="'submit'"/>
+            <ConfirmButton
+              :text="'Delete'"
+              @click="handleDeleteForm"/>
+          </template>
           <AddButton 
+            v-else
             :button-type="'submit'"/>
           <CommonButton
-            :text="'Cancel'" />
+            :text="'Cancel'" 
+            @click="emits('cancelForm')"/>
         </div>
       </RightAlignContainer>
     </form>
