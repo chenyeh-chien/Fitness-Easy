@@ -1,4 +1,5 @@
 export type TableHeader = {
   label: string;
   key: string;
+  type?: string;
 }

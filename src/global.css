@@ -42,6 +42,8 @@
     --table-data-color: var(--sidebar-link-color);
     --table-data-bg: #FAFAFA;
     --table-data-hover-bg: var(--sidebar-link-hover-bg);
+    --table-data-progress-asc-color: #F04A4A;
+    --table-data-progress-desc-color: #2FBA91;
 
     --login-bg: var(--sidebar-bg);
     --login-border-color: var(--section-container-border-color);
@@ -109,6 +111,8 @@
     --table-data-color: var(--sidebar-link-color);
     --table-data-bg: #222024;
     --table-data-hover-bg: var(--sidebar-link-hover-bg);
+    --table-data-progress-asc-color: #F04A4A;
+    --table-data-progress-desc-color: #4AF0C1;
 
     --login-bg: var(--sidebar-bg);
     --login-border-color: var(--section-container-border-color);

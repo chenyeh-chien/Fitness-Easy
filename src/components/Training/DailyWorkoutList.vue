@@ -29,6 +29,10 @@ const LABELS = [{
   label: "Weight (kg)",
   key: "weight",
 }, {
+  label: "Growth",
+  key: "growth",
+  type: "progress"
+}, {
   label: "Reps",
   key: "reps",
 }, {
@@ -42,7 +46,10 @@ const LABELS = [{
   key: "note",
 }]
 const { user, isAuthReady } = useAuth();
-const { getDailyWorkouts } = useDailyWorkouts();
+const { 
+  getDailyWorkouts, 
+  getLatestWeight 
+} = useDailyWorkouts();
 const originalDailyWorkouts = ref<any[]>([]);
 const dailyWorkouts = ref<any[]>([]);
 
@@ -60,10 +67,6 @@ async function checkUserDailyWorkouts() {
     const querySnapshot = 
       await getDailyWorkouts(user.value.uid, date.value);
     
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
-
     if (querySnapshot.empty) {
       console.log("No workouts found for this user.");
     }
@@ -76,13 +79,35 @@ async function checkUserDailyWorkouts() {
           id: doc.id,
         }
       });
+    
+    const workouts = [];
+    for (let workout of originalDailyWorkouts.value) {
+      const latestWeight = 
+        await getLatestWeight(
+          user.value.uid, 
+          date.value, 
+          workout.bodyPart, 
+          workout.exercise
+        );
 
-    dailyWorkouts.value = originalDailyWorkouts.value.map((workout) => {
-      return {
-        ...workout,
-        setTime: formatMinutesStr(workout.setTime),
+      const weight = latestWeight.docs.map((doc) => {
+        const data = doc.data();
+        return data.weight;
+      });
+      
+      let growth = 0;
+      if (weight.length > 0) {
+        growth = workout.weight - weight[0];
       }
-    })
+
+      workouts.push({
+        ...workout,
+        growth,
+        setTime: formatMinutesStr(workout.setTime),
+      })
+    }
+
+    dailyWorkouts.value = workouts;
   } catch (error) {
     console.error("Error querying daily workouts:", error);
   }

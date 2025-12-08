@@ -9,7 +9,8 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
-  orderBy
+  orderBy,
+  limit
 } from 'firebase/firestore'
 import { formatDateStr } from "@/components/Utils/utilFunctions"
 
@@ -43,6 +44,37 @@ export function useDailyWorkouts() {
     } catch (e) {
       error.value = e;
       console.error("Error getting daily workouts:", e);
+      throw e;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const getLatestWeight = async (
+    userId: string,
+    date: Date,
+    bodyPart: string,
+    exercise: string
+  ) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const formattedDate = formatDateStr(date, false);
+
+      const q = query(
+        collection(db, 'daily-workouts'),
+        where('userId', '==', userId),
+        where('date', '<', formattedDate),
+        where('bodyPart', '==', bodyPart),
+        where('exercise', '==', exercise),
+        limit(1)
+      );
+
+      const querySnapshot = await getDocs(q);
+      return querySnapshot;
+    } catch (e) {
+      error.value = e;
+      console.error("Error getting latest weight:", e);
       throw e;
     } finally {
       loading.value = false;
@@ -103,6 +135,7 @@ export function useDailyWorkouts() {
 
   return {
     getDailyWorkouts,
+    getLatestWeight,
     addDailyWorkout,
     updateDailyWorkout,
     deleteDailyWorkout,

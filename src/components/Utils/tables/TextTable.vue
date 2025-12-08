@@ -2,6 +2,8 @@
 import { clsx } from 'clsx'
 import { toRefs, watch } from 'vue';
 import type { TableHeader } from '@/types/common';
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 
 interface Props {
   headers: TableHeader[];
@@ -62,13 +64,29 @@ watch(
           <td 
             v-for="header in headers"
             class="px-2 py-4 whitespace-nowrap">
-            {{ item[header.key] }}
+            <template v-if="header.type">
+              <div 
+                v-if="header.type === 'progress' && item[header.key] !== 0"
+                class="flex gap-1">
+                <span>
+                  <FontAwesomeIcon 
+                    v-if="item[header.key] > 0"
+                    class="text-(--table-data-progress-asc-color)" 
+                    icon="fa-solid fa-angles-up" />
+                  <FontAwesomeIcon 
+                    v-else-if="item[header.key] < 0"
+                    class="text-(--table-data-progress-desc-color)" 
+                    icon="fa-solid fa-angles-down" />
+                </span>
+                <span>{{ Math.abs(item[header.key]) }}</span>
+              </div>
+            </template>
+            <template v-else>
+              {{ item[header.key] }}
+            </template>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
-
-<style>
-</style>
