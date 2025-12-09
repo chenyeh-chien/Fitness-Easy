@@ -157,4 +157,9 @@
 html,
 body {
   background-color: var(--page-bg);
+
+  /* 避免內容溢出造成水平滾動 */
+  overflow-x: hidden;
+  /* 確保元素寬度佔滿視口 */
+  width: 100%;
 }
