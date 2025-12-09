@@ -40,7 +40,7 @@ watch(
       <thead 
         :class="clsx(
           'text-(--table-label-color) text-xs pb-2 border-b-(--table-label-border-color)',
-          'shadow-(--table-label-box-shadow) sticky top-0 bg-(--table-label-bg) z-10'
+          'shadow-(--table-label-box-shadow) sticky top-0 bg-(--table-label-bg) z-(--table-label-z-index)'
         )">
         <tr>
           <th 

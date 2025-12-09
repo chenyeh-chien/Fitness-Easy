@@ -77,10 +77,15 @@
     --datetime-day-sun-color: #db7449;
     --datetime-day-hover-color: white;
     --datetime-day-hover-bg: var(--app-color);
+
+    /* z-index */
+    --navbar-z-index: 19;
+    --sidebar-z-index: 20;
+    --datetime-z-index: 25;
+    --table-label-z-index: 10;
   }
 
   .dark {
-    --font-family: "Open Sans", sans-serif;
     --app-color: #8980AB;
     --app-name-color: var(--sidebar-link-color);
     --page-bg: #131314;
@@ -147,4 +152,11 @@
     --datetime-day-hover-color: var(--accent-color);
     --datetime-day-hover-bg: var(--app-color);
   }
+}
+
+body {
+  padding-top: constant(safe-area-inset-top);
+  padding-right: constant(safe-area-inset-right);
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-left: constant(safe-area-inset-left);
 }

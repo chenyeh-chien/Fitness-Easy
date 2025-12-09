@@ -39,7 +39,7 @@ async function handleSignout() {
 <template>
   <aside 
     :class="clsx(
-      'fixed w-(--sidebar-width) z-10',
+      'fixed w-(--sidebar-width) z-(--sidebar-z-index)',
       'md:w-(--sidebar-md-width) h-screen bg-(--sidebar-bg) flex justify-center p-2'
     )">
     <nav 

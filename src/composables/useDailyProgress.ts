@@ -24,7 +24,7 @@ export function useDailyProgress() {
       const q = query(
         collection(db, 'daily-progress'),
         where('userId', '==', userId),
-        orderBy(documentId(), "desc")
+        orderBy('date', "desc")
       );
       const querySnapshot = await getDocs(q);
       return querySnapshot;

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { nextTick, ref, useTemplateRef } from 'vue'
+import DailySummary from '@/components/Home/DailySummary.vue'
 import MealContentForm from '@/components/Meals/MealContentForm.vue'
 import DailyMealsForm from '@/components/Meals/DailyMealsForm.vue'
 import DailyFoodIntake from '@/components/Home/DailyFoodIntake.vue'
@@ -96,6 +97,12 @@ function hideForms() {
 
 <template>
   <div class="flex flex-col gap-4">
+    <SectionContainer 
+      class="w-full"
+      :title="'Daily summary'">
+      <DailySummary 
+        :key="componentKey"/>
+    </SectionContainer>
     <SectionContainer
       :title="'Daily food intake'">
       <DatetimeSelectorWithLabel 

@@ -14,6 +14,9 @@ const LABELS = [{
   label: "Date",
   key: "date",
 }, {
+  label: "Total (Kcal)",
+  key: "total",
+}, {
   label: "Protein (g)",
   key: "protein",
 }, {
@@ -25,6 +28,7 @@ const LABELS = [{
 }]
 const { user, isAuthReady } = useAuth();
 const { getDailyTargets } = useDailyTarget();
+const originalDailyTargets = ref<any[]>([]);
 const dailyTargets = ref<any[]>([]);
 
 onMounted(() => {
@@ -49,12 +53,19 @@ async function checkDailyTargets() {
       console.log("No body info found for this user.");
     }
     
-    dailyTargets.value = querySnapshot.docs.map((doc) => {
+    originalDailyTargets.value = querySnapshot.docs.map((doc) => {
       const data = doc.data();
 
       return {
         ...data,
         id: doc.id,
+      }
+    });
+
+    dailyTargets.value = originalDailyTargets.value.map((item) => {
+      return {
+        ...item,
+        total: item.protein * 4 + item.carbohydrate * 4 + item.fat * 9,
       }
     });
   } catch (error) {
@@ -63,7 +74,7 @@ async function checkDailyTargets() {
 }
 
 function handleSelectRow(index: number) {
-  const data = dailyTargets.value[index];
+  const data = originalDailyTargets.value[index];
   emits('selectRecord', data);
 }
 

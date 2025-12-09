@@ -205,7 +205,7 @@ watch(
 
 <template>
   <div
-    class="absolute flex flex-col gap-2 z-200 text-xs mt-10"
+    class="absolute flex flex-col gap-2 z-(--datetime-z-index) text-xs mt-10"
     data-test="date-time">
     <div
       class="flex gap-2"

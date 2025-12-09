@@ -4,6 +4,7 @@ import { useAuth } from '@/composables/useAuth'
 import { useDailyTarget } from '@/composables/useDailyTarget'
 import SectionContainer from '@/components/Utils/containers/SectionContainer.vue'
 import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelectorWithLabel.vue'
+import LabeledSelect from '@/components/Utils/dropdowns/LabeledSelect.vue'
 import LabeledTextbox from '@/components/Utils/textboxes/LabeledTextbox.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
@@ -39,12 +40,50 @@ const {
   deleteDailyTarget,
 } = useDailyTarget();
 const targetInfo = ref<Record<string, any> | null>(props.target);
+const calorieGoal = ref<'Bulk' | 'Cut'>("Bulk");
+const totalCalories = ref(2500);
 const formTitle = computed(() => {
   return action.value === "add" ? "Add daily target" : "Update daily target";
 })
 
 function setTargetInfo(info: Record<string, any>) {
   targetInfo.value = info;
+}
+
+function setCalorieGoal(goal: string) {
+  if (goal !== 'Bulk' && goal !== 'Cut') {
+    return;
+  }
+
+  calorieGoal.value = goal;
+}
+
+function setCalculatedNutrients(
+  calories: number, 
+  goal: 'Bulk' | 'Cut'
+) {
+  if (
+    action.value === "update" ||
+    typeof calories !== 'number' ||
+    targetInfo.value === null
+  ) {
+    return;
+  }
+
+  switch(goal) {
+    case "Bulk":
+      targetInfo.value.protein = Math.round(calories * 0.12 / 4);
+      targetInfo.value.carbohydrate = Math.round(calories * 0.68 / 4);
+      targetInfo.value.fat = Math.round(calories * 0.2 / 9);
+      break;
+    case "Cut":
+      targetInfo.value.protein = Math.round(calories * 0.3 / 4);
+      targetInfo.value.carbohydrate = Math.round(calories * 0.3 / 4);
+      targetInfo.value.fat = Math.round(calories * 0.4 / 9);
+      break;
+    default:
+      return;
+  }
 }
 
 async function checkUserDailyTarget() {
@@ -165,6 +204,18 @@ watch(
   },
   { immediate: true, deep: true }
 )
+
+watch(
+  [calorieGoal, totalCalories],
+  (newValue) => {
+    if (!newValue) {
+      return;
+    }
+
+    setCalculatedNutrients(totalCalories.value, calorieGoal.value);
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <template>
@@ -179,6 +230,18 @@ watch(
           :time="new Date(targetInfo!.date)"
           :show-time="false"
           @change-time="changeTime"/>
+        <template v-if="action === 'add'">
+          <LabeledSelect 
+            :label="'Calorie goal'"
+            :name="'Calorie goal'"
+            :value="calorieGoal"
+            :options="['Bulk', 'Cut']"
+            @on-change-value="setCalorieGoal"/>
+          <LabeledTextbox 
+            v-model:text.number="totalCalories"
+            :label="'Total calories'"
+            :name="'Total calories'"/>
+        </template>
         <LabeledTextbox 
           v-model:text.number="targetInfo!.protein"
           :label="'Protein'"

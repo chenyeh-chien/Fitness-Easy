@@ -23,6 +23,7 @@ function setSelectedDailyTarget(data: Record<string, any> | null) {
 }
 
 function handleShowAddDailyTarget() {
+  hideForms();
   setShowAddDailyTarget(true);
 }
 

@@ -7,7 +7,7 @@ import ModeButton from './ModeButton.vue';
 <template>
   <div 
     :class="clsx(
-      'fixed z-9 w-full p-3 flex justify-end gap-4',
+      'fixed z-(--navbar-z-index) w-full p-3 flex justify-end gap-4',
       'bg-(--navbar-bg)'
     )">
     <div>
