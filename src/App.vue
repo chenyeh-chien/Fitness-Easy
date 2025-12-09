@@ -15,13 +15,12 @@ document.documentElement.className = "dark";
       'w-full h-max min-h-screen bg-(--page-bg)',
       'flex font-(family-name:--font-family)'
     )">
-    <SidebarMain />
     <div 
       class="w-full">
       <NavbarMain />
       <main 
         :class="clsx(
-          'p-4 pb-40 mt-10 ml-(--sidebar-width) md:ml-(--sidebar-md-width)',
+          'p-5 pb-40 mt-18',
           'min-h-[calc(100vh-40px)]'
         )">
         <RouterView />

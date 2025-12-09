@@ -18,16 +18,16 @@ const route = useRoute();
 <template>
   <RouterLink
     :class="clsx(
-      'w-9 h-9 text-(--sidebar-link-color) text-sm px-3 py-1 rounded-lg',
-      'flex justify-center items-center gap-3',
+      'text-(--sidebar-link-color) text-sm px-3 py-1 rounded-lg',
+      'flex items-center gap-5',
       'md:w-full md:justify-start',
       'hover:bg-(--sidebar-link-hover-bg) hover:cursor-pointer duration-500',
       route.path === info.link && 'bg-(--sidebar-link-hover-bg)'
     )"
     :to="info.link">
-    <div>
+    <div class="flex justify-center items-center">
       <FontAwesomeIcon :icon="info.icon" />
     </div>
-    <span class="hidden md:block">{{ info.name }}</span>
+    <span>{{ info.name }}</span>
   </RouterLink>
 </template>
