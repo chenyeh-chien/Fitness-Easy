@@ -36,8 +36,6 @@ export const formatMinutesStr = (
   return `${String(minuteInt).padStart(2, '0')}:${String(secondInt).padStart(2, '0')}`;
 }
 
-
-
 export const roundTo2 = (num: number) => {
   return Math.round(num * 100) / 100;
 }

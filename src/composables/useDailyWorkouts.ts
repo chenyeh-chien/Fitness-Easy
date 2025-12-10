@@ -67,6 +67,7 @@ export function useDailyWorkouts() {
         where('date', '<', formattedDate),
         where('bodyPart', '==', bodyPart),
         where('exercise', '==', exercise),
+        orderBy('date', 'desc'),
         limit(1)
       );
 

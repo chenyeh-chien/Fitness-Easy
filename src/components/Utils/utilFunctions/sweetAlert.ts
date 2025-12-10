@@ -19,10 +19,13 @@ const DEFAULT_CHECK_CONFIG: SweetAlertOptions = {
 
 const DEFAULT_REPLY_CONFIG: SweetAlertOptions = {
   icon: "success",
-  title: "Stopped",
   text: "The command has been stopped.",
   customClass: {
-    popup: "swal__custom-style"
+    title: "swal__custom-title",
+    container: "swal__custom-container",
+    popup: "swal__custom-style",
+    confirmButton: "swal__custom-confirm-button",
+    cancelButton: "swal__custom-cancel-button"
   }
 }
 
@@ -57,7 +60,7 @@ export const useSweetAlertAddRecord = async (
   }
 
   const replyConfig: SweetAlertOptions = {
-    title: "Added",
+    // title: "Added",
     text: "The record has been added.",
   }
 
@@ -79,7 +82,7 @@ export const useSweetAlertUpdateRecord = async (
   }
 
   const replyConfig: SweetAlertOptions = {
-    title: "Updated",
+    // title: "Updated",
     text: "The record has been updated.",
   }
 
@@ -101,7 +104,7 @@ export const useSweetAlertDeleteRecord = async (
   }
 
   const replyConfig: SweetAlertOptions = {
-    title: "Deleted",
+    // title: "Deleted",
     text: "The record has been deleted.",
   }
 
