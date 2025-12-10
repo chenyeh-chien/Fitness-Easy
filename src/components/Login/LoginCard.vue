@@ -1,12 +1,24 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
 import { clsx } from "clsx";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 import { auth } from "@/components/Utils/Firebase/firebase"
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { useAuth } from '@/composables/useAuth'
+
+const router = useRouter();
 
 async function handleSigninToGoogle() {
   const provider = new GoogleAuthProvider();
   await signInWithPopup(auth, provider);
+  
+  const { isAuthReady } = useAuth();
+
+  if (!isAuthReady.value) {
+    return;
+  }
+
+  router.push('/');
 }
 
 </script>
