@@ -3,7 +3,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import TextTable from '../Utils/tables/TextTable.vue'
 import { useAuth } from '@/composables/useAuth'
 import { useMealOptions } from '@/composables/useMealOptions'
-import { roundTo2 } from '@/components/Utils/utilFunctions'
+import { roundTo2 } from '@/components/Utils/utilFunctions/index'
 
 interface Emits {
   (e: 'selectRecord', data: Record<string, any>): void

@@ -42,7 +42,7 @@ const navInfos = [
 <template>
   <aside 
     :class="clsx(
-      'fixed left-0 top-18 h-full p-5',
+      'fixed left-0 top-18 h-full p-2',
       'opacity-0 duration-300 ease-in-out -translate-x-full',
       showSidebar && 'opacity-100 translate-x-0',
       'bg-(--sidebar-bg) w-full overflow-y-auto',
@@ -54,7 +54,7 @@ const navInfos = [
       aria-label="Main navigation">
       <ul
         :class="clsx(
-          'flex flex-col gap-3'
+          'flex flex-col gap-2'
         )">
         <li 
           v-for="info in navInfos"

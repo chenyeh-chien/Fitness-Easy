@@ -10,7 +10,7 @@ import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelector
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
-import { formatDateStr } from '../Utils/utilFunctions'
+import { formatDateStr } from '@/components/Utils/utilFunctions/index'
 
 interface Props {
   action?: "add" | "update";

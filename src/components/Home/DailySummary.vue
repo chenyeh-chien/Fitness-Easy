@@ -6,7 +6,7 @@ import { useDailyMeals } from '@/composables/useDailyMeals'
 import DigitScroller from '../Utils/transitions/DigitScroller.vue'
 // import NutrientsPercentage from './NutrientsPercentage.vue'
 import RemainNutrients from './RemainNutrients.vue'
-import { formatDateStr } from '@/components/Utils/utilFunctions'
+import { formatDateStr } from '@/components/Utils/utilFunctions/index'
 
 const { user, isAuthReady } = useAuth();
 const { getDailyTargetsByDate } = useDailyTarget();

@@ -1,21 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { clsx } from 'clsx'
 import { signOut } from "firebase/auth"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useAuth } from '@/composables/useAuth'
+import { useOverflowHidden } from "@/components/Utils/hooks"
 import { auth } from "@/components/Utils/Firebase/firebase"
 import ModeButton from "@/components/Navbar/ModeButton.vue"
 import SidebarLink from "@/components/Sidebar/SidebarLink.vue"
 import SidebarMain from "@/components/Sidebar/SidebarMain.vue"
 
+
 const { user } = useAuth();
 const APP_NAME = "Fitness Easy"
-const showSidebar = ref(false);
-
-function setShowSidebar(offset: boolean) {
-  showSidebar.value = offset;
-}
+const [showSidebar, setShowSidebar] = useOverflowHidden(document.body);
 
 async function handleSignout() {
   await signOut(auth);
@@ -78,13 +75,17 @@ async function handleSignout() {
             :src="user!.photoURL!" />
         </button>
       </div>
-      <SidebarLink 
+      <RouterLink
         v-else
-        :info="{
-          icon: 'fa-solid fa-arrow-right-to-bracket',
-          link: '/login',
-          name: 'Login'
-        }" />
+        to="/login"
+        :class="clsx(
+          'text-(--navbar-color) px-3 py-1 rounded-lg duration-500',
+          'flex justify-center items-center',
+          'hover:bg-(--sidebar-link-hover-bg) hover:cursor-pointer'
+        )"
+        @click="setShowSidebar(false)">
+        <FontAwesomeIcon icon="fa-solid fa-arrow-right-to-bracket" />
+      </RouterLink>
     </div>
   </header>
 </template>

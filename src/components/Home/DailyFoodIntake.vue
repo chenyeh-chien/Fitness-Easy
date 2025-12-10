@@ -2,7 +2,7 @@
 import { ref, watch, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyMeals } from '@/composables/useDailyMeals'
-import { roundTo2 } from '../Utils/utilFunctions'
+import { roundTo2 } from '@/components/Utils/utilFunctions/index'
 import TextTable from '../Utils/tables/TextTable.vue'
 
 interface Props {

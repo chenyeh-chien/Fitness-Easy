@@ -24,7 +24,7 @@ const emits = defineEmits<Emits>();
 <template>
   <ul
     :class="clsx(
-      'bg-(--dropdown-bg) rounded-md text-xs text-(--dropdown-color)',
+      'bg-(--dropdown-bg) rounded-md text-base text-(--dropdown-color)',
       'flex flex-col shadow-(--dropdown-box-shadow)',
       'overflow-y-auto scrollbar-thin',
       !isOpened && 'hidden'

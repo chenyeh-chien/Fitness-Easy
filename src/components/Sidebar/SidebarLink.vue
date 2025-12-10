@@ -18,11 +18,11 @@ const route = useRoute();
 <template>
   <RouterLink
     :class="clsx(
-      'text-(--sidebar-link-color) text-sm px-3 py-1 rounded-lg',
+      'text-(--sidebar-link-color) text-sm px-3 py-2 rounded-lg',
       'flex items-center gap-5',
       'md:w-full md:justify-start',
       'hover:bg-(--sidebar-link-hover-bg) hover:cursor-pointer duration-500',
-      route.path === info.link && 'bg-(--sidebar-link-hover-bg)'
+      route.path === info.link && 'bg-(--sidebar-link-bg)'
     )"
     :to="info.link">
     <div class="flex justify-center items-center">

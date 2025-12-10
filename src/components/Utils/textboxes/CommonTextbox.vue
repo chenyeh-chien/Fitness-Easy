@@ -26,8 +26,8 @@ const computedWidth = computed(() => {
   <input 
     v-model="text"
     :class="clsx(
-      'bg-(--textbox-bg) rounded-md outline-none text-xs px-3 py-1.5',
-      'text-(--textbox-color) md:w-70',
+      'bg-(--textbox-bg) rounded-md outline-none px-3 py-1.5',
+      'text-base text-(--textbox-color) md:w-70',
       'focus:shadow-(--textbox-box-shadow) read-only:bg-(--textbox-readonly-bg)',
     )"
     :style="computedWidth"

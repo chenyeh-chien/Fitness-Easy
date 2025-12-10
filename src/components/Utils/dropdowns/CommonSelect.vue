@@ -84,7 +84,7 @@ function handleClickDropdown(selectedVal?: string) {
       ref="reference"
       tabindex="0"
       :class="clsx(
-        'relative text-xs text-(--dropdown-color) w-full px-3 py-1.5 rounded-md',
+        'relative text-base text-(--dropdown-color) w-full px-3 py-1.5 rounded-md',
         'flex gap-1 justify-between bg-(--dropdown-bg) md:w-70',
         'focus:outline-none focus:shadow-(--dropdown-box-shadow)'
       )"

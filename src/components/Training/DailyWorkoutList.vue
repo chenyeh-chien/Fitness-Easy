@@ -3,7 +3,7 @@ import { ref, watch, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyWorkouts } from '@/composables/useDailyWorkouts'
 import TextTable from '../Utils/tables/TextTable.vue'
-import { formatMinutesStr } from '../Utils/utilFunctions'
+import { formatMinutesStr } from '@/components/Utils/utilFunctions/index'
 
 interface Props {
   date?: Date;
@@ -52,6 +52,7 @@ const {
 } = useDailyWorkouts();
 const originalDailyWorkouts = ref<any[]>([]);
 const dailyWorkouts = ref<any[]>([]);
+const isLoading = ref(false);
 
 onMounted(() => {
   checkUserDailyWorkouts();
@@ -64,6 +65,7 @@ async function checkUserDailyWorkouts() {
   }
 
   try {
+    isLoading.value = true;
     const querySnapshot = 
       await getDailyWorkouts(user.value.uid, date.value);
     
@@ -110,6 +112,8 @@ async function checkUserDailyWorkouts() {
     dailyWorkouts.value = workouts;
   } catch (error) {
     console.error("Error querying daily workouts:", error);
+  } finally {
+    isLoading.value = false;
   }
 }
 
@@ -132,5 +136,6 @@ watch(
     :headers="LABELS"
     :data="dailyWorkouts"
     :clickable="true"
+    :isLoading="isLoading"
     @select-row="handleSelectRow"/>
 </template>

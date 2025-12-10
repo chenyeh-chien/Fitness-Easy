@@ -10,7 +10,13 @@ import RightAlignContainer from '@/components/Utils/containers/RightAlignContain
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
-import { formatDateStr } from '@/components/Utils/utilFunctions'
+import { 
+  formatDateStr, 
+  useSweetAlert,
+  useSweetAlertAddRecord,
+  useSweetAlertUpdateRecord,
+  useSweetAlertDeleteRecord
+} from '@/components/Utils/utilFunctions/index'
 
 interface Props {
   action?: "add" | "update";
@@ -115,8 +121,6 @@ function changeTime(time: Date) {
 async function handleSubmitForm() {
   try {
     action.value === "add" ? await addRecord() : await updateRecord();
-
-    emits('cancelForm')
   } catch (error) {
     console.error("Error writing document:", error);
   }
@@ -125,8 +129,6 @@ async function handleSubmitForm() {
 async function handleDeleteForm() {
   try {
     await deleteRecord();
-
-    emits('cancelForm')
   } catch (error) {
     console.error("Error deleting document:", error);
   }
@@ -143,13 +145,24 @@ async function addRecord() {
     return;
   }
 
-  await addDailyTarget({
-    userId: user.value.uid,
-    date: targetInfo.value.date,
-    protein: targetInfo.value.protein,
-    carbohydrate: targetInfo.value.carbohydrate,
-    fat: targetInfo.value.fat,
-  });
+  const isExecuted = await useSweetAlertAddRecord(
+    addDailyTarget,
+    [
+      {
+        userId: user.value.uid,
+        date: targetInfo.value.date,
+        protein: targetInfo.value.protein,
+        carbohydrate: targetInfo.value.carbohydrate,
+        fat: targetInfo.value.fat,
+      }
+    ]
+  );
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 async function updateRecord() {
@@ -163,13 +176,25 @@ async function updateRecord() {
     return;
   }
 
-  await updateDailyTarget({
-    userId: user.value.uid,
-    date: targetInfo.value.date,
-    protein: targetInfo.value.protein,
-    carbohydrate: targetInfo.value.carbohydrate,
-    fat: targetInfo.value.fat,
-  }, targetInfo.value.id);
+  const isExecuted = await useSweetAlertUpdateRecord(
+    updateDailyTarget,
+    [
+      {
+        userId: user.value.uid,
+        date: targetInfo.value.date,
+        protein: targetInfo.value.protein,
+        carbohydrate: targetInfo.value.carbohydrate,
+        fat: targetInfo.value.fat,
+      },
+      targetInfo.value.id
+    ]
+  );
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 async function deleteRecord() {
@@ -183,7 +208,16 @@ async function deleteRecord() {
     return;
   }
 
-  await deleteDailyTarget(targetInfo.value.id);
+  const isExecuted = await useSweetAlertDeleteRecord(
+    deleteDailyTarget,
+    [targetInfo.value.id]
+  );
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 watch(

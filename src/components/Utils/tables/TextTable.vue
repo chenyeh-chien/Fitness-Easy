@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { clsx } from 'clsx'
 import { toRefs, watch } from 'vue';
-import type { TableHeader } from '@/types/common';
+import { clsx } from 'clsx'
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import type { TableHeader } from '@/types/common';
+import ShimmerBody from './ShimmerBody.vue';
 
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
   data: Record<string, any>[];
   clickable?: boolean;
   displayedDataCnt?: number;
+  isLoading?: boolean;
 }
 
 interface Emits {
@@ -19,8 +21,15 @@ interface Emits {
 const props = withDefaults(defineProps<Props>(), {
   clickable: false,
   displayedDataCnt: 10,
+  isLoading: false,
 });
-const { headers, data, clickable, displayedDataCnt } = toRefs(props);
+const { 
+  headers, 
+  data, 
+  clickable, 
+  displayedDataCnt, 
+  isLoading 
+} = toRefs(props);
 const emits = defineEmits<Emits>();
 
 watch(
@@ -39,25 +48,32 @@ watch(
     <table class="min-w-full max-w-max border-collapse">
       <thead 
         :class="clsx(
-          'text-(--table-label-color) text-xs pb-2 border-b-(--table-label-border-color)',
-          'shadow-(--table-label-box-shadow) sticky top-0 bg-(--table-label-bg) z-(--table-label-z-index)'
+          'text-(--table-label-color) text-xs pb-2',
+          'border-b-(--table-label-border-color)',
+          'shadow-(--table-label-box-shadow) sticky top-0',
+          'bg-(--table-label-bg) z-(--table-label-z-index)'
         )">
         <tr>
           <th 
             v-for="header in headers"
-            class="p-2 text-start font-medium"
+            :class="clsx(
+              'p-2 text-start font-medium',
+            )"
             :key="header.key">
             {{ header.label }}
           </th>
         </tr>
       </thead>
-      <tbody>
+      <ShimmerBody
+        :headers="headers"
+        v-if="isLoading"/>
+      <tbody v-else>
         <tr 
           v-for="(item, index) of data"
           :class="clsx(
             'text-(--table-data-color) text-xs px-2 py-4',
             'even:bg-(--table-data-bg)',
-            clickable && 'hover:bg-(--table-data-hover-bg) hover:cursor-pointer',
+            clickable && 'hover:bg-(--table-data-hover-bg) hover:cursor-pointer'
           )"
           :key="index"
           @click="clickable && emits('selectRow', index)">

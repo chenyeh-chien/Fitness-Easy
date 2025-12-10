@@ -19,9 +19,10 @@
 
     --sidebar-width: 50px;
     --sidebar-md-width: 200px;
-    --sidebar-bg: white;
+    --sidebar-bg: var(--page-bg);
     --sidebar-link-color: #5B616A;
-    --sidebar-link-hover-bg: #F5F5F5;
+    --sidebar-link-bg: #E0E0E0;
+    --sidebar-link-hover-bg: var(--sidebar-link-bg);
 
     --navbar-color: var(--sidebar-link-color);
     --navbar-bg: var(--page-bg);
@@ -44,6 +45,7 @@
     --table-data-hover-bg: var(--sidebar-link-hover-bg);
     --table-data-progress-asc-color: #F04A4A;
     --table-data-progress-desc-color: #2FBA91;
+    --table-data-shimmer-bg: #E3E3E3;
 
     --login-bg: var(--sidebar-bg);
     --login-border-color: var(--section-container-border-color);
@@ -83,6 +85,11 @@
     --sidebar-z-index: 20;
     --datetime-z-index: 25;
     --table-label-z-index: 10;
+
+    /* swal */
+    --swal-custom-color: var(--table-label-color);
+    --swal-custom-bg: var(--page-bg);
+    --swal-custom-box-shadow: var(--button-box-shadow);
   }
 
   .dark {
@@ -92,10 +99,10 @@
 
     --sidebar-width: 50px;
     --sidebar-md-width: 200px;
-    --sidebar-bg: #1A191C;
+    --sidebar-bg: var(--page-bg);
     --sidebar-link-color: #E3E1EB;
-    --sidebar-link-hover-bg: #2B2B33;
-    --sidebar-link-hover-border-color: #3E384A;
+    --sidebar-link-bg: #222229;
+    --sidebar-link-hover-bg: var(--sidebar-link-bg);
 
     --navbar-color: var(--sidebar-link-color);
     --navbar-bg: var(--page-bg);
@@ -118,6 +125,7 @@
     --table-data-hover-bg: var(--sidebar-link-hover-bg);
     --table-data-progress-asc-color: #F04A4A;
     --table-data-progress-desc-color: #4AF0C1;
+    --table-data-shimmer-bg: #3F3D47;
 
     --login-bg: var(--sidebar-bg);
     --login-border-color: var(--section-container-border-color);
@@ -157,9 +165,43 @@
 html,
 body {
   background-color: var(--page-bg);
+}
 
-  /* 避免內容溢出造成水平滾動 */
-  overflow-x: hidden;
-  /* 確保元素寬度佔滿視口 */
-  width: 100%;
+.swal__custom-title {
+  font-size: 20px;
+}
+
+.swal__custom-container {
+  padding: 36px;
+}
+
+.swal__custom-confirm-button {
+  font-size: 12px;
+  color: var(--button-color);
+  background-color: var(--button-bg);
+  box-shadow: var(--button-box-shadow);
+  padding: 6px 12px;
+
+  &:hover {
+    background-color: var(--button-hover-bg);
+  }
+}
+
+.swal__custom-cancel-button {
+  font-size: 12px;
+  color: var(--button-color);
+  background-color: var(--button-bg);
+  box-shadow: var(--button-box-shadow);
+  padding: 6px 12px;
+
+  &:hover {
+    background-color: var(--button-hover-bg);
+  }
+}
+
+.swal__custom-style {
+  font-size: 16px;
+  color: var(--swal-custom-color);
+  background: var(--swal-custom-bg);
+  box-shadow: var(--swal-custom-box-shadow);
 }

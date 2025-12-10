@@ -22,9 +22,12 @@ function setSelectedDailyTarget(data: Record<string, any> | null) {
   selectedDailyTarget.value = data;
 }
 
-function handleShowAddDailyTarget() {
+async function handleShowAddDailyTarget() {
   hideForms();
   setShowAddDailyTarget(true);
+
+  await nextTick();
+  scrollToDailyTargetForm();
 }
 
 function scrollToDailyTargetForm() {
