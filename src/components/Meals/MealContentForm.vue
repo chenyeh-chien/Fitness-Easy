@@ -8,6 +8,11 @@ import RightAlignContainer from '@/components/Utils/containers/RightAlignContain
 import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
+import {
+  useSweetAlertAddRecord,
+  useSweetAlertUpdateRecord,
+  useSweetAlertDeleteRecord
+} from '@/components/Utils/utilFunctions/index'
 
 interface Props {
   action?: "add" | "update";
@@ -78,8 +83,6 @@ async function checkUserMealOptions() {
 async function handleSubmitForm() {
   try {
     action.value === "add" ? await addRecord() : await updateRecord();
-
-    emits('cancelForm')
   } catch (error) {
     console.error("Error writing document:", error);
   }
@@ -88,8 +91,6 @@ async function handleSubmitForm() {
 async function handleDeleteForm() {
   try {
     await deleteRecord();
-
-    emits('cancelForm')
   } catch (error) {
     console.error("Error deleting document:", error);
   }
@@ -106,14 +107,25 @@ async function addRecord() {
     return;
   }
 
-  await addMealOption({
-    userId: user.value.uid,
-    meal: mealInfo.value.meal,
-    protein: mealInfo.value.protein,
-    carbohydrate: mealInfo.value.carbohydrate,
-    fat: mealInfo.value.fat,
-    weight: mealInfo.value.weight,
-  });
+  const isExecuted = await useSweetAlertAddRecord(
+    addMealOption,
+    [
+      {
+        userId: user.value.uid,
+        meal: mealInfo.value.meal,
+        protein: mealInfo.value.protein,
+        carbohydrate: mealInfo.value.carbohydrate,
+        fat: mealInfo.value.fat,
+        weight: mealInfo.value.weight,
+      }
+    ]
+  )
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm')
 }
 
 async function updateRecord() {
@@ -127,14 +139,25 @@ async function updateRecord() {
     return;
   }
 
-  await updateMealOption({
-    userId: user.value.uid,
-    meal: mealInfo.value.meal,
-    protein: mealInfo.value.protein,
-    carbohydrate: mealInfo.value.carbohydrate,
-    fat: mealInfo.value.fat,
-    weight: mealInfo.value.weight,
-  }, meal.value.id);
+  const isExecuted = await useSweetAlertUpdateRecord(
+    updateMealOption,
+    [
+      {
+        userId: user.value.uid,
+        meal: mealInfo.value.meal,
+        protein: mealInfo.value.protein,
+        carbohydrate: mealInfo.value.carbohydrate,
+        fat: mealInfo.value.fat,
+        weight: mealInfo.value.weight,
+      }, meal.value.id
+    ]
+  )
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm')
 }
 
 async function deleteRecord() {
@@ -147,8 +170,17 @@ async function deleteRecord() {
     console.error("Meal is null");
     return;
   }
+  
+  const isExecuted = await useSweetAlertDeleteRecord(
+    deleteMealOption,
+    meal.value.id
+  )
 
-  await deleteMealOption(meal.value.id);
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm')
 }
 
 watch(

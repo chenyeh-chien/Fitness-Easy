@@ -11,6 +11,11 @@ import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 import LabeledSelect from '../Utils/dropdowns/LabeledSelect.vue'
+import {
+  useSweetAlertAddRecord,
+  useSweetAlertUpdateRecord,
+  useSweetAlertDeleteRecord
+} from '@/components/Utils/utilFunctions/index'
 
 interface Props {
   action?: "add" | "update";
@@ -90,8 +95,6 @@ function setSelectedMeal(meal: string) {
 async function handleSubmitForm() {
   try {
     action.value === "add" ? await addRecord() : await updateRecord();
-
-    emits('cancelForm')
   } catch (error) {
     console.error("Error writing document:", error);
   }
@@ -100,8 +103,6 @@ async function handleSubmitForm() {
 async function handleDeleteForm() {
   try {
     await deleteRecord();
-
-    emits('cancelForm')
   } catch (error) {
     console.error("Error deleting document:", error);
   }
@@ -118,17 +119,28 @@ async function addRecord() {
     return;
   }
 
-  await addDailyMeal({
-    userId: user.value.uid,
-    time: mealInfo.value.time,
-    meal: mealInfo.value.meal,
-    protein: mealInfo.value.protein,
-    carbohydrate: mealInfo.value.carbohydrate,
-    fat: mealInfo.value.fat,
-    weight: mealInfo.value.weight,
-    quantity: mealInfo.value.quantity,
-    note: mealInfo.value.note,
-  });
+  const isExecuted = await useSweetAlertAddRecord(
+    addDailyMeal,
+    [
+      {
+        userId: user.value.uid,
+        time: mealInfo.value.time,
+        meal: mealInfo.value.meal,
+        protein: mealInfo.value.protein,
+        carbohydrate: mealInfo.value.carbohydrate,
+        fat: mealInfo.value.fat,
+        weight: mealInfo.value.weight,
+        quantity: mealInfo.value.quantity,
+        note: mealInfo.value.note,
+      }
+    ]
+  );
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 async function updateRecord() {
@@ -142,17 +154,29 @@ async function updateRecord() {
     return;
   }
 
-  await updateDailyMeal({
-    userId: user.value.uid,
-    time: mealInfo.value.time,
-    meal: mealInfo.value.meal,
-    protein: mealInfo.value.protein,
-    carbohydrate: mealInfo.value.carbohydrate,
-    fat: mealInfo.value.fat,
-    weight: mealInfo.value.weight,
-    quantity: mealInfo.value.quantity,
-    note: mealInfo.value.note,
-  }, meal.value.id);
+  const isExecuted = await useSweetAlertUpdateRecord(
+    updateDailyMeal,
+    [
+      {
+        userId: user.value.uid,
+        time: mealInfo.value.time,
+        meal: mealInfo.value.meal,
+        protein: mealInfo.value.protein,
+        carbohydrate: mealInfo.value.carbohydrate,
+        fat: mealInfo.value.fat,
+        weight: mealInfo.value.weight,
+        quantity: mealInfo.value.quantity,
+        note: mealInfo.value.note,
+      }, 
+      meal.value.id
+    ]
+  )
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 async function deleteRecord() {
@@ -166,7 +190,16 @@ async function deleteRecord() {
     return;
   }
 
-  await deleteDailyMeal(meal.value.id);
+  const isExecuted = await useSweetAlertDeleteRecord(
+    deleteDailyMeal,
+    [meal.value.id]
+  )
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 watch(

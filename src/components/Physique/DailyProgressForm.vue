@@ -9,7 +9,12 @@ import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelector
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
-import { formatDateStr } from '@/components/Utils/utilFunctions/index';
+import { 
+  formatDateStr,
+  useSweetAlertAddRecord,
+  useSweetAlertUpdateRecord,
+  useSweetAlertDeleteRecord
+} from '@/components/Utils/utilFunctions/index';
 
 
 interface Props {
@@ -52,8 +57,6 @@ function changeTime(time: Date) {
 async function handleSubmitForm() {
   try {
     action.value === "add" ? await addRecord() : await updateRecord();
-
-    emits('cancelForm')
   } catch (error) {
     console.error("Error writing document:", error);
   }
@@ -62,8 +65,6 @@ async function handleSubmitForm() {
 async function handleDeleteForm() {
   try {
     await deleteRecord();
-
-    emits('cancelForm')
   } catch (error) {
     console.error("Error deleting document:", error);
   }
@@ -80,11 +81,22 @@ async function addRecord() {
     return;
   }
 
-  await addDailyProgress({
-    userId: user.value!.uid,
-    date: dailyProgress.value!.date,
-    weight: dailyProgress.value!.weight,
-  });
+  const isExecuted = await useSweetAlertAddRecord(
+    addDailyProgress,
+    [
+      {
+        userId: user.value!.uid,
+        date: dailyProgress.value!.date,
+        weight: dailyProgress.value!.weight,
+      }
+    ]
+  );
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 async function updateRecord() {
@@ -98,11 +110,22 @@ async function updateRecord() {
     return;
   }
 
-  await updateDailyProgress({
-    userId: user.value!.uid,
-    date: dailyProgress.value!.date,
-    weight: dailyProgress.value!.weight,
-  }, progress.value!.id);
+  const isExecuted = await useSweetAlertUpdateRecord(
+    updateDailyProgress,
+    [
+      {
+        userId: user.value.uid,
+        date: dailyProgress.value.date,
+        weight: dailyProgress.value.weight,
+      }, progress.value.id
+    ]
+  );
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 async function deleteRecord() {
@@ -116,7 +139,16 @@ async function deleteRecord() {
     return;
   }
 
-  await deleteDailyProgress(dailyProgress.value.id);
+  const isExecuted = await useSweetAlertDeleteRecord(
+    deleteDailyProgress,
+    [dailyProgress.value.id]
+  );
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 watch(

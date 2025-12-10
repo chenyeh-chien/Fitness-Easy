@@ -3,7 +3,6 @@ import { ref, watch, computed, onMounted, toRefs, nextTick } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyWorkouts } from '@/composables/useDailyWorkouts'
 import { useExercises } from '@/composables/useExercises'
-import { formatDateStr } from '@/components/Utils/utilFunctions/index'
 import SectionContainer from '@/components/Utils/containers/SectionContainer.vue'
 import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelectorWithLabel.vue'
 import LabeledTextbox from '@/components/Utils/textboxes/LabeledTextbox.vue'
@@ -12,6 +11,12 @@ import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 import LabeledSelect from '../Utils/dropdowns/LabeledSelect.vue'
+import { 
+  formatDateStr,
+  useSweetAlertAddRecord,
+  useSweetAlertUpdateRecord,
+  useSweetAlertDeleteRecord
+} from '@/components/Utils/utilFunctions/index'
 
 
 interface Props {
@@ -103,8 +108,6 @@ function setSelectedWorkout(workout: string) {
 async function handleSubmitForm() {
   try {
     action.value === "add" ? await addRecord() : await updateRecord();
-
-    emits('cancelForm')
   } catch (error) {
     console.error("Error writing document:", error);
   }
@@ -113,8 +116,6 @@ async function handleSubmitForm() {
 async function handleDeleteForm() {
   try {
     await deleteRecord();
-
-    emits('cancelForm')
   } catch (error) {
     console.error("Error deleting document:", error);
   }
@@ -131,17 +132,28 @@ async function addRecord() {
     return;
   }
 
-  await addDailyWorkout({
-    userId: user.value.uid,
-    date: workoutInfo.value.date,
-    exercise: workoutInfo.value.exercise,
-    bodyPart: workoutInfo.value.bodyPart,
-    weight: workoutInfo.value.weight,
-    reps: workoutInfo.value.reps,
-    sets: workoutInfo.value.sets,
-    setTime: workoutInfo.value.setTime,
-    note: workoutInfo.value.note,
-  });
+  const isExecuted = await useSweetAlertAddRecord(
+    addDailyWorkout,
+    [
+      {
+        userId: user.value.uid,
+        date: workoutInfo.value.date,
+        exercise: workoutInfo.value.exercise,
+        bodyPart: workoutInfo.value.bodyPart,
+        weight: workoutInfo.value.weight,
+        reps: workoutInfo.value.reps,
+        sets: workoutInfo.value.sets,
+        setTime: workoutInfo.value.setTime,
+        note: workoutInfo.value.note,
+      }
+    ]
+  );
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 async function updateRecord() {
@@ -155,17 +167,28 @@ async function updateRecord() {
     return;
   }
 
-  await updateDailyWorkout({
-    userId: user.value.uid,
-    date: workoutInfo.value.date,
-    exercise: workoutInfo.value.exercise,
-    bodyPart: workoutInfo.value.bodyPart,
-    weight: workoutInfo.value.weight,
-    reps: workoutInfo.value.reps,
-    sets: workoutInfo.value.sets,
-    setTime: workoutInfo.value.setTime,
-    note: workoutInfo.value.note,
-  }, workout.value.id);
+  const isExecuted = await useSweetAlertUpdateRecord(
+    updateDailyWorkout,
+    [
+      {
+        userId: user.value.uid,
+        date: workoutInfo.value.date,
+        exercise: workoutInfo.value.exercise,
+        bodyPart: workoutInfo.value.bodyPart,
+        weight: workoutInfo.value.weight,
+        reps: workoutInfo.value.reps,
+        sets: workoutInfo.value.sets,
+        setTime: workoutInfo.value.setTime,
+        note: workoutInfo.value.note,
+      }, workout.value.id
+    ]
+  );
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 async function deleteRecord() {
@@ -179,7 +202,16 @@ async function deleteRecord() {
     return;
   }
 
-  await deleteDailyWorkout(workout.value.id);
+  const isExecuted = await useSweetAlertDeleteRecord(
+    deleteDailyWorkout,
+    [workout.value.id]
+  );
+
+  if (!isExecuted) {
+    return;
+  }
+
+  emits('cancelForm');
 }
 
 watch(

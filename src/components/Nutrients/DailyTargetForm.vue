@@ -11,8 +11,7 @@ import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 import { 
-  formatDateStr, 
-  useSweetAlert,
+  formatDateStr,
   useSweetAlertAddRecord,
   useSweetAlertUpdateRecord,
   useSweetAlertDeleteRecord
