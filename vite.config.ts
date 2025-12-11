@@ -18,7 +18,8 @@ export default defineConfig({
         name: 'Fitness Easy',
         short_name: 'Fitness Easy',
         description: 'This is an web app for monitoring daily physique progress.',
-        theme_color: '#ffffff',
+        background_color: '#000000',
+        theme_color: '#000000',
         display: 'standalone',
         start_url: '/',
         icons: [
