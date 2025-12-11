@@ -37,14 +37,20 @@ function setSelectedBodyInfo(value: Record<string, any> | null) {
   selectedBodyInfo.value = value;
 }
 
-function handleShowAddBodyInfo() {
-  hideForms();
-  setShowAddBodyInfo(true);
-}
-
-function handleShowAddDailyProgress() {
+async function handleShowAddDailyProgress() {
   hideForms();
   setShowAddDailyProgress(true);
+
+  await nextTick();
+  scrollToDailyProgressForm();
+}
+
+async function handleShowAddBodyInfo() {
+  hideForms();
+  setShowAddBodyInfo(true);
+
+  await nextTick();
+  scrollToBodyInfoForm();
 }
 
 function scrollToDailyProgressForm() {
