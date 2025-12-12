@@ -180,6 +180,6 @@ watch(
         backgroundColor: '#00FF00',
         barThickness: 2,
       }]"
-      :round-to="1" />
+      :round-to="0" />
   </div>
 </template>
