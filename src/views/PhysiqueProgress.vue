@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, nextTick, useTemplateRef } from 'vue'
+import CanvasChart from '@/components/Utils/chart/CanvasChart.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import SectionContainer from '@/components/Utils/containers/SectionContainer.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
@@ -7,6 +8,7 @@ import DailyProgress from '@/components/Physique/DailyProgress.vue'
 import BodyInfo from '@/components/Physique/BodyInfo.vue'
 import BodyInfoForm from '@/components/Physique/BodyInfoForm.vue'
 import DailyProgressForm from '@/components/Physique/DailyProgressForm.vue'
+import DailyProgressChart from '@/components/Physique/DailyProgressChart.vue'
 
 // Name, Birth date, Gender, Height
 // Every day weight
@@ -94,9 +96,14 @@ function hideForms() {
   <div class="flex flex-col gap-4">
     <SectionContainer
       :title="'Body Progress'">
-      <DailyProgress
-        :key="componentKey"
-        @select-record="handleSelectDailyProgress"/>
+      <div class="flex flex-col gap-10 md:flex-row">
+        <div class="flex justify-center items-center">
+          <DailyProgressChart/>
+        </div>
+        <DailyProgress
+          :key="componentKey"
+          @select-record="handleSelectDailyProgress"/>
+      </div>
       <RightAlignContainer>
         <div class="flex gap-2">
           <div>

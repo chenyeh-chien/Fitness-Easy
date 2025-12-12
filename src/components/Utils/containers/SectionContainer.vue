@@ -4,12 +4,14 @@ import { clsx } from "clsx"
 
 interface Props {
   title?: string;
+  showTitle?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  title: "Default Title"
+  title: "Default Title",
+  showTitle: true,
 });
-const { title } = toRefs(props);
+const { title, showTitle } = toRefs(props);
 
 </script>
 
@@ -20,6 +22,7 @@ const { title } = toRefs(props);
       'bg-(--section-container-bg) border border-(--section-container-border-color)'
     )">
     <h2 
+      v-if="showTitle"
       class="text-(--section-container-color)">
       {{ title }}
     </h2>

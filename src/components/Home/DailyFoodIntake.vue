@@ -7,6 +7,7 @@ import TextTable from '../Utils/tables/TextTable.vue'
 
 interface Props {
   date?: Date;
+  editable?: boolean;
 }
 
 interface Emits {
@@ -15,8 +16,9 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   date: () => new Date(),
+  editable: false,
 });
-const { date } = toRefs(props);
+const { date, editable } = toRefs(props);
 const emits = defineEmits<Emits>();
 
 const LABELS = [{
@@ -111,6 +113,6 @@ watch(
   <TextTable 
     :headers="LABELS"
     :data="dailyMeals"
-    :clickable="true"
+    :clickable="editable"
     @select-row="handleSelectRow"/>
 </template>

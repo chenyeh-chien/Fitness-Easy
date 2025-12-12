@@ -60,6 +60,3 @@ watch(
     </div>
   </button>
 </template>
-
-<style>
-</style>

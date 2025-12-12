@@ -7,7 +7,10 @@ import {
 import { 
   formatDateStr, 
   formatMinutesStr, 
-  roundTo2 
+  roundTo2,
+  getCSSVariable,
+  getDataColorSet,
+  hexToRgba
 } from './common';
 
 export {
@@ -17,5 +20,8 @@ export {
   useSweetAlertDeleteRecord,
   formatDateStr,
   formatMinutesStr,
-  roundTo2
+  roundTo2,
+  getCSSVariable,
+  getDataColorSet,
+  hexToRgba
 }

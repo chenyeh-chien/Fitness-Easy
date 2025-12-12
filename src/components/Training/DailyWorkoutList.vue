@@ -7,6 +7,7 @@ import { formatMinutesStr } from '@/components/Utils/utilFunctions/index'
 
 interface Props {
   date?: Date;
+  editable?: boolean;
 }
 
 interface Emits {
@@ -15,8 +16,9 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   date: () => new Date(),
+  editable: false
 });
-const { date } = toRefs(props);
+const { date, editable } = toRefs(props);
 const emits = defineEmits<Emits>();
 
 const LABELS = [{
@@ -135,7 +137,7 @@ watch(
   <TextTable 
     :headers="LABELS"
     :data="dailyWorkouts"
-    :clickable="true"
+    :clickable="editable"
     :isLoading="isLoading"
     @select-row="handleSelectRow"/>
 </template>

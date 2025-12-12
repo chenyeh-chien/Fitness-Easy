@@ -3,6 +3,7 @@ import { toRefs, watch } from 'vue';
 import { clsx } from 'clsx'
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import type { TableHeader } from '@/types/common';
+import { roundTo2 } from '@/components/Utils/utilFunctions/index';
 import ShimmerBody from './ShimmerBody.vue';
 
 
@@ -94,7 +95,7 @@ watch(
                     class="text-(--table-data-progress-desc-color)" 
                     icon="fa-solid fa-angles-down" />
                 </span>
-                <span>{{ Math.abs(item[header.key]) }}</span>
+                <span>{{ Math.abs(roundTo2(item[header.key])) }}</span>
               </div>
             </template>
             <template v-else>

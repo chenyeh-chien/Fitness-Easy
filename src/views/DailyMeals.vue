@@ -111,8 +111,9 @@ function hideForms() {
         :show-time="false"
         @change-time="changeTime"/>
       <DailyFoodIntake 
-        :date="selectedDate"
         :key="componentKey"
+        :date="selectedDate"
+        :editable="true"
         @select-record="handleSelectDailyMeal"/>
       <RightAlignContainer>
         <div class="flex gap-2">

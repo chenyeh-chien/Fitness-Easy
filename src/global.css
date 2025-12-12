@@ -80,6 +80,37 @@
     --datetime-day-hover-color: white;
     --datetime-day-hover-bg: var(--app-color);
 
+    --chart-setting-bg: var(--page-bg);
+    --chart-setting-box-shadow: var(--common-container-box-shadow);
+    --chart-title-color: #5B616A;
+    --chart-legend-color: #101318;
+    --chart-grid-color: #EDEDED;
+    --chart-xaxis-axisBorder-color: #EDEDED;
+    --chart-xaxis-label-color: #A7ABB0;
+    --chart-xaxis-title-color: #C1C3C6;
+    --chart-yaxis-label-color: #A7ABB0;
+    --chart-yaxis-title-color: #C1C3C6;
+    --chart-tooltip-time-color: var(--chart-yaxis-label-color);
+    --chart-tooltip-data-color: var(--chart-title-color);
+    --chart-zoom-border-color: rgba(46, 130, 111, 1);
+    --chart-zoom-bg: rgba(46, 130, 111, 0.25);
+    --ue-chart-streaming-icon-color: var(--search-box-placeholder-color);
+    --ue-chart-streaming-icon-hover-color: var(--search-box-with-result-count-color);
+    --ue-chart-streaming-icon-hover-bg: var(--search-box-with-result-count-bg);
+    --matrix-chart-color-offline: #BFBFBF;
+    --matrix-chart-color-online: #33B57F;
+    --matrix-chart-color-task: #3369B5;
+    --chart-data-color-1: #0A62D0;
+    --chart-data-color-2: #3BA885;
+    --chart-data-color-3: #3B5EA8;
+    --chart-data-color-4: #3BA885;
+    --chart-data-color-5: #3B5EA8;
+    --chart-data-color-6: #3BA885;
+    --chart-data-color-7: #3B5EA8;
+    --chart-data-color-8: #3BA885;
+    --chart-data-color-9: #3B5EA8;
+    --chart-data-color-10: #3BA885;
+
     /* z-index */
     --navbar-z-index: 19;
     --sidebar-z-index: 20;
@@ -159,6 +190,37 @@
     --datetime-day-sun-color: #f1956f;
     --datetime-day-hover-color: var(--accent-color);
     --datetime-day-hover-bg: var(--app-color);
+
+    --chart-setting-bg: var(--page-bg);
+    --chart-setting-box-shadow: var(--common-container-box-shadow);
+    --chart-title-color: white;
+    --chart-legend-color: white;
+    --chart-grid-color: #2D333B;
+    --chart-xaxis-axisBorder-color: #2D333B;
+    --chart-xaxis-label-color: #81868E;
+    --chart-xaxis-title-color: #40464F;
+    --chart-yaxis-label-color: #81868E;
+    --chart-yaxis-title-color: #40464F;
+    --chart-tooltip-time-color: var(--chart-yaxis-label-color);
+    --chart-tooltip-data-color: var(--chart-title-color);
+    --chart-zoom-border-color: rgba(106, 126, 254, 1);
+    --chart-zoom-bg: rgba(106, 126, 254, 0.25);
+    --ue-chart-streaming-icon-color: var(--search-box-placeholder-color);
+    --ue-chart-streaming-icon-hover-color: var(--search-box-with-result-count-color);
+    --ue-chart-streaming-icon-hover-bg: var(--search-box-with-result-count-bg);
+    --matrix-chart-color-offline: #2e343e;
+    --matrix-chart-color-online: #3BA885;
+    --matrix-chart-color-task: #3B5EA8;
+    --chart-data-color-1: #8980AB;
+    --chart-data-color-2: #3BA885;
+    --chart-data-color-3: #3B5EA8;
+    --chart-data-color-4: #3BA885;
+    --chart-data-color-5: #3B5EA8;
+    --chart-data-color-6: #3BA885;
+    --chart-data-color-7: #3B5EA8;
+    --chart-data-color-8: #3BA885;
+    --chart-data-color-9: #3B5EA8;
+    --chart-data-color-10: #3BA885;
   }
 }
 

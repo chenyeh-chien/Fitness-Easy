@@ -107,6 +107,7 @@ function hideForms() {
       <DailyWorkoutList
         :key="componentKey"
         :date="selectedDate"
+        :editable="true"
         @select-record="handleSelectDailyWorkout"/>
       <RightAlignContainer>
         <div class="flex gap-2">
