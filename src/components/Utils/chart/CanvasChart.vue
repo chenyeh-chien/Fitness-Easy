@@ -318,11 +318,12 @@ watch(
 <template>
   <div 
     :class="clsx(
-      'flex flex-col gap-4 w-100 h-55',
+      'flex flex-col gap-4 w-100',
       'pt-5 pr-8'
     )">
     <component
       v-if="showChart"
+      height="230"
       ref="chartRef"
       :is="chartComponent"
       :data="transformedData" 
