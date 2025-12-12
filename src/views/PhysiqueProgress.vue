@@ -96,14 +96,9 @@ function hideForms() {
   <div class="flex flex-col gap-4">
     <SectionContainer
       :title="'Body Progress'">
-      <div class="flex flex-col gap-10 md:flex-row">
-        <div class="flex justify-center items-center">
-          <DailyProgressChart/>
-        </div>
-        <DailyProgress
-          :key="componentKey"
-          @select-record="handleSelectDailyProgress"/>
-      </div>
+      <DailyProgress
+        :key="componentKey"
+        @select-record="handleSelectDailyProgress"/>
       <RightAlignContainer>
         <div class="flex gap-2">
           <div>

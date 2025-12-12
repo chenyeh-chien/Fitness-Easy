@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, toRefs } from 'vue'
+import { toRefs, ref, watch, onMounted } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyProgress } from '@/composables/useDailyProgress'
+import DailyProgressChart from './DailyProgressChart.vue'
 import TextTable from '../Utils/tables/TextTable.vue'
+
+interface Props {
+  displayChart?: boolean;
+}
 
 interface Emits {
   (e: 'selectRecord', data: Record<string, any>): void;
 }
 
+const props = withDefaults(defineProps<Props>(), {
+  displayChart: true,
+});
+const { displayChart } = toRefs(props);
 const emits = defineEmits<Emits>();
 
 const LABELS = [{
@@ -71,9 +80,14 @@ watch(
 </script>
 
 <template>
-  <TextTable 
-    :headers="LABELS"
-    :data="dailyProgress"
-    :clickable="true"
-    @select-row="handleSelectRow"/>
+  <div class="flex flex-col gap-10 md:flex-row">
+    <DailyProgressChart 
+      v-if="displayChart"
+      :daily-progress="dailyProgress"/>
+    <TextTable 
+      :headers="LABELS"
+      :data="dailyProgress"
+      :clickable="true"
+      @select-row="handleSelectRow"/>
+  </div>
 </template>

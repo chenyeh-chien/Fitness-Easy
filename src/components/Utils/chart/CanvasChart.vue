@@ -34,20 +34,24 @@ interface Props {
   yaxisInfo: YaxisInfo;
   dataset: ChartDataset[];
   roundTo: number;
+  displayLegend?: boolean;
 }
 
 interface Emits {
   (e: "changeTimeInterval", start: Date, end: Date): void;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  displayLegend: true,
+});
 const { 
   chartType, 
   title, 
   xaxisInfo, 
   yaxisInfo, 
   dataset, 
-  roundTo
+  roundTo,
+  displayLegend
 } = toRefs(props);
 const emits = defineEmits<Emits>();
 const CHART_MAP = {
@@ -57,6 +61,7 @@ const CHART_MAP = {
 }
 const colors = getDataColorSet();
 const showChart = ref(true);
+const chartRef = ref();
 const transformedData = ref<ChartData<any>>({
   labels: [],
   datasets: [],
@@ -263,6 +268,17 @@ ChartJS.register(
   TimeScale, zoomPlugin, Filler
 )
 
+const toggleDataset = (index: number) => {
+    const chart = chartRef.value?.chart;
+    if (!chart) return;
+
+    const meta = chart.getDatasetMeta(index);
+    meta.hidden = meta.hidden === null ? !chart.data.datasets[index].hidden : null;
+    transformedData.value.datasets[index].hidden = !transformedData.value.datasets[index].hidden;
+    chart.data.datasets[index].hidden = !chart.data.datasets[index].hidden;
+    chart.update();
+};
+
 const makeVerticalGradient = (
     ctx: CanvasRenderingContext2D, 
     area: { top: number; bottom: number }, 
@@ -271,6 +287,7 @@ const makeVerticalGradient = (
   const g = ctx.createLinearGradient(0, area.top, 0, area.bottom);
   g.addColorStop(0, hexToRgba(color, 0.4));
   g.addColorStop(1, hexToRgba(color, 0.0));
+
   return g;
 }
 
@@ -317,16 +334,38 @@ watch(
 
 <template>
   <div 
-    :class="clsx(
-      'flex flex-col gap-4 w-100',
-      'pt-5 pr-8'
-    )">
-    <component
+    class="flex flex-col gap-4 pt-5">
+    <div 
       v-if="showChart"
-      height="230"
-      ref="chartRef"
-      :is="chartComponent"
-      :data="transformedData" 
-      :options="options"/>
+      class="flex justify-center items-center w-100">
+      <component
+        height="230"
+        ref="chartRef"
+        :is="chartComponent"
+        :data="transformedData" 
+        :options="options"/>
+    </div>
+    <div
+      v-if="displayLegend"
+      :class="clsx(
+        'flex flex-wrap justify-center max-h-16',
+        'overflow-y-auto gap-2 px-6 mb-4 text-sm',
+        'text-(--chart-legend-color)'
+      )">
+      <div
+        v-for="(dataset, index) in transformedData.datasets"
+        class="flex items-center gap-1 cursor-pointer select-none"
+        :style="{ opacity: dataset.hidden ? 0.3 : 1 }"
+        :key="dataset.label"
+        @click="toggleDataset(index)">
+        <span
+          class="w-3 h-3 rounded-xs"
+          :style="{ 
+            backgroundColor: dataset.backgroundColor 
+          }">
+        </span>
+        <span class="text-xs">{{ dataset.label }}</span>
+      </div>
+    </div>
   </div>
 </template>
