@@ -2,14 +2,22 @@
 import { ref, watch, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyTarget } from '@/composables/useDailyTarget'
+import DailyTargetChart from './DailyTargetChart.vue'
 import TextTable from '../Utils/tables/TextTable.vue'
+
+interface Props {
+  displayChart?: boolean;
+}
 
 interface Emits {
   (e: 'selectRecord', data: Record<string, any>): void;
 }
 
+const props = withDefaults(defineProps<Props>(), {
+  displayChart: true,
+});
+const { displayChart } = toRefs(props);
 const emits = defineEmits<Emits>();
-
 const LABELS = [{
   label: "Date",
   key: "date",
@@ -88,9 +96,14 @@ watch(
 </script>
 
 <template>
-  <TextTable 
-    :headers="LABELS"
-    :data="dailyTargets"
-    :clickable="true"
-    @select-row="handleSelectRow"/>
+  <div class="flex flex-col gap-10 md:flex-row">
+    <DailyTargetChart 
+      v-if="displayChart"
+      :daily-target="dailyTargets"/>
+    <TextTable 
+      :headers="LABELS"
+      :data="dailyTargets"
+      :clickable="true"
+      @select-row="handleSelectRow"/>
+  </div>
 </template>

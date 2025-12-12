@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { watch, ref, onMounted, computed } from 'vue'
+import { watch, ref, onMounted, computed, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyTarget } from '@/composables/useDailyTarget'
 import { useDailyMeals } from '@/composables/useDailyMeals'
 import DigitScroller from '../Utils/transitions/DigitScroller.vue'
 // import NutrientsPercentage from './NutrientsPercentage.vue'
+import DailySummaryChart from '../Meals/DailySummaryChart.vue'
 import RemainNutrients from './RemainNutrients.vue'
 import { formatDateStr } from '@/components/Utils/utilFunctions/index'
 
+interface Props {
+  displayChart?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  displayChart: true,
+});
+const { displayChart } = toRefs(props); 
 const { user, isAuthReady } = useAuth();
 const { getDailyTargetsByDate } = useDailyTarget();
 const { getDailyMeals } = useDailyMeals();
@@ -98,7 +107,7 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-10">
+  <div class="flex flex-col gap-10">
     <div>
       <DigitScroller
         :data="dailyRemainCalories"
@@ -109,11 +118,17 @@ watch(
         :show-unit="true"
         :unit="'kcal'"/>
     </div>
-    <div class="w-full">
-      <RemainNutrients 
-        :target="dailyTarget"
-        :intake="dailyIntake" />
+    <div class="flex flex-col gap-10 md:flex-row">
+      <div v-if="displayChart">
+        <DailySummaryChart />
+      </div>
+      <div class="w-full">
+        <RemainNutrients 
+          :target="dailyTarget"
+          :intake="dailyIntake" />
+      </div>
     </div>
+    
     <!-- 顯示在當天應該攝取的比例比較適合 -->
     <!-- 
     <div class="w-full flex justify-center md:w-auto">
