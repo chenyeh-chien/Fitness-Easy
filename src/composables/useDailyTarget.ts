@@ -11,6 +11,7 @@ import {
   updateDoc,
   deleteDoc
 } from 'firebase/firestore'
+import { formatDateStr } from '@/components/Utils/utilFunctions';
 
 export function useDailyTarget() {
   const loading = ref(false);
@@ -33,6 +34,40 @@ export function useDailyTarget() {
     } catch (e) {
       error.value = e;
       console.error("Error getting daily targets:", e);
+      throw e;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const getDailyTargetsByInterval = async (
+    userId: string,
+    startDate: Date,
+    endDate: Date
+  ) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const today = new Date(startDate);
+      today.setHours(0, 0, 0, 0);
+      const startOfDay = formatDateStr(today, false);
+
+      const endOfToday = new Date(endDate);
+      endOfToday.setHours(23, 59, 59, 999);
+      const endOfDay = formatDateStr(endOfToday, false);
+
+      const q = query(
+        collection(db, 'daily-target'),
+        where('userId', '==', userId),
+        where('date', '>=', startOfDay),
+        where('date', '<=', endOfDay),
+        orderBy('date', 'desc')
+      );
+      const querySnapshot = await getDocs(q);
+      return querySnapshot;
+    } catch (e) {
+      error.value = e;
+      console.error("Error getting daily targets by interval:", e);
       throw e;
     } finally {
       loading.value = false;
@@ -107,6 +142,7 @@ export function useDailyTarget() {
   return {
     getDailyTargets,
     getDailyTargetsByDate,
+    getDailyTargetsByInterval,
     addDailyTarget,
     updateDailyTarget,
     deleteDailyTarget,

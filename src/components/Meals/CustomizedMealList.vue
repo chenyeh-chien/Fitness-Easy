@@ -57,8 +57,6 @@ async function setMealOptions() {
           id: doc.id,
         }
        });
-
-    console.log(mealsInfo.value);
   } catch (error) {
     console.error("Error querying daily meals:", error);
   }

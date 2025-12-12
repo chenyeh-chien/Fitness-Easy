@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { toRefs, ref, computed, nextTick, watch } from 'vue'
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import {
   Chart as ChartJS,
   Title, Tooltip, Legend,
@@ -361,7 +361,7 @@ watch(
         <span
           class="w-3 h-3 rounded-xs"
           :style="{ 
-            backgroundColor: dataset.backgroundColor 
+            backgroundColor: colors[index] 
           }">
         </span>
         <span class="text-xs">{{ dataset.label }}</span>

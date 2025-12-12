@@ -58,10 +58,6 @@ async function checkUserDailyMeals() {
   try {
     const querySnapshot = 
       await getDailyMeals(user.value.uid, date.value);
-    
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
 
     if (querySnapshot.empty) {
       console.log("No meals found for this user.");

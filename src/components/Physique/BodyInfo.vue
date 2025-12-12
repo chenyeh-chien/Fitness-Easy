@@ -43,10 +43,6 @@ async function checkBodyInfo() {
   try {
     const querySnapshot = 
       await getBodyInfo(user.value.uid);
-    
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
 
     if (querySnapshot.empty) {
       console.log("No body info found for this user.");

@@ -100,10 +100,6 @@ async function checkUserDailyTarget() {
   try {
     const querySnapshot = 
       await getDailyTargets(user.value.uid);
-    
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
 
     if (querySnapshot.empty) {
       console.log("No targets found for this user.");

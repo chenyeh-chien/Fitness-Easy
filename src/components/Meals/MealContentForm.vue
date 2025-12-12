@@ -68,10 +68,6 @@ async function checkUserMealOptions() {
         user.value.uid
       );
     
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
-
     if (querySnapshot.empty) {
       console.log("No meals found for this user.");
     }

@@ -64,10 +64,6 @@ async function checkExercises() {
       await getExercises(
         user.value.uid
       );
-    
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
 
     if (querySnapshot.empty) {
       console.log("No exercises found for this user.");

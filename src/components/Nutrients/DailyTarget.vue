@@ -52,10 +52,6 @@ async function checkDailyTargets() {
   try {
     const querySnapshot = 
       await getDailyTargets(user.value.uid);
-    
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
 
     if (querySnapshot.empty) {
       console.log("No body info found for this user.");
