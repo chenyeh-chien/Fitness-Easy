@@ -62,7 +62,7 @@ const transformedData = ref<ChartData<any>>({
   datasets: [],
 });
 const options = ref<ChartOptions<'line'>>({
-  responsive: true,
+  responsive: false,
   maintainAspectRatio: false,
   animation: {
     duration: 1000,
@@ -319,7 +319,7 @@ watch(
   <div 
     :class="clsx(
       'flex flex-col gap-4 w-100 h-55',
-      'pt-5 pr-12'
+      'pt-5 pr-8'
     )">
     <component
       v-if="showChart"
