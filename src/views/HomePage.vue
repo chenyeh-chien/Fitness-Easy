@@ -18,8 +18,7 @@ import DailyWorkoutList from "@/components/Training/DailyWorkoutList.vue";
       <SectionContainer 
         class="w-full"
         :title="'Daily summary'">
-        <DailySummary 
-          :display-chart="false"/>
+        <DailySummary />
       </SectionContainer>
     </div>
     <SectionContainer 

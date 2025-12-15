@@ -3,6 +3,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import TextTable from '../Utils/tables/TextTable.vue'
 import { useAuth } from '@/composables/useAuth'
 import { useMealOptions } from '@/composables/useMealOptions'
+import { useIsLoading } from '@/composables/index'
 import { roundTo2 } from '@/components/Utils/utilFunctions/index'
 
 interface Emits {
@@ -30,9 +31,10 @@ const LABELS = [{
   key: "weight",
 }]
 const mealsInfo = ref<any[]>([]);
+const { isLoading, loadingEffect } = useIsLoading();
 
 onMounted(() => {
-  setMealOptions();
+  loadingEffect(setMealOptions);
 })
 
 async function setMealOptions() {
@@ -70,7 +72,7 @@ function handleSelectRow(index: number) {
 watch(
   [isAuthReady],
   () => {
-    setMealOptions();
+    loadingEffect(setMealOptions);
   }
 )
 </script>
@@ -81,5 +83,6 @@ watch(
     :data="mealsInfo"
     :clickable="true"
     :displayed-data-cnt="4"
+    :is-loading="isLoading"
     @select-row="handleSelectRow"/>
 </template> 

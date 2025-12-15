@@ -75,6 +75,7 @@ const digitsContainerStyle = computed(() => {
 const digitsNumbers = computed(() => {
   return (index: number) => {
     return `
+      transition-property: transform;
       transition-duration: ${transitionDuration.value}s; 
       transition-delay: .5s;
       transform: translate3d(0px, -${SIZE_MAP[size.value].height * digits.value[index]!}px, 0px);
@@ -90,6 +91,7 @@ const digitsUnitStyle = computed(() => {
     color: ${color.value};
     margin-bottom: 5px;
     margin-left: 4px;
+    transition-property: transform;
     transition-duration: ${transitionDuration.value}s; 
     transition-delay: .5s;
     height: fit-content;
@@ -186,11 +188,10 @@ watch(
 <style>
 .scroller-enter-active,
 .scroller-leave-active {
-    transition: all 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out;
 }
 .scroller-enter,
 .scroller-leave-to {
-    opacity: 0;
     transform: translateY(30px);
 }
 </style>

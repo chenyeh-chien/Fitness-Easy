@@ -12,7 +12,8 @@ interface Props {
     protein: number;
     carbohydrate: number;
     fat: number;
-  }
+  },
+  isLoading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -29,9 +30,10 @@ const props = withDefaults(defineProps<Props>(), {
       carbohydrate: 0,
       fat: 0
     }
-  }
+  },
+  isLoading: false
 });
-const { target, intake } = toRefs(props);
+const { target, intake, isLoading } = toRefs(props);
 const LABELS = [{
   label: "Nutrients",
   key: "nutrients",
@@ -69,5 +71,6 @@ const nutrientsStats = computed(() => {
 <template>
   <TextTable 
     :headers="LABELS"
-    :data="nutrientsStats"/>
+    :data="nutrientsStats"
+    :is-loading="isLoading"/>
 </template>

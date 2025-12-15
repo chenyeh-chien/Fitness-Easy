@@ -3,6 +3,7 @@ import { watch, ref, onMounted, computed, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyTarget } from '@/composables/useDailyTarget'
 import { useDailyMeals } from '@/composables/useDailyMeals'
+import { useIsLoading } from '@/composables/index'
 import DigitScroller from '../Utils/transitions/DigitScroller.vue'
 // import NutrientsPercentage from './NutrientsPercentage.vue'
 import DailySummaryChart from '../Meals/DailySummaryChart.vue'
@@ -20,6 +21,7 @@ const { displayChart } = toRefs(props);
 const { user, isAuthReady } = useAuth();
 const { getDailyTargetsByDate } = useDailyTarget();
 const { getDailyMeals } = useDailyMeals();
+const { isLoading, loadingEffect } = useIsLoading();
 const currentDate = ref(formatDateStr(new Date(), false))
 const dailyTarget = ref({
   protein: 0,
@@ -39,10 +41,12 @@ const dailyRemainCalories = computed(() => {
 })
 
 onMounted(() => {
-  if (isAuthReady.value) {
-    checkUserDailyTarget()
-    checkUserDailyMeals()
-  }
+  loadingEffect(
+    async () => {
+      await checkUserDailyTarget()
+      await checkUserDailyMeals()
+    }
+  )
 })
 
 async function checkUserDailyTarget() {
@@ -100,8 +104,12 @@ async function checkUserDailyMeals() {
 watch(
   isAuthReady,
   () => {
-    checkUserDailyTarget();
-    checkUserDailyMeals();
+    loadingEffect(
+      async () => {
+        checkUserDailyTarget()
+        checkUserDailyMeals()
+      }
+    )
   }
 )
 </script>
@@ -125,7 +133,8 @@ watch(
       <div class="w-full">
         <RemainNutrients 
           :target="dailyTarget"
-          :intake="dailyIntake" />
+          :intake="dailyIntake"
+          :is-loading="isLoading" />
       </div>
     </div>
     

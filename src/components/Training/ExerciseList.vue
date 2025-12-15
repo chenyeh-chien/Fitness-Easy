@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import TextTable from '../Utils/tables/TextTable.vue'
 import { useAuth } from '@/composables/useAuth'
 import { useExercises } from '@/composables/useExercises'
+import { useIsLoading } from '@/composables/index'
 
 interface Emits {
   (e: 'selectRecord', data: Record<string, any>): void
@@ -11,6 +12,7 @@ interface Emits {
 const emits = defineEmits<Emits>();
 const { user, isAuthReady } = useAuth();
 const { getExercises } = useExercises();
+const { isLoading, loadingEffect } = useIsLoading();
 
 const LABELS = [{
   label: "Body part",
@@ -22,7 +24,7 @@ const LABELS = [{
 const exercisesInfo = ref<any[]>([]);
 
 onMounted(() => {
-  setExercises();
+  loadingEffect(setExercises);
 })
 
 async function setExercises() {
@@ -59,7 +61,7 @@ function handleSelectRow(index: number) {
 watch(
   [isAuthReady],
   () => {
-    setExercises();
+    loadingEffect(setExercises);
   }
 )
 </script>
@@ -70,5 +72,6 @@ watch(
     :data="exercisesInfo"
     :clickable="true"
     :displayed-data-cnt="4"
+    :is-loading="isLoading"
     @select-row="handleSelectRow"/>
 </template> 

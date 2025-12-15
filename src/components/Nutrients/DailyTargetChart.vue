@@ -32,7 +32,7 @@ const chartData = computed(() => {
         unit: 'day',
       }"
       :yaxis-info="{
-        unit: 'kg',
+        unit: 'kcal',
       }"
       :dataset="[{
         label: 'Total',

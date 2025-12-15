@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyTarget } from '@/composables/useDailyTarget'
+import { useIsLoading } from '@/composables/index'
 import DailyTargetChart from './DailyTargetChart.vue'
 import TextTable from '../Utils/tables/TextTable.vue'
 
@@ -36,11 +37,12 @@ const LABELS = [{
 }]
 const { user, isAuthReady } = useAuth();
 const { getDailyTargets } = useDailyTarget();
+const { isLoading, loadingEffect } = useIsLoading();
 const originalDailyTargets = ref<any[]>([]);
 const dailyTargets = ref<any[]>([]);
 
 onMounted(() => {
-  checkDailyTargets();
+  loadingEffect(checkDailyTargets);
 })
 
 async function checkDailyTargets() {
@@ -85,7 +87,7 @@ function handleSelectRow(index: number) {
 watch(
   isAuthReady,
   () => {
-    checkDailyTargets();
+    loadingEffect(checkDailyTargets);
   }
 )
 
@@ -100,6 +102,7 @@ watch(
       :headers="LABELS"
       :data="dailyTargets"
       :clickable="true"
+      :is-loading="isLoading"
       @select-row="handleSelectRow"/>
   </div>
 </template>

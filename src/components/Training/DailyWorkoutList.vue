@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyWorkouts } from '@/composables/useDailyWorkouts'
+import { useIsLoading } from '@/composables/index'
 import TextTable from '../Utils/tables/TextTable.vue'
 import { formatMinutesStr } from '@/components/Utils/utilFunctions/index'
 
@@ -54,10 +55,10 @@ const {
 } = useDailyWorkouts();
 const originalDailyWorkouts = ref<any[]>([]);
 const dailyWorkouts = ref<any[]>([]);
-const isLoading = ref(false);
+const { isLoading, loadingEffect } = useIsLoading();
 
 onMounted(() => {
-  checkUserDailyWorkouts();
+  loadingEffect(checkUserDailyWorkouts);
 })
 
 async function checkUserDailyWorkouts() {
@@ -67,7 +68,6 @@ async function checkUserDailyWorkouts() {
   }
 
   try {
-    isLoading.value = true;
     const querySnapshot = 
       await getDailyWorkouts(user.value.uid, date.value);
     
@@ -114,8 +114,6 @@ async function checkUserDailyWorkouts() {
     dailyWorkouts.value = workouts;
   } catch (error) {
     console.error("Error querying daily workouts:", error);
-  } finally {
-    isLoading.value = false;
   }
 }
 
@@ -127,7 +125,7 @@ function handleSelectRow(index: number) {
 watch(
   [isAuthReady, date],
   () => {
-    checkUserDailyWorkouts();
+    loadingEffect(checkUserDailyWorkouts);
   }
 )
 
@@ -138,6 +136,6 @@ watch(
     :headers="LABELS"
     :data="dailyWorkouts"
     :clickable="editable"
-    :isLoading="isLoading"
+    :is-loading="isLoading"
     @select-row="handleSelectRow"/>
 </template>

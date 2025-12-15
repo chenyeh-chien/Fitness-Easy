@@ -165,7 +165,7 @@ watch(
         unit: 'day',
       }"
       :yaxis-info="{
-        unit: 'kg',
+        unit: 'kcal',
       }"
       :dataset="[{
         label: 'Target',

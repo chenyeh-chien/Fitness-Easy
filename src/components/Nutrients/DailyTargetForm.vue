@@ -253,7 +253,7 @@ watch(
     <form 
       class="flex flex-col gap-6"
       @submit.prevent="handleSubmitForm">
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-4 md:flex-row md:flex-wrap">
         <DatetimeSelectorWithLabel 
           :label="'Date'"
           :time="new Date(targetInfo!.date)"

@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyMeals } from '@/composables/useDailyMeals'
+import { useIsLoading } from '@/composables/index'
 import { roundTo2 } from '@/components/Utils/utilFunctions/index'
 import TextTable from '../Utils/tables/TextTable.vue'
 
@@ -44,9 +45,10 @@ const { user, isAuthReady } = useAuth();
 const { getDailyMeals } = useDailyMeals();
 const originalDailyMeals = ref<any[]>([]);
 const dailyMeals = ref<any[]>([]);
+const { isLoading, loadingEffect } = useIsLoading();
 
 onMounted(() => {
-  checkUserDailyMeals();
+  loadingEffect(checkUserDailyMeals);
 })
 
 async function checkUserDailyMeals() {
@@ -99,7 +101,7 @@ function handleSelectRow(index: number) {
 watch(
   [isAuthReady, date],
   () => {
-    checkUserDailyMeals();
+    loadingEffect(checkUserDailyMeals);
   }
 )
 
@@ -110,5 +112,6 @@ watch(
     :headers="LABELS"
     :data="dailyMeals"
     :clickable="editable"
+    :is-loading="isLoading"
     @select-row="handleSelectRow"/>
 </template>

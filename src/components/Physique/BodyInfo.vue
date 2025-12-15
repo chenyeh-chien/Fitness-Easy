@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useBodyInfo } from '@/composables/useBodyInfo'
+import { useIsLoading } from '@/composables/index'
 import TextTable from '../Utils/tables/TextTable.vue'
 
 interface Emits {
@@ -29,9 +30,10 @@ const LABELS = [{
 const { user, isAuthReady } = useAuth();
 const { getBodyInfo } = useBodyInfo();
 const bodyInfo = ref<any[]>([]);
+const { isLoading, loadingEffect } = useIsLoading();
 
 onMounted(() => {
-  checkBodyInfo();
+  loadingEffect(checkBodyInfo);
 })
 
 async function checkBodyInfo() {
@@ -69,7 +71,7 @@ function handleSelectRow(index: number) {
 watch(
   isAuthReady,
   () => {
-    checkBodyInfo();
+    loadingEffect(checkBodyInfo);
   }
 )
 
@@ -80,5 +82,6 @@ watch(
     :headers="LABELS"
     :data="bodyInfo"
     :clickable="true"
+    :is-loading="isLoading"
     @select-row="handleSelectRow"/>
 </template>

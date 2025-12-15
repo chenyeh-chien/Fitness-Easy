@@ -2,6 +2,7 @@
 import { toRefs, ref, watch, onMounted } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyProgress } from '@/composables/useDailyProgress'
+import { useIsLoading } from '@/composables/index'
 import DailyProgressChart from './DailyProgressChart.vue'
 import TextTable from '../Utils/tables/TextTable.vue'
 
@@ -28,10 +29,12 @@ const LABELS = [{
 }]
 const { user, isAuthReady } = useAuth();
 const { getDailyProgress } = useDailyProgress();
+const { isLoading, loadingEffect } = useIsLoading();
 const dailyProgress = ref<any[]>([]);
 
+
 onMounted(() => {
-  checkDailyProgress();
+  loadingEffect(checkDailyProgress);
 })
 
 async function checkDailyProgress() {
@@ -69,7 +72,7 @@ function handleSelectRow(index: number) {
 watch(
   isAuthReady,
   () => {
-    checkDailyProgress();
+    loadingEffect(checkDailyProgress);
   }
 )
 
@@ -84,6 +87,7 @@ watch(
       :headers="LABELS"
       :data="dailyProgress"
       :clickable="true"
+      :is-loading="isLoading"
       @select-row="handleSelectRow"/>
   </div>
 </template>
