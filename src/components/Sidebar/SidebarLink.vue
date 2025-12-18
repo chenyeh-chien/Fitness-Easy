@@ -7,10 +7,13 @@ import type { SidebarLinkInfo } from "./Sidebar.types"
 
 interface Props {
   info: SidebarLinkInfo;
+  displayIcon?: boolean;
 }
 
-const props = defineProps<Props>();
-const { info } = toRefs(props);
+const props = withDefaults(defineProps<Props>(), {
+  displayIcon: true,
+});
+const { info, displayIcon } = toRefs(props);
 const route = useRoute();
 
 </script>
@@ -25,7 +28,9 @@ const route = useRoute();
       route.path === info.link && 'bg-(--sidebar-link-bg)'
     )"
     :to="info.link">
-    <div class="flex justify-center items-center">
+    <div 
+      v-if="displayIcon"
+      class="flex justify-center items-center">
       <FontAwesomeIcon :icon="info.icon" />
     </div>
     <span>{{ info.name }}</span>

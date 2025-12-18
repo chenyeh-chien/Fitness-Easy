@@ -6,13 +6,34 @@ import { useAuth } from '@/composables/useAuth'
 import { useOverflowHidden } from "@/components/Utils/hooks"
 import { auth } from "@/components/Utils/Firebase/firebase"
 import ModeButton from "@/components/Navbar/ModeButton.vue"
-import SidebarLink from "@/components/Sidebar/SidebarLink.vue"
+import NavbarLinks from "./NavbarLinks.vue"
 import SidebarMain from "@/components/Sidebar/SidebarMain.vue"
 
 
 const { user } = useAuth();
 const APP_NAME = "Fitness Easy"
 const [showSidebar, setShowSidebar] = useOverflowHidden(document.body);
+const PAGES = [
+  {
+  name: "Nutrients",
+  icon: "fa-solid fa-scale-balanced",
+  link: "/nutrients"
+},
+{
+  name: "Training routine",
+  icon: "fa-solid fa-dumbbell",
+  link: "/training-routine"
+},
+{
+  name: "Daily meals",
+  icon: "fa-solid fa-utensils",
+  link: "/daily-meals"
+},
+{
+  name: "Physique progress",
+  icon: "fa-solid fa-weight-scale",
+  link: "/physique-progress"
+}]
 
 async function handleSignout() {
   await signOut(auth);
@@ -49,7 +70,10 @@ async function handleSignout() {
         <span class="font-bold">{{ APP_NAME }}</span>
       </RouterLink>
     </div>
-    <SidebarMain 
+    <NavbarLinks 
+      :pages="PAGES"/>
+    <SidebarMain
+      :pages="PAGES" 
       :show-sidebar="showSidebar" 
       @handle-show-sidebar="setShowSidebar"/>
     <div class="flex gap-4">

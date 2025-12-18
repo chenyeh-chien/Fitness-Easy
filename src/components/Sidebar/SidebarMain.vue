@@ -4,8 +4,10 @@ import { RouterLink } from 'vue-router'
 import { clsx } from "clsx"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SidebarLink from "./SidebarLink.vue"
+import type { SidebarLinkInfo } from "./Sidebar.types"
 
 interface Props {
+  pages: SidebarLinkInfo[]
   showSidebar: boolean;
 }
 
@@ -14,29 +16,8 @@ interface Emits {
 }
 
 const props = defineProps<Props>();
-const { showSidebar } = toRefs(props);
+const { pages, showSidebar } = toRefs(props);
 const emit = defineEmits<Emits>();
-const navInfos = [
-  {
-  name: "Nutrients",
-  icon: "fa-solid fa-scale-balanced",
-  link: "/nutrients"
-},
-{
-  name: "Training routine",
-  icon: "fa-solid fa-dumbbell",
-  link: "/training-routine"
-},
-{
-  name: "Daily meals",
-  icon: "fa-solid fa-utensils",
-  link: "/daily-meals"
-},
-{
-  name: "Physique progress",
-  icon: "fa-solid fa-weight-scale",
-  link: "/physique-progress"
-}]
 </script>
 
 <template>
@@ -57,7 +38,7 @@ const navInfos = [
           'flex flex-col gap-2'
         )">
         <li 
-          v-for="info in navInfos"
+          v-for="info in pages"
           :key="info.name">
           <SidebarLink 
             :info="info" 
