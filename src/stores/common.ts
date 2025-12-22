@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useDatetimeStore = defineStore('datetime', () => {
@@ -13,8 +13,8 @@ export const useDatetimeStore = defineStore('datetime', () => {
   persist: {
     // Custom serializer to handle Date objects
     serializer: {
-      serialize: (state) => JSON.stringify(state),
-      deserialize: (value) => {
+      serialize: (state: any) => JSON.stringify(state),
+      deserialize: (value: string) => {
         const data = JSON.parse(value)
         if (data.currTime) {
           data.currTime = new Date(data.currTime) // Convert back to Object
@@ -23,4 +23,4 @@ export const useDatetimeStore = defineStore('datetime', () => {
       }
     }
   }
-})
+} as any)
