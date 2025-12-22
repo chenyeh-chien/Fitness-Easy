@@ -5,7 +5,6 @@ import MealContentForm from '@/components/Meals/MealContentForm.vue'
 import DailyMealsForm from '@/components/Meals/DailyMealsForm.vue'
 import DailyFoodIntake from '@/components/Home/DailyFoodIntake.vue'
 import SectionContainer from '@/components/Utils/containers/SectionContainer.vue'
-import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelectorWithLabel.vue'
 import CustomizedMealList from '@/components/Meals/CustomizedMealList.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
@@ -13,7 +12,6 @@ import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 const SCROLL_OPTIONS = {
   behavior: 'smooth',
 }
-const selectedDate = ref(new Date())
 const showAddMealOption = ref(false)
 const showAddDailyMeal = ref(false)
 const componentKey = ref(0)
@@ -21,10 +19,6 @@ const mealContentFormRef = useTemplateRef('mealContentForm')
 const dailyMealsFormRef = useTemplateRef('dailyMealsForm')
 const selectedMealOption = ref<Record<string, any> | null>(null)
 const selectedDailyMeal = ref<Record<string, any> | null>(null)
-
-function changeTime(time: Date) {
-  selectedDate.value = time;
-}
 
 function setShowAddMealOption(value: boolean) {
   showAddMealOption.value = value;
@@ -105,14 +99,8 @@ function hideForms() {
     </SectionContainer>
     <SectionContainer
       :title="'Daily food intake'">
-      <DatetimeSelectorWithLabel 
-        :label="'Date'"
-        :time="selectedDate"
-        :show-time="false"
-        @change-time="changeTime"/>
       <DailyFoodIntake 
         :key="componentKey"
-        :date="selectedDate"
         :editable="true"
         @select-record="handleSelectDailyMeal"/>
       <RightAlignContainer>

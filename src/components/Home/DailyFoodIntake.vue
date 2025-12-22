@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, toRefs } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useDatetimeStore } from '@/stores/common'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyMeals } from '@/composables/useDailyMeals'
 import { useIsLoading } from '@/composables/index'
@@ -7,7 +9,6 @@ import { roundTo2 } from '@/components/Utils/utilFunctions/index'
 import TextTable from '../Utils/tables/TextTable.vue'
 
 interface Props {
-  date?: Date;
   editable?: boolean;
 }
 
@@ -16,11 +17,11 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  date: () => new Date(),
   editable: false,
 });
-const { date, editable } = toRefs(props);
+const { editable } = toRefs(props);
 const emits = defineEmits<Emits>();
+const { currTime } = storeToRefs(useDatetimeStore());
 
 const LABELS = [{
   label: "Name",
@@ -59,7 +60,7 @@ async function checkUserDailyMeals() {
 
   try {
     const querySnapshot = 
-      await getDailyMeals(user.value.uid, date.value);
+      await getDailyMeals(user.value.uid, currTime.value);
 
     if (querySnapshot.empty) {
       console.log("No meals found for this user.");
@@ -99,7 +100,7 @@ function handleSelectRow(index: number) {
 }
 
 watch(
-  [isAuthReady, date],
+  [isAuthReady, currTime],
   () => {
     loadingEffect(checkUserDailyMeals);
   }

@@ -4,15 +4,19 @@ import { signOut } from "firebase/auth"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useAuth } from '@/composables/useAuth'
 import { useOverflowHidden } from "@/components/Utils/hooks"
+import { useDatetimeStore } from "@/stores"
 import { auth } from "@/components/Utils/Firebase/firebase"
-import ModeButton from "@/components/Navbar/ModeButton.vue"
 import NavbarLinks from "./NavbarLinks.vue"
 import SidebarMain from "@/components/Sidebar/SidebarMain.vue"
+import DatetimeSelector from "../Utils/dates/DatetimeSelector.vue"
+import ModeButton from "@/components/Navbar/ModeButton.vue"
+
 
 
 const { user } = useAuth();
 const APP_NAME = "Fitness Easy"
 const [showSidebar, setShowSidebar] = useOverflowHidden(document.body);
+const { currTime, changeTime } = useDatetimeStore();
 const PAGES = [
   {
   name: "Nutrients",
@@ -77,6 +81,15 @@ async function handleSignout() {
       :show-sidebar="showSidebar" 
       @handle-show-sidebar="setShowSidebar"/>
     <div class="flex gap-4">
+      <div class="hidden justify-center items-center lg:flex">
+        <DatetimeSelector
+          :time="new Date(currTime)"
+          :width="'110px'"
+          :show-time="false"
+          :disable-text-input="true"
+          @change-time="changeTime"
+        />
+      </div>
       <div class="flex justify-center items-center">
         <button 
           class="w-max text-(--navbar-color) hover:cursor-pointer">

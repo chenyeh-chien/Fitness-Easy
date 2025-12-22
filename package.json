@@ -34,6 +34,7 @@
     "date-fns": "^4.1.0",
     "firebase": "^12.6.0",
     "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.7.1",
     "sweetalert2": "^11.26.4",
     "tailwindcss": "^4.1.17",
     "vue": "^3.5.22",

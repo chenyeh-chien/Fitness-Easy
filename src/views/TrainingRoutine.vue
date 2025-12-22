@@ -21,10 +21,6 @@ const componentKey = ref(0)
 const exerciseFormRef = useTemplateRef('exerciseFormRef') 
 const dailyWorkoutFormRef = useTemplateRef('dailyWorkoutFormRef')
 
-function changeTime(time: Date) {
-  selectedDate.value = time;
-}
-
 function setShowAddExercise(value: boolean) {
   showAddExercise.value = value;
 }
@@ -99,14 +95,8 @@ function hideForms() {
   <div class="flex flex-col gap-4">
     <SectionContainer
       :title="'Daily workout list'">
-      <DatetimeSelectorWithLabel 
-        :label="'Date'"
-        :time="selectedDate"
-        :show-time="false"
-        @change-time="changeTime"/>
       <DailyWorkoutList
         :key="componentKey"
-        :date="selectedDate"
         :editable="true"
         @select-record="handleSelectDailyWorkout"/>
       <RightAlignContainer>

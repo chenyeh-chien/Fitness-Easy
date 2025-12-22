@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, toRefs } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useDatetimeStore } from '@/stores/common'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyWorkouts } from '@/composables/useDailyWorkouts'
 import { useIsLoading } from '@/composables/index'
@@ -7,7 +9,6 @@ import TextTable from '../Utils/tables/TextTable.vue'
 import { formatMinutesStr } from '@/components/Utils/utilFunctions/index'
 
 interface Props {
-  date?: Date;
   editable?: boolean;
 }
 
@@ -16,11 +17,11 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  date: () => new Date(),
   editable: false
 });
-const { date, editable } = toRefs(props);
+const { editable } = toRefs(props);
 const emits = defineEmits<Emits>();
+const { currTime } = storeToRefs(useDatetimeStore());
 
 const LABELS = [{
   label: "Body part",
@@ -69,7 +70,7 @@ async function checkUserDailyWorkouts() {
 
   try {
     const querySnapshot = 
-      await getDailyWorkouts(user.value.uid, date.value);
+      await getDailyWorkouts(user.value.uid, currTime.value);
     
     if (querySnapshot.empty) {
       console.log("No workouts found for this user.");
@@ -89,7 +90,7 @@ async function checkUserDailyWorkouts() {
       const latestWeight = 
         await getLatestWeight(
           user.value.uid, 
-          date.value, 
+          currTime.value, 
           workout.bodyPart, 
           workout.exercise
         );
@@ -123,7 +124,7 @@ function handleSelectRow(index: number) {
 }
 
 watch(
-  [isAuthReady, date],
+  [isAuthReady, currTime],
   () => {
     loadingEffect(checkUserDailyWorkouts);
   }

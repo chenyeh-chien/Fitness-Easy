@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { watch, ref, onMounted, computed, toRefs } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyTarget } from '@/composables/useDailyTarget'
 import { useDailyMeals } from '@/composables/useDailyMeals'
 import { useIsLoading } from '@/composables/index'
+import { useDatetimeStore } from '@/stores'
 import DigitScroller from '../Utils/transitions/DigitScroller.vue'
 // import NutrientsPercentage from './NutrientsPercentage.vue'
 import DailySummaryChart from '../Meals/DailySummaryChart.vue'
@@ -22,7 +24,7 @@ const { user, isAuthReady } = useAuth();
 const { getDailyTargetsByDate } = useDailyTarget();
 const { getDailyMeals } = useDailyMeals();
 const { isLoading, loadingEffect } = useIsLoading();
-const currentDate = ref(formatDateStr(new Date(), false))
+const { currTime } = storeToRefs(useDatetimeStore());
 const dailyTarget = ref({
   protein: 0,
   carbohydrate: 0,
@@ -35,20 +37,12 @@ const dailyIntake = ref<any>({
   fat: 0,
   total: 0
 });
-
+const currentDate = computed(() => {
+  return formatDateStr(currTime.value, false)
+})
 const dailyRemainCalories = computed(() => {
   return Math.round(dailyTarget.value.total - dailyIntake.value.total);
 })
-
-onMounted(() => {
-  loadingEffect(
-    async () => {
-      await checkUserDailyTarget()
-      await checkUserDailyMeals()
-    }
-  )
-})
-
 async function checkUserDailyTarget() {
   if (user.value === null) {
     console.error("User not logged in");
@@ -80,7 +74,7 @@ async function checkUserDailyMeals() {
   }
 
   const querySnapshot = 
-    await getDailyMeals(user.value.uid, new Date());
+    await getDailyMeals(user.value.uid, currTime.value);
   
   if (querySnapshot.empty) {
     console.log("No meals found for this user.");
@@ -102,7 +96,7 @@ async function checkUserDailyMeals() {
 }
 
 watch(
-  isAuthReady,
+  [isAuthReady, currTime],
   () => {
     loadingEffect(
       async () => {
@@ -110,7 +104,8 @@ watch(
         checkUserDailyMeals()
       }
     )
-  }
+  },
+  { immediate: true }
 )
 </script>
 

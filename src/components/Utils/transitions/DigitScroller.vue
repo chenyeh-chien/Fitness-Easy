@@ -123,6 +123,7 @@ const delay = (milliseconds: number) => {
     setTimeout(resolve, milliseconds);
   });
 }
+
 watch(
   data,
   async () => {
