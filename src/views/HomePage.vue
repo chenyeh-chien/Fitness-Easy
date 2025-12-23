@@ -23,13 +23,13 @@ import DailyWorkoutList from "@/components/Training/DailyWorkoutList.vue";
     </div>
     <SectionContainer 
       class="w-full"
-      :title="'Training routine'">
-      <DailyWorkoutList />
+      :title="'Daily food intake'">
+      <DailyFoodIntake />
     </SectionContainer>
     <SectionContainer 
       class="w-full"
-      :title="'Daily food intake'">
-      <DailyFoodIntake />
+      :title="'Training routine'">
+      <DailyWorkoutList />
     </SectionContainer>
   </div>
 </template>

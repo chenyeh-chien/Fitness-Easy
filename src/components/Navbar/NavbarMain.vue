@@ -19,9 +19,9 @@ const [showSidebar, setShowSidebar] = useOverflowHidden(document.body);
 const { currTime, changeTime } = useDatetimeStore();
 const PAGES = [
   {
-  name: "Nutrients",
-  icon: "fa-solid fa-scale-balanced",
-  link: "/nutrients"
+  name: "Daily meals",
+  icon: "fa-solid fa-utensils",
+  link: "/daily-meals"
 },
 {
   name: "Training routine",
@@ -29,9 +29,9 @@ const PAGES = [
   link: "/training-routine"
 },
 {
-  name: "Daily meals",
-  icon: "fa-solid fa-utensils",
-  link: "/daily-meals"
+  name: "Nutrients",
+  icon: "fa-solid fa-scale-balanced",
+  link: "/nutrients"
 },
 {
   name: "Physique progress",

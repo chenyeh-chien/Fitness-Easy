@@ -29,6 +29,9 @@ const LABELS = [{
 }, {
   label: "Weight (g)",
   key: "weight",
+}, {
+  label: "Cost (NTD)",
+  key: "unitCost",
 }]
 const mealsInfo = ref<any[]>([]);
 const { isLoading, loadingEffect } = useIsLoading();

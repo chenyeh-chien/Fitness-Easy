@@ -31,6 +31,7 @@ const props = withDefaults(defineProps<Props>(), {
     carbohydrate: 0,
     fat: 0,
     weight: 0,
+    unitCost: 0,
   })
 })
 const { action, meal } = toRefs(props);
@@ -113,6 +114,7 @@ async function addRecord() {
         carbohydrate: mealInfo.value.carbohydrate,
         fat: mealInfo.value.fat,
         weight: mealInfo.value.weight,
+        unitCost: mealInfo.value.unitCost,
       }
     ]
   )
@@ -145,6 +147,7 @@ async function updateRecord() {
         carbohydrate: mealInfo.value.carbohydrate,
         fat: mealInfo.value.fat,
         weight: mealInfo.value.weight,
+        unitCost: mealInfo.value.unitCost,
       }, meal.value.id
     ]
   )
@@ -193,7 +196,10 @@ watch(
       return;
     }
 
-    setMealInfo(newValue);
+    setMealInfo({
+      unitCost: 0,
+      ...newValue
+    });
   },
   { immediate: true, deep: true }
 )
@@ -226,6 +232,10 @@ watch(
           v-model:text.number="mealInfo!.weight"
           :label="'Weight (g)'"
           :name="'Weight'"/>
+        <LabeledTextbox 
+          v-model:text.number="mealInfo!.unitCost"
+          :label="'Cost (NTD)'"
+          :name="'Cost'"/>
       </div>
       <RightAlignContainer>
         <div class="flex flex-wrap gap-2">

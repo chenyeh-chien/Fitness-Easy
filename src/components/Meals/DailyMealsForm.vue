@@ -16,6 +16,7 @@ import {
   useSweetAlertUpdateRecord,
   useSweetAlertDeleteRecord
 } from '@/components/Utils/utilFunctions/index'
+import { roundTo2 } from '@/components/Utils/utilFunctions/index'
 
 interface Props {
   action?: "add" | "update";
@@ -36,6 +37,8 @@ const props = withDefaults(defineProps<Props>(), {
     fat: 0,
     weight: 0,
     quantity: 1,
+    unitCost: 0,
+    totalCost: 0,
     note: "",
   })
 })
@@ -58,6 +61,14 @@ const formTitle = computed(() => {
 
 const mealOptions = computed(() => {
   return mealsInfo.value.map(item => item.meal);
+})
+
+const calculatedCost = computed(() => {
+  if (!mealInfo.value || !mealInfo.value.unitCost) {
+    return 0;
+  }
+
+  return roundTo2(mealInfo.value!.quantity * mealInfo.value!.unitCost);
 })
 
 onMounted(() => {
@@ -131,6 +142,8 @@ async function addRecord() {
         fat: mealInfo.value.fat,
         weight: mealInfo.value.weight,
         quantity: mealInfo.value.quantity,
+        unitCost: mealInfo.value.unitCost,
+        totalCost: mealInfo.value.totalCost,
         note: mealInfo.value.note,
       }
     ]
@@ -166,6 +179,8 @@ async function updateRecord() {
         fat: mealInfo.value.fat,
         weight: mealInfo.value.weight,
         quantity: mealInfo.value.quantity,
+        unitCost: mealInfo.value.unitCost,
+        totalCost: mealInfo.value.totalCost,
         note: mealInfo.value.note,
       }, 
       meal.value.id
@@ -216,7 +231,11 @@ watch(
       return;
     }
 
-    setMealInfo(newValue);
+    setMealInfo({
+      unitCost: 0,
+      totalCost: 0,
+      ...newValue,
+    });
     setSelectedMeal(newValue.meal);
   },
   { immediate: true, deep: true }
@@ -233,6 +252,17 @@ watch(
       ...mealInfo.value,
       ...mealsInfo.value.find((item) => item.meal === newValue),
     });
+  }
+)
+
+watch(
+  calculatedCost,
+  (newValue) => {
+    if (!mealInfo.value) {
+      return;
+    }
+
+    mealInfo.value.totalCost = newValue;
   }
 )
 </script>
@@ -281,11 +311,20 @@ watch(
             :label="'Weight (g)'"
             :name="'Weight'"
             :readonly="true"/>
+          <LabeledTextbox 
+            v-model:text.number="mealInfo.unitCost"
+            :label="'Unit Cost (NTD)'"
+            :name="'Unit Cost'"
+            :readonly="true"/>
         </template>
         <LabeledTextbox 
           v-model:text.number="mealInfo!.quantity"
           :label="'Quantity'"
           :name="'Quantity'"/>
+        <LabeledTextbox 
+          v-model:text.number="mealInfo!.totalCost"
+          :label="'Cost (NTD)'"
+          :name="'Cost'"/>
         <LabeledTextbox 
           v-model:text="mealInfo!.note"
           :label="'Note'"
