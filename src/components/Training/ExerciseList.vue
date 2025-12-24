@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import TextTable from '../Utils/tables/TextTable.vue'
+import SearchTable from '../Utils/tables/SearchTable.vue'
 import { useAuth } from '@/composables/useAuth'
 import { useExercises } from '@/composables/useExercises'
 import { useIsLoading } from '@/composables/index'
@@ -53,11 +53,6 @@ async function setExercises() {
   }
 }
 
-function handleSelectRow(index: number) {
-  const data = exercisesInfo.value[index];
-  emits('selectRecord', data);
-}
-
 watch(
   [isAuthReady],
   () => {
@@ -67,11 +62,11 @@ watch(
 </script>
 
 <template>
-  <TextTable 
+  <SearchTable 
     :headers="LABELS"
     :data="exercisesInfo"
     :clickable="true"
     :displayed-data-cnt="4"
     :is-loading="isLoading"
-    @select-row="handleSelectRow"/>
+    @select-record="(record) => emits('selectRecord', record)"/>
 </template> 

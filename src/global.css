@@ -36,6 +36,8 @@
     --section-container-bg: white;
     --section-container-border-color: #EBEEF2;
 
+    --label-color: var(--sidebar-link-color);
+
     --table-label-color: var(--sidebar-link-color);
     --table-label-bg: var(--section-container-bg);
     --table-label-border-color: var(--sidebar-link-color);
@@ -60,8 +62,10 @@
     --textbox-bg: #EDEFF5;
     --textbox-color: var(--sidebar-link-color);
     --textbox-box-shadow: var(--button-box-shadow);
-    --textbox-label-color: var(--sidebar-link-color);
     --textbox-readonly-bg: #F7F8FA;
+    --search-box-color: var(--textbox-color);
+    --search-box-bg: var(--textbox-bg);
+    --search-box-placeholder-color: #858A92;
 
     --dropdown-bg: var(--textbox-bg);
     --dropdown-color: var(--textbox-color);

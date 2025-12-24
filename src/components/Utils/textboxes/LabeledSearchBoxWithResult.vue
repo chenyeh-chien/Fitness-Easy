@@ -1,20 +1,25 @@
 <script setup lang="ts">
 import { toRefs } from 'vue'
 import LabelContainer from '../Labels/LabelContainer.vue'
-import CommonTextbox from './CommonTextbox.vue'
+import SearchBoxWithResult from './SearchBoxWithResult.vue'
 
 interface Props {
   name?: string;
   label?: string;
-  width?: string;
-  readonly?: boolean;
+  results?: string[];
+}
+
+interface Emits {
+  (e: 'onChangeValue', value: string): void;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   label: "Label",
   name: "Default",
+  results: () => []
 })
-const { name, label, width, readonly } = toRefs(props);
+const { name, label } = toRefs(props);
+const emits = defineEmits<Emits>();
 const text = defineModel<string | number>("text", { required: true });
 </script>
 
@@ -22,10 +27,9 @@ const text = defineModel<string | number>("text", { required: true });
   <LabelContainer 
     :name="name"
     :label="label">
-    <CommonTextbox 
+    <SearchBoxWithResult
       v-model:text="text"
-      :name="name"
-      :width="width"
-      :readonly="readonly"/>
+      :results="results"
+      @on-change-value="emits('onChangeValue', $event)"/>
   </LabelContainer>
 </template>

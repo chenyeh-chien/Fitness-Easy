@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
+import SearchTable from '@/components/Utils/tables/SearchTable.vue'
 import TextTable from '../Utils/tables/TextTable.vue'
 import { useAuth } from '@/composables/useAuth'
 import { useMealOptions } from '@/composables/useMealOptions'
@@ -67,11 +68,6 @@ async function setMealOptions() {
   }
 }
 
-function handleSelectRow(index: number) {
-  const data = mealsInfo.value[index];
-  emits('selectRecord', data);
-}
-
 watch(
   [isAuthReady],
   () => {
@@ -81,11 +77,11 @@ watch(
 </script>
 
 <template>
-  <TextTable 
+  <SearchTable 
     :headers="LABELS"
     :data="mealsInfo"
     :clickable="true"
     :displayed-data-cnt="4"
     :is-loading="isLoading"
-    @select-row="handleSelectRow"/>
+    @select-record="(record) => emits('selectRecord', record)"/>
 </template> 

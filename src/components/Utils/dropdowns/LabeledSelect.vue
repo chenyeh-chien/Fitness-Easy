@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { clsx } from 'clsx'
 import { toRefs } from 'vue';
+import LabelContainer from '../Labels/LabelContainer.vue'
 import CommonSelect from './CommonSelect.vue'
 
 interface Props {
@@ -22,15 +22,12 @@ const emits = defineEmits<Emits>();
 </script>
 
 <template>
-  <div 
-    :class="clsx(
-      'flex flex-col gap-1 text-(--dropdown-label-color) text-xs',
-    )">
-    <label 
-      :for="name">{{ label }}</label>
+  <LabelContainer 
+    :name="name"
+    :label="label">
     <CommonSelect 
       :value="value"
       :options="options"
       @on-change-value="(val) => emits('onChangeValue', val)"/>
-  </div>
+  </LabelContainer>
 </template>

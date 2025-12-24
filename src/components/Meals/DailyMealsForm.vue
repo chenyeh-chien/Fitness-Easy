@@ -5,6 +5,7 @@ import { useDailyMeals } from '@/composables/useDailyMeals'
 import { useMealOptions } from '@/composables/useMealOptions'
 import SectionContainer from '@/components/Utils/containers/SectionContainer.vue'
 import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelectorWithLabel.vue'
+import LabeledSearchBoxWithResult from '@/components/Utils/textboxes/LabeledSearchBoxWithResult.vue'
 import LabeledTextbox from '@/components/Utils/textboxes/LabeledTextbox.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
@@ -278,12 +279,12 @@ watch(
           :label="'Time'"
           :time="new Date(mealInfo!.time)"
           @change-time="changeTime"/>
-        <LabeledSelect 
-          v-if="action === 'add'"
+        <LabeledSearchBoxWithResult
+          v-if="action === 'add'" 
+          v-model:text="mealInfo!.meal"
           :name="'Meal'"
           :label="'Meal'"
-          :value="mealInfo!.meal"
-          :options="mealOptions" 
+          :results="mealOptions"
           @on-change-value="setSelectedMeal"/>
         <LabeledTextbox 
           v-else
