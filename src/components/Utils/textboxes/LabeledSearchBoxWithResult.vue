@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const { name, label } = toRefs(props);
 const emits = defineEmits<Emits>();
-const text = defineModel<string | number>("text", { required: true });
+const text = defineModel<string>("text", { required: true });
 </script>
 
 <template>
