@@ -3,23 +3,24 @@ import { ref, watch, computed, onMounted, toRefs, nextTick } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyWorkouts } from '@/composables/useDailyWorkouts'
 import { useExercises } from '@/composables/useExercises'
-import SectionContainer from '@/components/Utils/containers/SectionContainer.vue'
 import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelectorWithLabel.vue'
 import LabeledTextbox from '@/components/Utils/textboxes/LabeledTextbox.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
-import LabeledSelect from '../Utils/dropdowns/LabeledSelect.vue'
+import LabeledSelect from '@/components/Utils/dropdowns/LabeledSelect.vue'
 import { 
   formatDateStr,
   useSweetAlertAddRecord,
   useSweetAlertUpdateRecord,
   useSweetAlertDeleteRecord
 } from '@/components/Utils/utilFunctions/index'
+import CommonDrawer from '@/components/Utils/drawer/CommonDrawer.vue'
 
 
 interface Props {
+  open: boolean;
   action?: "add" | "update";
   workout?: Record<string, any>;
 }
@@ -41,7 +42,7 @@ const props = withDefaults(defineProps<Props>(), {
     note: "",
   })
 })
-const { action, workout } = toRefs(props);
+const { open, action, workout } = toRefs(props);
 const emits = defineEmits<Emits>();
 const { user, isAuthReady } = useAuth();
 const { 
@@ -283,8 +284,10 @@ watch(
 </script>
 
 <template>
-  <SectionContainer 
-    :title="formTitle">
+  <CommonDrawer
+    :open="open"
+    :title="formTitle"
+    @close-drawer="emits('cancelForm')">
     <form 
       class="flex flex-col gap-6"
       @submit.prevent="handleSubmitForm">
@@ -348,5 +351,5 @@ watch(
         </div>
       </RightAlignContainer>
     </form>
-  </SectionContainer>
+  </CommonDrawer>
 </template>

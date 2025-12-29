@@ -11,7 +11,6 @@ import RightAlignContainer from '@/components/Utils/containers/RightAlignContain
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
 import ConfirmButton from '@/components/Utils/buttons/ConfirmButton.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
-import LabeledSelect from '../Utils/dropdowns/LabeledSelect.vue'
 import {
   useSweetAlertAddRecord,
   useSweetAlertUpdateRecord,

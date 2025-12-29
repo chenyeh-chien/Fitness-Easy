@@ -28,7 +28,7 @@ const emits = defineEmits<Emits>();
 <template>
   <DrawerRoot
     :open="open"
-    @close="emits('closeDrawer')">
+    @update:open="(val) => { if (!val) emits('closeDrawer') }">
     <DrawerPortal>
       <DrawerOverlay 
         class="fixed inset-0 bg-black/80 z-50"/>
@@ -37,7 +37,7 @@ const emits = defineEmits<Emits>();
         :class="clsx(
           'flex flex-col rounded-t-[20px]',
           'bg-(--drawer-bg) text-(--drawer-color)',
-          'h-[90%] mt-24 fixed bottom-0 left-0 right-0 z-50 outline-none'
+          'max-h-[90%] mt-24 fixed bottom-0 left-0 right-0 z-50 outline-none'
         )">
         <div 
           class="mx-auto w-12 h-1.5 shrink-0 rounded-full bg-zinc-300 my-4">

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, nextTick, useTemplateRef } from 'vue'
-import CanvasChart from '@/components/Utils/chart/CanvasChart.vue'
+import { ref } from 'vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import SectionContainer from '@/components/Utils/containers/SectionContainer.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
@@ -8,18 +7,10 @@ import DailyProgress from '@/components/Physique/DailyProgress.vue'
 import BodyInfo from '@/components/Physique/BodyInfo.vue'
 import BodyInfoForm from '@/components/Physique/BodyInfoForm.vue'
 import DailyProgressForm from '@/components/Physique/DailyProgressForm.vue'
-import DailyProgressChart from '@/components/Physique/DailyProgressChart.vue'
 
-// Name, Birth date, Gender, Height
-// Every day weight
-const SCROLL_OPTIONS = {
-  behavior: 'smooth',
-}
 const showAddBodyInfo = ref(false);
 const showAddDailyProgress = ref(false);
 const componentKey = ref(0)
-const dailyProgressFormRef = useTemplateRef('dailyProgressForm')
-const bodyInfoFormRef = useTemplateRef('bodyInfoForm')
 const selectedDailyProgress = ref<Record<string, any> | null>(null);
 const selectedBodyInfo = ref<Record<string, any> | null>(null);
 
@@ -42,41 +33,21 @@ function setSelectedBodyInfo(value: Record<string, any> | null) {
 async function handleShowAddDailyProgress() {
   hideForms();
   setShowAddDailyProgress(true);
-
-  await nextTick();
-  scrollToDailyProgressForm();
 }
 
 async function handleShowAddBodyInfo() {
   hideForms();
   setShowAddBodyInfo(true);
-
-  await nextTick();
-  scrollToBodyInfoForm();
-}
-
-function scrollToDailyProgressForm() {
-  dailyProgressFormRef.value?.$el?.scrollIntoView(SCROLL_OPTIONS);
-}
-
-function scrollToBodyInfoForm() {
-  bodyInfoFormRef.value?.$el?.scrollIntoView(SCROLL_OPTIONS);
 }
 
 async function handleSelectDailyProgress(data: Record<string, any>) {
   hideForms();
   setSelectedDailyProgress(data);
-
-  await nextTick();
-  scrollToDailyProgressForm();
 }
 
 async function handleSelectBodyInfo(data: Record<string, any>) {
   hideForms();
   setSelectedBodyInfo(data);
-
-  await nextTick();
-  scrollToBodyInfoForm();
 }
 
 function handleCancelForm() {
@@ -124,25 +95,25 @@ function hideForms() {
         </div>
       </RightAlignContainer>
     </SectionContainer>
-    <BodyInfoForm
-      v-if="showAddBodyInfo"
-      ref="bodyInfoForm"
-      @cancel-form="handleCancelForm"/>
-    <BodyInfoForm
-      v-if="selectedBodyInfo !== null"
-      ref="bodyInfoForm"
-      :action="'update'"
-      :info="selectedBodyInfo"
-      @cancel-form="handleCancelForm"/>
     <DailyProgressForm
       v-if="showAddDailyProgress"
-      ref="dailyProgressForm"
+      :open="showAddDailyProgress"
       @cancel-form="handleCancelForm"/>
     <DailyProgressForm
       v-if="selectedDailyProgress !== null"
-      ref="dailyProgressForm"
+      :open="selectedDailyProgress !== null"
       :action="'update'"
-      :progress="selectedDailyProgress"
+      :progress="selectedDailyProgress!"
+      @cancel-form="handleCancelForm"/>
+    <BodyInfoForm
+      v-if="showAddBodyInfo"
+      :open="showAddBodyInfo"
+      @cancel-form="handleCancelForm"/>
+    <BodyInfoForm
+      v-if="selectedBodyInfo !== null"
+      :open="selectedBodyInfo !== null"
+      :action="'update'"
+      :info="selectedBodyInfo!"
       @cancel-form="handleCancelForm"/>
   </div>
 </template>

@@ -2,7 +2,6 @@
 import { toRefs, ref, computed, watch } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyProgress } from '@/composables/useDailyProgress'
-import SectionContainer from '@/components/Utils/containers/SectionContainer.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import LabeledTextbox from '@/components/Utils/textboxes/LabeledTextbox.vue'
 import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelectorWithLabel.vue'
@@ -15,9 +14,11 @@ import {
   useSweetAlertUpdateRecord,
   useSweetAlertDeleteRecord
 } from '@/components/Utils/utilFunctions/index';
+import CommonDrawer from '@/components/Utils/drawer/CommonDrawer.vue'
 
 
 interface Props {
+  open: boolean;
   action?: "add" | "update";
   progress?: Record<string, any>;
 }
@@ -33,7 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
     weight: 75,
   })
 })
-const { action, progress } = toRefs(props);
+const { open, action, progress } = toRefs(props);
 const emits = defineEmits<Emits>();
 const { user, isAuthReady } = useAuth();
 const { 
@@ -165,8 +166,10 @@ watch(
 </script>
 
 <template>
-  <SectionContainer
-    :title="formTitle">
+  <CommonDrawer
+    :open="open"
+    :title="formTitle"
+    @close-drawer="emits('cancelForm')">
     <form
       class="flex flex-col gap-6"
       @submit.prevent="handleSubmitForm">
@@ -200,5 +203,5 @@ watch(
         </div>
       </RightAlignContainer>
     </form>
-  </SectionContainer>
+  </CommonDrawer>
 </template>

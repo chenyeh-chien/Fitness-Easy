@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref, useTemplateRef } from 'vue'
+import { ref } from 'vue'
 import DailySummary from '@/components/Home/DailySummary.vue'
 import MealContentForm from '@/components/Meals/MealContentForm.vue'
 import DailyMealsForm from '@/components/Meals/DailyMealsForm.vue'
@@ -9,13 +9,9 @@ import CustomizedMealList from '@/components/Meals/CustomizedMealList.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import CommonButton from '@/components/Utils/buttons/CommonButton.vue'
 
-const SCROLL_OPTIONS = {
-  behavior: 'smooth',
-}
 const showAddMealOption = ref(false)
 const showAddDailyMeal = ref(false)
 const componentKey = ref(0)
-const mealContentFormRef = useTemplateRef('mealContentForm')
 const selectedMealOption = ref<Record<string, any> | null>(null)
 const selectedDailyMeal = ref<Record<string, any> | null>(null)
 
@@ -38,9 +34,6 @@ function setSelectedDailyMeal(value: Record<string, any> | null) {
 async function handleShowAddMealOption() {
   hideForms();
   setShowAddMealOption(true);
-
-  await nextTick();
-  scrollToMealOptionForm();
 }
 
 async function handleShowAddDailyMeal() {
@@ -48,16 +41,9 @@ async function handleShowAddDailyMeal() {
   setShowAddDailyMeal(true);
 }
 
-function scrollToMealOptionForm() {
-  mealContentFormRef.value?.$el?.scrollIntoView(SCROLL_OPTIONS);
-}
-
 async function handleSelectMealOption(data: Record<string, any>) {
   hideForms();
-  setSelectedMealOption(data);
-
-  await nextTick();
-  scrollToMealOptionForm();
+  setSelectedMealOption(data)
 }
 
 async function handleSelectDailyMeal(data: Record<string, any>) {
@@ -117,26 +103,25 @@ function hideForms() {
         </div>
       </RightAlignContainer>
     </SectionContainer>
+    <DailyMealsForm
+      v-if="showAddDailyMeal"
+      :open="showAddDailyMeal"
+      @cancel-form="handleCancelForm"/>
+    <DailyMealsForm
+      v-if="selectedDailyMeal !== null"
+      :open="selectedDailyMeal !== null"
+      :action="'update'"
+      :meal="selectedDailyMeal!"
+      @cancel-form="handleCancelForm"/>
     <MealContentForm
       v-if="showAddMealOption"
-      ref="mealContentForm"
+      :open="showAddMealOption"
       @cancel-form="handleCancelForm"/>
     <MealContentForm
       v-if="selectedMealOption !== null"
-      ref="mealContentForm"
+      :open="selectedMealOption !== null"
       :action="'update'"
-      :meal="selectedMealOption"
+      :meal="selectedMealOption!"
       @cancel-form="handleCancelForm"/>
-    <DailyMealsForm
-      :open="showAddDailyMeal"
-      @cancel-form="handleCancelForm"/>
-    <!--
-    <DailyMealsForm
-      v-if="selectedDailyMeal !== null"
-      ref="dailyMealsForm"
-      :action="'update'"
-      :meal="selectedDailyMeal"
-      @cancel-form="handleCancelForm"/>
-    -->
   </div>
 </template>

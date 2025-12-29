@@ -16,8 +16,10 @@ import {
   useSweetAlertUpdateRecord,
   useSweetAlertDeleteRecord
 } from '@/components/Utils/utilFunctions/index'
+import CommonDrawer from '@/components/Utils/drawer/CommonDrawer.vue'
 
 interface Props {
+  open: boolean;
   action?: "add" | "update";
   target?: Record<string, any>;
 }
@@ -35,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
     fat: 0,
   })
 })
-const { action, target } = toRefs(props);
+const { open, action, target } = toRefs(props);
 const emits = defineEmits<Emits>();
 const { user, isAuthReady } = useAuth();
 const { 
@@ -248,8 +250,10 @@ watch(
 </script>
 
 <template>
-  <SectionContainer 
-    :title="formTitle">
+  <CommonDrawer
+    :open="open"
+    :title="formTitle"
+    @close-drawer="emits('cancelForm')">
     <form 
       class="flex flex-col gap-6"
       @submit.prevent="handleSubmitForm">
@@ -303,5 +307,5 @@ watch(
         </div>
       </RightAlignContainer>
     </form>
-  </SectionContainer>
+  </CommonDrawer>
 </template>
