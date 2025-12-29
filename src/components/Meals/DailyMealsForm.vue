@@ -3,7 +3,7 @@ import { ref, watch, computed, onMounted, toRefs } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyMeals } from '@/composables/useDailyMeals'
 import { useMealOptions } from '@/composables/useMealOptions'
-import SectionContainer from '@/components/Utils/containers/SectionContainer.vue'
+import CommonDrawer from '@/components/Utils/drawer/CommonDrawer.vue'
 import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelectorWithLabel.vue'
 import LabeledSearchBoxWithResult from '@/components/Utils/textboxes/LabeledSearchBoxWithResult.vue'
 import LabeledTextbox from '@/components/Utils/textboxes/LabeledTextbox.vue'
@@ -20,6 +20,7 @@ import {
 import { roundTo2 } from '@/components/Utils/utilFunctions/index'
 
 interface Props {
+  open: boolean;
   action?: "add" | "update";
   meal?: Record<string, any>;
 }
@@ -43,7 +44,7 @@ const props = withDefaults(defineProps<Props>(), {
     note: "",
   })
 })
-const { action, meal } = toRefs(props);
+const { open, action, meal } = toRefs(props);
 const emits = defineEmits<Emits>();
 const { user, isAuthReady } = useAuth();
 const { 
@@ -269,8 +270,10 @@ watch(
 </script>
 
 <template>
-  <SectionContainer 
-    :title="formTitle">
+  <CommonDrawer
+    :open="open"
+    :title="formTitle"
+    @close-drawer="emits('cancelForm')">
     <form 
       class="flex flex-col gap-6"
       @submit.prevent="handleSubmitForm">
@@ -350,5 +353,5 @@ watch(
         </div>
       </RightAlignContainer>
     </form>
-  </SectionContainer>
+  </CommonDrawer>
 </template>

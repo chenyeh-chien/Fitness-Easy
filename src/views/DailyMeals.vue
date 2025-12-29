@@ -16,7 +16,6 @@ const showAddMealOption = ref(false)
 const showAddDailyMeal = ref(false)
 const componentKey = ref(0)
 const mealContentFormRef = useTemplateRef('mealContentForm')
-const dailyMealsFormRef = useTemplateRef('dailyMealsForm')
 const selectedMealOption = ref<Record<string, any> | null>(null)
 const selectedDailyMeal = ref<Record<string, any> | null>(null)
 
@@ -47,17 +46,10 @@ async function handleShowAddMealOption() {
 async function handleShowAddDailyMeal() {
   hideForms();
   setShowAddDailyMeal(true);
-
-  await nextTick();
-  scrollToDailyMealForm();
 }
 
 function scrollToMealOptionForm() {
   mealContentFormRef.value?.$el?.scrollIntoView(SCROLL_OPTIONS);
-}
-
-function scrollToDailyMealForm() {
-  dailyMealsFormRef.value?.$el?.scrollIntoView(SCROLL_OPTIONS);
 }
 
 async function handleSelectMealOption(data: Record<string, any>) {
@@ -71,9 +63,6 @@ async function handleSelectMealOption(data: Record<string, any>) {
 async function handleSelectDailyMeal(data: Record<string, any>) {
   hideForms();
   setSelectedDailyMeal(data);
-  
-  await nextTick();
-  scrollToDailyMealForm();
 }
 
 function handleCancelForm() {
@@ -139,14 +128,15 @@ function hideForms() {
       :meal="selectedMealOption"
       @cancel-form="handleCancelForm"/>
     <DailyMealsForm
-      v-if="showAddDailyMeal"
-      ref="dailyMealsForm"
+      :open="showAddDailyMeal"
       @cancel-form="handleCancelForm"/>
+    <!--
     <DailyMealsForm
       v-if="selectedDailyMeal !== null"
       ref="dailyMealsForm"
       :action="'update'"
       :meal="selectedDailyMeal"
       @cancel-form="handleCancelForm"/>
+    -->
   </div>
 </template>

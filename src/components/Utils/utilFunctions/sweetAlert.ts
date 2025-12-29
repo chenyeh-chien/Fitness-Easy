@@ -37,6 +37,7 @@ export const useSweetAlert = async (
   replyConfig: SweetAlertOptions = {}
 ): Promise<boolean> => {
   const checkResult = await Swal.fire({
+    target: document.getElementById('drawer-content-area') || 'body',
     ...DEFAULT_CHECK_CONFIG,
     ...checkConfig
   } as SweetAlertOptions);
@@ -44,6 +45,7 @@ export const useSweetAlert = async (
 
   await callback(...args);
   await Swal.fire({
+    target: document.getElementById('drawer-content-area') || 'body',
     ...DEFAULT_REPLY_CONFIG,
     ...replyConfig
   } as SweetAlertOptions);

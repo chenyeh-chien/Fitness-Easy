@@ -12,6 +12,13 @@ import DailySummaryChart from '../Meals/DailySummaryChart.vue'
 import RemainNutrients from './RemainNutrients.vue'
 import { formatDateStr } from '@/components/Utils/utilFunctions/index'
 
+type NutrientsInfo = {
+  protein: number;
+  carbohydrate: number;
+  fat: number;
+  total: number;
+}
+
 interface Props {
   displayChart?: boolean;
 }
@@ -25,24 +32,35 @@ const { getDailyTargetsByDate } = useDailyTarget();
 const { getDailyMeals } = useDailyMeals();
 const { isLoading, loadingEffect } = useIsLoading();
 const { currTime } = storeToRefs(useDatetimeStore());
-const dailyTarget = ref({
+const dailyTarget = ref<NutrientsInfo>({
   protein: 0,
   carbohydrate: 0,
   fat: 0,
   total: 0
 });
-const dailyIntake = ref<any>({
+const dailyIntake = ref<NutrientsInfo>({
   protein: 0,
   carbohydrate: 0,
   fat: 0,
   total: 0
 });
+
 const currentDate = computed(() => {
   return formatDateStr(currTime.value, false)
 })
+
 const dailyRemainCalories = computed(() => {
   return Math.round(dailyTarget.value.total - dailyIntake.value.total);
 })
+
+function setDailyTarget(target: NutrientsInfo) {
+  dailyTarget.value = target;
+}
+
+function setDailyIntake(intake: NutrientsInfo) {
+  dailyIntake.value = intake;
+}
+
 async function checkUserDailyTarget() {
   if (user.value === null) {
     console.error("User not logged in");
@@ -54,17 +72,23 @@ async function checkUserDailyTarget() {
   
   if (querySnapshot.empty) {
     console.log("No targets found for this user.");
+    setDailyTarget({
+      protein: 0,
+      carbohydrate: 0,
+      fat: 0,
+      total: 0
+    });
     return;
   }
 
   const data = querySnapshot.docs[0]!.data();
 
-  dailyTarget.value = {
+  setDailyTarget({
     protein: data.protein,
     carbohydrate: data.carbohydrate,
     fat: data.fat,
     total: data.protein * 4 + data.carbohydrate * 4 + data.fat * 9
-  };
+  });
 }
 
 async function checkUserDailyMeals() {
@@ -78,21 +102,29 @@ async function checkUserDailyMeals() {
   
   if (querySnapshot.empty) {
     console.log("No meals found for this user.");
+    setDailyIntake({
+      protein: 0,
+      carbohydrate: 0,
+      fat: 0,
+      total: 0
+    });
     return;
   }
 
-  dailyIntake.value = querySnapshot.docs
-    .map(item => item.data())
-    .reduce((acc, item) => {
-      acc.protein += item.quantity * item.protein;
-      acc.carbohydrate += item.quantity * item.carbohydrate;
-      acc.fat += item.quantity * item.fat;
-      acc.total += item.quantity * (
-        item.protein * 4 + item.carbohydrate * 4 + item.fat * 9
-      );
+  setDailyIntake(
+    querySnapshot.docs
+      .map(item => item.data())
+      .reduce((acc, item) => {
+        acc.protein += item.quantity * item.protein;
+        acc.carbohydrate += item.quantity * item.carbohydrate;
+        acc.fat += item.quantity * item.fat;
+        acc.total += item.quantity * (
+          item.protein * 4 + item.carbohydrate * 4 + item.fat * 9
+        );
 
-      return acc;
-    }, { protein: 0, carbohydrate: 0, fat: 0, total: 0 });
+        return acc;
+      }, { protein: 0, carbohydrate: 0, fat: 0, total: 0 }) as NutrientsInfo
+  )
 }
 
 watch(

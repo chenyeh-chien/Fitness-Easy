@@ -125,6 +125,10 @@
     --swal-custom-color: var(--table-label-color);
     --swal-custom-bg: var(--page-bg);
     --swal-custom-box-shadow: var(--button-box-shadow);
+
+    /* drawer */
+    --drawer-bg: var(--page-bg);
+    --drawer-color: white;
   }
 
   .dark {
@@ -225,6 +229,10 @@
     --chart-data-color-8: #3BA885;
     --chart-data-color-9: #3B5EA8;
     --chart-data-color-10: #3BA885;
+
+    /* drawer */
+    --drawer-bg: var(--page-bg);
+    --drawer-color: white;
   }
 }
 
