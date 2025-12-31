@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { clsx } from "clsx";
-import SectionContainer from '@/components/Utils/containers/SectionContainer.vue';
-import DailySummary from "@/components/Home/DailySummary.vue";
-import DailyFoodIntake from "@/components/Home/DailyFoodIntake.vue";
-import DailyWorkoutList from "@/components/Training/DailyWorkoutList.vue";
+import { ref } from 'vue'
+import { clsx } from "clsx"
+import SectionContainer from '@/components/Utils/containers/SectionContainer.vue'
+import DailySummary from "@/components/Home/DailySummary.vue"
+import DailyFoodIntakeMain from "@/components/Meals/DailyFoodIntakeMain.vue"
+import DailyWorkout from "@/components/Training/DailyWorkout.vue"
+
+const componentKey = ref(0)
+
+function updateComponentKey() {
+  componentKey.value++;
+}
 </script>
 
 <template>
@@ -18,18 +25,14 @@ import DailyWorkoutList from "@/components/Training/DailyWorkoutList.vue";
       <SectionContainer 
         class="w-full"
         :title="'Daily summary'">
-        <DailySummary />
+        <DailySummary :key="componentKey"/>
       </SectionContainer>
     </div>
-    <SectionContainer 
-      class="w-full"
-      :title="'Daily food intake'">
-      <DailyFoodIntake />
-    </SectionContainer>
-    <SectionContainer 
-      class="w-full"
-      :title="'Training routine'">
-      <DailyWorkoutList />
-    </SectionContainer>
+    <DailyFoodIntakeMain 
+      :key="componentKey"
+      @update-component-key="updateComponentKey"/>
+    <DailyWorkout 
+      :key="componentKey"
+      @update-component-key="updateComponentKey"/>
   </div>
 </template>
