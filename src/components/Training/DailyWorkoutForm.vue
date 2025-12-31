@@ -39,6 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
     reps: 8,
     sets: 4,
     setTime: 4,
+    rpe: "9",
     note: "",
   })
 })
@@ -55,6 +56,7 @@ const workoutInfo = ref<Record<string, any> | null>(null)
 const workoutsInfo = ref<any[]>([])
 const selectedBodyPart = ref<string | null>(null);
 const selectedWorkout = ref<string | null>(null);
+const selectedRPE = ref<string>("9");
 
 const formTitle = computed(() => {
   return action.value === "add" ? "Add daily workout" : "Update daily workout";
@@ -68,6 +70,19 @@ const workoutOptions = computed(() => {
   return workoutsInfo.value
     .filter(item => item.bodyPart === selectedBodyPart.value)
     .map(item => item.exercise);
+})
+
+const calculatedE1RM = computed(() => {
+  if (!workoutInfo.value?.weight || !workoutInfo.value?.reps) return 0;
+
+  // 如果使用者輸入的 RPE 小於 10，代表他還有保留體力 (RIR)
+  // 我們將次數做一個轉換，例如 RPE 9 代表還能做 1 下，所以有效次數 = reps + 1
+  const effectiveReps = workoutInfo.value.reps + (10 - workoutInfo.value.rpe);
+  
+  // 使用 Brzycki 公式
+  const e1RM = workoutInfo.value.weight / (1.0278 - 0.0278 * effectiveReps);
+  
+  return Math.round(e1RM * 10) / 10;
 })
 
 onMounted(() => {
@@ -104,6 +119,10 @@ function setSelectedBodyPart(bodyPart: string) {
 
 function setSelectedWorkout(workout: string) {
   selectedWorkout.value = workout;
+}
+
+function setSelectedRPE(rpe: string) {
+  selectedRPE.value = rpe;
 }
 
 async function handleSubmitForm() {
@@ -145,6 +164,8 @@ async function addRecord() {
         reps: workoutInfo.value.reps,
         sets: workoutInfo.value.sets,
         setTime: workoutInfo.value.setTime,
+        rpe: workoutInfo.value.rpe,
+        e1RM: calculatedE1RM.value,
         note: workoutInfo.value.note,
       }
     ]
@@ -180,6 +201,8 @@ async function updateRecord() {
         reps: workoutInfo.value.reps,
         sets: workoutInfo.value.sets,
         setTime: workoutInfo.value.setTime,
+        rpe: workoutInfo.value.rpe,
+        e1RM: calculatedE1RM.value,
         note: workoutInfo.value.note,
       }, workout.value.id
     ]
@@ -281,6 +304,20 @@ watch(
     });
   }
 )
+
+watch(
+  selectedRPE,
+  (newValue) => {
+    if (!newValue) {
+      return
+    }
+
+    setWorkoutInfo({
+      ...workoutInfo.value,
+      rpe: newValue,
+    });
+  }
+)
 </script>
 
 <template>
@@ -327,6 +364,12 @@ watch(
           v-model:text.number="workoutInfo!.setTime"
           :label="'Set time (m)'"
           :name="'Set time'"/>
+        <LabeledSelect
+          :name="'RPE'"
+          :label="'RPE (Rate of Perceived Exertion)'"
+          :value="selectedRPE"
+          :options="['10', '9', '8', '7', '6', '5', '4', '3', '2', '1']" 
+          @on-change-value="setSelectedRPE"/>
         <LabeledTextbox 
           v-model:text="workoutInfo!.note"
           :label="'Note'"

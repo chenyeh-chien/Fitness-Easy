@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, toRefs } from 'vue'
+import { ref, watch, onMounted, toRefs, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDatetimeStore } from '@/stores/common'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyWorkouts } from '@/composables/useDailyWorkouts'
 import { useIsLoading } from '@/composables/index'
+import DigitScroller from '../Utils/transitions/DigitScroller.vue'
 import TextTable from '../Utils/tables/TextTable.vue'
 import { formatMinutesStr } from '@/components/Utils/utilFunctions/index'
 
@@ -37,11 +38,17 @@ const LABELS = [{
   key: "growth",
   type: "progress"
 }, {
+  label: "E1RM",
+  key: "e1RM",
+}, {
   label: "Reps",
   key: "reps",
 }, {
   label: "Sets",
   key: "sets",
+}, {
+  label: "RPE",
+  key: "rpe",
 }, {
   label: "Set time (m)",
   key: "setTime",
@@ -57,6 +64,19 @@ const {
 const originalDailyWorkouts = ref<any[]>([]);
 const dailyWorkouts = ref<any[]>([]);
 const { isLoading, loadingEffect } = useIsLoading();
+const dailyWorkOutTotal = computed(() => {
+  return Math.round(dailyWorkouts.value.reduce((acc, workout) => {
+    if (
+      workout.weight !== undefined &&
+      workout.reps !== undefined &&
+      workout.sets !== undefined
+    ) {
+      return acc + workout.weight * workout.reps * workout.sets;
+    }
+
+    return acc;
+  }, 0));
+})
 
 onMounted(() => {
   loadingEffect(checkUserDailyWorkouts);
@@ -133,10 +153,22 @@ watch(
 </script>
 
 <template>
-  <TextTable 
-    :headers="LABELS"
-    :data="dailyWorkouts"
-    :clickable="editable"
-    :is-loading="isLoading"
-    @select-row="handleSelectRow"/>
+  <div class="flex flex-col gap-4">
+    <div>
+      <DigitScroller
+        :data="dailyWorkOutTotal"
+        :transitionDuration="2"
+        :size="'2xl'"
+        :font-weight="700"
+        :color="'var(--sidebar-link-color)'"
+        :show-unit="true"
+        :unit="'kg'"/>
+    </div>
+    <TextTable 
+      :headers="LABELS"
+      :data="dailyWorkouts"
+      :clickable="editable"
+      :is-loading="isLoading"
+      @select-row="handleSelectRow"/>
+  </div>
 </template>
