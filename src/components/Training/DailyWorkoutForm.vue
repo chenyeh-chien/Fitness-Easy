@@ -269,6 +269,7 @@ watch(
     if (action.value === 'update') {
       setSelectedBodyPart(newValue.bodyPart);
       setSelectedWorkout(newValue.exercise);
+      setSelectedRPE(newValue.rpe);
     }
   },
   { immediate: true, deep: true }
