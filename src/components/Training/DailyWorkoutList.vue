@@ -6,10 +6,12 @@ import { useAuth } from '@/composables/useAuth'
 import { useDailyWorkouts } from '@/composables/useDailyWorkouts'
 import { useIsLoading } from '@/composables/index'
 import DigitScroller from '../Utils/transitions/DigitScroller.vue'
+import VolumeLoadChart from '@/components/Training/VolumeLoadChart.vue'
 import TextTable from '../Utils/tables/TextTable.vue'
 import { formatMinutesStr } from '@/components/Utils/utilFunctions/index'
 
 interface Props {
+  displayChart?: boolean;
   editable?: boolean;
 }
 
@@ -18,9 +20,10 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  displayChart: true,
   editable: false
 });
-const { editable } = toRefs(props);
+const { displayChart, editable } = toRefs(props);
 const emits = defineEmits<Emits>();
 const { currTime } = storeToRefs(useDatetimeStore());
 
@@ -64,7 +67,7 @@ const {
 const originalDailyWorkouts = ref<any[]>([]);
 const dailyWorkouts = ref<any[]>([]);
 const { isLoading, loadingEffect } = useIsLoading();
-const dailyWorkOutTotal = computed(() => {
+const dailyVolumeLoad = computed(() => {
   return Math.round(dailyWorkouts.value.reduce((acc, workout) => {
     if (
       workout.weight !== undefined &&
@@ -153,10 +156,10 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-10">
     <div>
       <DigitScroller
-        :data="dailyWorkOutTotal"
+        :data="dailyVolumeLoad"
         :transitionDuration="2"
         :size="'2xl'"
         :font-weight="700"
@@ -164,11 +167,16 @@ watch(
         :show-unit="true"
         :unit="'kg'"/>
     </div>
-    <TextTable 
-      :headers="LABELS"
-      :data="dailyWorkouts"
-      :clickable="editable"
-      :is-loading="isLoading"
-      @select-row="handleSelectRow"/>
+    <div class="flex flex-col gap-10 md:flex-row">
+      <div v-if="displayChart">
+        <VolumeLoadChart />
+      </div>
+      <TextTable 
+        :headers="LABELS"
+        :data="dailyWorkouts"
+        :clickable="editable"
+        :is-loading="isLoading"
+        @select-row="handleSelectRow"/>
+    </div>
   </div>
 </template>

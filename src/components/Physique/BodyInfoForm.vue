@@ -90,16 +90,18 @@ async function addRecord() {
   }
 
   const isExecuted = await useSweetAlertAddRecord(
-    addBodyInfo,
+    [addBodyInfo],
     [
-      {
-        userId: user.value.uid,
-        firstName: bodyInfo.value.firstName,
-        lastName: bodyInfo.value.lastName,
-        birthDate: bodyInfo.value.birthDate,
-        gender: bodyInfo.value.gender,
-        height: bodyInfo.value.height,
-      }
+      [
+        {
+          userId: user.value.uid,
+          firstName: bodyInfo.value.firstName,
+          lastName: bodyInfo.value.lastName,
+          birthDate: bodyInfo.value.birthDate,
+          gender: bodyInfo.value.gender,
+          height: bodyInfo.value.height,
+        }
+      ]
     ]
   );
 
@@ -122,16 +124,18 @@ async function updateRecord() {
   }
 
   const isExecuted = await useSweetAlertUpdateRecord(
-    updateBodyInfo,
+    [updateBodyInfo],
     [
-      {
-        userId: user.value.uid,
-        firstName: bodyInfo.value.firstName,
-        lastName: bodyInfo.value.lastName,
-        birthDate: bodyInfo.value.birthDate,
-        gender: bodyInfo.value.gender,
-        height: bodyInfo.value.height,
-      }, info.value.id
+      [
+        {
+          userId: user.value.uid,
+          firstName: bodyInfo.value.firstName,
+          lastName: bodyInfo.value.lastName,
+          birthDate: bodyInfo.value.birthDate,
+          gender: bodyInfo.value.gender,
+          height: bodyInfo.value.height,
+        }, info.value.id
+      ]
     ]
   );
 
@@ -154,8 +158,10 @@ async function deleteRecord() {
   }
 
   const isExecuted = await useSweetAlertDeleteRecord(
-    deleteBodyInfo,
-    [info.value.id]
+    [deleteBodyInfo],
+    [
+      [info.value.id]
+    ]
   );
 
   if (!isExecuted) {

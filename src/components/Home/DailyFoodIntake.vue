@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { toRefs, ref, computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useDatetimeStore } from '@/stores/common'
+import { useDatetimeStore } from '@/stores'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyMeals } from '@/composables/useDailyMeals'
 import { useIsLoading } from '@/composables/index'

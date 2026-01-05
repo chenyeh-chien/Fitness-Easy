@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted, toRefs, nextTick } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useDatetimeStore } from '@/stores'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyWorkouts } from '@/composables/useDailyWorkouts'
 import { useExercises } from '@/composables/useExercises'
-import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelectorWithLabel.vue'
 import LabeledTextbox from '@/components/Utils/textboxes/LabeledTextbox.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
 import AddButton from '@/components/Utils/buttons/AddButton.vue'
@@ -52,6 +53,7 @@ const {
   deleteDailyWorkout 
 } = useDailyWorkouts();
 const { getExercises } = useExercises();
+const { currTime } = storeToRefs(useDatetimeStore());
 const workoutInfo = ref<Record<string, any> | null>(null)
 const workoutsInfo = ref<any[]>([])
 const selectedBodyPart = ref<string | null>(null);
@@ -105,10 +107,6 @@ async function setWorkoutOptions() {
   }
 }
 
-function changeDate(time: Date) {
-  workoutInfo.value!.date = formatDateStr(time, false);
-}
-
 function setWorkoutInfo(info: Record<string, any>) {
   workoutInfo.value = info;
 }
@@ -153,21 +151,23 @@ async function addRecord() {
   }
 
   const isExecuted = await useSweetAlertAddRecord(
-    addDailyWorkout,
+    [addDailyWorkout],
     [
-      {
-        userId: user.value.uid,
-        date: workoutInfo.value.date,
-        exercise: workoutInfo.value.exercise,
-        bodyPart: workoutInfo.value.bodyPart,
-        weight: workoutInfo.value.weight,
-        reps: workoutInfo.value.reps,
-        sets: workoutInfo.value.sets,
-        setTime: workoutInfo.value.setTime,
-        rpe: workoutInfo.value.rpe,
-        e1RM: calculatedE1RM.value,
-        note: workoutInfo.value.note,
-      }
+      [
+        {
+          userId: user.value.uid,
+          date: workoutInfo.value.date,
+          exercise: workoutInfo.value.exercise,
+          bodyPart: workoutInfo.value.bodyPart,
+          weight: workoutInfo.value.weight,
+          reps: workoutInfo.value.reps,
+          sets: workoutInfo.value.sets,
+          setTime: workoutInfo.value.setTime,
+          rpe: workoutInfo.value.rpe,
+          e1RM: calculatedE1RM.value,
+          note: workoutInfo.value.note,
+        }
+      ]
     ]
   );
 
@@ -190,21 +190,23 @@ async function updateRecord() {
   }
 
   const isExecuted = await useSweetAlertUpdateRecord(
-    updateDailyWorkout,
+    [updateDailyWorkout],
     [
-      {
-        userId: user.value.uid,
-        date: workoutInfo.value.date,
-        exercise: workoutInfo.value.exercise,
-        bodyPart: workoutInfo.value.bodyPart,
-        weight: workoutInfo.value.weight,
-        reps: workoutInfo.value.reps,
-        sets: workoutInfo.value.sets,
-        setTime: workoutInfo.value.setTime,
-        rpe: workoutInfo.value.rpe,
-        e1RM: calculatedE1RM.value,
-        note: workoutInfo.value.note,
-      }, workout.value.id
+      [
+        {
+          userId: user.value.uid,
+          date: workoutInfo.value.date,
+          exercise: workoutInfo.value.exercise,
+          bodyPart: workoutInfo.value.bodyPart,
+          weight: workoutInfo.value.weight,
+          reps: workoutInfo.value.reps,
+          sets: workoutInfo.value.sets,
+          setTime: workoutInfo.value.setTime,
+          rpe: workoutInfo.value.rpe,
+          e1RM: calculatedE1RM.value,
+          note: workoutInfo.value.note,
+        }, workout.value.id
+      ]
     ]
   );
 
@@ -227,8 +229,10 @@ async function deleteRecord() {
   }
 
   const isExecuted = await useSweetAlertDeleteRecord(
-    deleteDailyWorkout,
-    [workout.value.id]
+    [deleteDailyWorkout],
+    [
+      [workout.value.id]
+    ]
   );
 
   if (!isExecuted) {
@@ -252,7 +256,15 @@ watch(
       return;
     }
 
-    setWorkoutInfo(newValue);
+    let updatedData = newValue;
+    if (action.value === "add") {
+      updatedData = {
+        ...updatedData,
+        date: formatDateStr(currTime.value, false),
+      }
+    }
+
+    setWorkoutInfo(updatedData);
 
     if (action.value === 'update') {
       setSelectedBodyPart(newValue.bodyPart);
@@ -329,11 +341,6 @@ watch(
       class="flex flex-col gap-6"
       @submit.prevent="handleSubmitForm">
       <div class="flex flex-col gap-4 md:flex-row md:flex-wrap">
-        <DatetimeSelectorWithLabel 
-          :label="'Date'"
-          :time="new Date(workoutInfo!.date)"
-          :show-time="false"
-          @change-time="changeDate"/>
         <LabeledSelect
           v-if="selectedBodyPart !== null"
           :name="'Body part'"

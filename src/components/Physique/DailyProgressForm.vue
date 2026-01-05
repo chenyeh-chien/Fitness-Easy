@@ -83,13 +83,15 @@ async function addRecord() {
   }
 
   const isExecuted = await useSweetAlertAddRecord(
-    addDailyProgress,
+    [addDailyProgress],
     [
-      {
-        userId: user.value!.uid,
-        date: dailyProgress.value!.date,
-        weight: dailyProgress.value!.weight,
-      }
+      [
+        {
+          userId: user.value!.uid,
+          date: dailyProgress.value!.date,
+          weight: dailyProgress.value!.weight,
+        }
+      ]
     ]
   );
 
@@ -112,13 +114,15 @@ async function updateRecord() {
   }
 
   const isExecuted = await useSweetAlertUpdateRecord(
-    updateDailyProgress,
+    [updateDailyProgress],
     [
-      {
-        userId: user.value.uid,
-        date: dailyProgress.value.date,
-        weight: dailyProgress.value.weight,
-      }, progress.value.id
+      [
+        {
+          userId: user.value.uid,
+          date: dailyProgress.value.date,
+          weight: dailyProgress.value.weight,
+        }, progress.value.id
+      ]
     ]
   );
 
@@ -141,8 +145,10 @@ async function deleteRecord() {
   }
 
   const isExecuted = await useSweetAlertDeleteRecord(
-    deleteDailyProgress,
-    [dailyProgress.value.id]
+    [deleteDailyProgress],
+    [
+      [dailyProgress.value.id]
+    ]
   );
 
   if (!isExecuted) {

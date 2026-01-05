@@ -102,13 +102,15 @@ async function addRecord() {
   }
 
   const isExecuted = await useSweetAlertAddRecord(
-    addExercise,
+    [addExercise],
     [
-      {
-        userId: user.value.uid,
-        bodyPart: exerciseInfo.value.bodyPart,
-        exercise: exerciseInfo.value.exercise,
-      }
+      [
+        {
+          userId: user.value.uid,
+          bodyPart: exerciseInfo.value.bodyPart,
+          exercise: exerciseInfo.value.exercise,
+        }
+      ]
     ]
   );
 
@@ -131,13 +133,15 @@ async function updateRecord() {
   }
 
   const isExecuted = await useSweetAlertUpdateRecord(
-    updateExercise,
+    [updateExercise],
     [
-      {
-        userId: user.value.uid,
-        bodyPart: exerciseInfo.value.bodyPart,
-        exercise: exerciseInfo.value.exercise,
-      }, exercise.value.id
+      [
+        {
+          userId: user.value.uid,
+          bodyPart: exerciseInfo.value.bodyPart,
+          exercise: exerciseInfo.value.exercise,
+        }, exercise.value.id
+      ]
     ]
   );
 
@@ -160,8 +164,10 @@ async function deleteRecord() {
   }
 
   const isExecuted = await useSweetAlertDeleteRecord(
-    deleteExercise,
-    [exercise.value.id]
+    [deleteExercise],
+    [
+      [exercise.value.id]
+    ]
   );
 
   if (!isExecuted) {

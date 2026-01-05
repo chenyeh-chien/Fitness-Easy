@@ -99,3 +99,81 @@ export const syncLatestWeight = onDocumentWritten(
     });
   }
 );
+
+export const calculateVolumnLoad = onDocumentWritten(
+  "daily-workouts/{logId}",
+  async (event) => {
+    const targets = new Set<string>();
+    
+    // Check old data (for update/delete cases or date change)
+    if (event.data?.before.exists) {
+      const oldData = event.data.before.data();
+      if (oldData?.userId && oldData?.date) {
+        targets.add(`${oldData.userId}|${oldData.date}`);
+      }
+    }
+
+    // Check new data (for create/update cases)
+    if (event.data?.after.exists) {
+      const newData = event.data.after.data();
+      if (newData?.userId && newData?.date) {
+        targets.add(`${newData.userId}|${newData.date}`);
+      }
+    }
+
+    console.log('targets: ', targets);
+
+    // Process each affected (userId, date) pair
+    const promises = Array.from(targets).map(async (target) => {
+      const [userId, date] = target.split('|');
+
+      if (!userId || !date) return;
+
+      // 1. Calculate total volume for this user and date
+      const workoutsSnapshot = await db.collection("daily-workouts")
+        .where("userId", "==", userId)
+        .where("date", "==", date)
+        .get();
+
+      let totalVolume = 0;
+      workoutsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        const weight = Number(data.weight) || 0;
+        const sets = Number(data.sets) || 0;
+        const reps = Number(data.reps) || 0;
+        // Volume Load = Weight * Sets * Reps
+        totalVolume += weight * sets * reps;
+      });
+
+      console.log(`Calculated volume for ${userId} on ${date}: ${totalVolume}`);
+
+      // 2. Update daily-volume-load collection
+      const statsQuery = await db.collection("daily-volume-load")
+        .where("userId", "==", userId)
+        .where("date", "==", date)
+        .limit(1)
+        .get();
+
+      if (!statsQuery.empty) {
+        // Update existing document
+        const docId = statsQuery.docs[0].id;
+        await db.collection("daily-volume-load").doc(docId).update({
+          volumeLoad: totalVolume
+        });
+
+        console.log(`Updated daily-volume-load/${docId}`);
+      } else {
+        // Create new document
+        await db.collection("daily-volume-load").add({
+          userId,
+          date,
+          volumeLoad: totalVolume
+        });
+
+        console.log(`Created new daily-volume-load document for ${userId} on ${date}`);
+      }
+    });
+
+    await Promise.all(promises);
+  }
+);

@@ -132,21 +132,23 @@ async function addRecord() {
   }
 
   const isExecuted = await useSweetAlertAddRecord(
-    addDailyMeal,
+    [addDailyMeal],
     [
-      {
-        userId: user.value.uid,
-        time: mealInfo.value.time,
-        meal: mealInfo.value.meal,
-        protein: mealInfo.value.protein,
-        carbohydrate: mealInfo.value.carbohydrate,
-        fat: mealInfo.value.fat,
-        weight: mealInfo.value.weight,
-        quantity: mealInfo.value.quantity,
-        unitCost: mealInfo.value.unitCost,
-        totalCost: mealInfo.value.totalCost,
-        note: mealInfo.value.note,
-      }
+      [
+        {
+          userId: user.value.uid,
+          time: mealInfo.value.time,
+          meal: mealInfo.value.meal,
+          protein: mealInfo.value.protein,
+          carbohydrate: mealInfo.value.carbohydrate,
+          fat: mealInfo.value.fat,
+          weight: mealInfo.value.weight,
+          quantity: mealInfo.value.quantity,
+          unitCost: mealInfo.value.unitCost,
+          totalCost: mealInfo.value.totalCost,
+          note: mealInfo.value.note,
+        }
+      ]
     ]
   );
 
@@ -169,22 +171,24 @@ async function updateRecord() {
   }
 
   const isExecuted = await useSweetAlertUpdateRecord(
-    updateDailyMeal,
+    [updateDailyMeal],
     [
-      {
-        userId: user.value.uid,
-        time: mealInfo.value.time,
-        meal: mealInfo.value.meal,
-        protein: mealInfo.value.protein,
-        carbohydrate: mealInfo.value.carbohydrate,
-        fat: mealInfo.value.fat,
-        weight: mealInfo.value.weight,
-        quantity: mealInfo.value.quantity,
-        unitCost: mealInfo.value.unitCost,
-        totalCost: mealInfo.value.totalCost,
-        note: mealInfo.value.note,
-      }, 
-      meal.value.id
+      [
+        {
+          userId: user.value.uid,
+          time: mealInfo.value.time,
+          meal: mealInfo.value.meal,
+          protein: mealInfo.value.protein,
+          carbohydrate: mealInfo.value.carbohydrate,
+          fat: mealInfo.value.fat,
+          weight: mealInfo.value.weight,
+          quantity: mealInfo.value.quantity,
+          unitCost: mealInfo.value.unitCost,
+          totalCost: mealInfo.value.totalCost,
+          note: mealInfo.value.note,
+        }, 
+        meal.value.id
+      ]
     ]
   )
 
@@ -207,8 +211,10 @@ async function deleteRecord() {
   }
 
   const isExecuted = await useSweetAlertDeleteRecord(
-    deleteDailyMeal,
-    [meal.value.id]
+    [deleteDailyMeal],
+    [
+      [meal.value.id]
+    ]
   )
 
   if (!isExecuted) {

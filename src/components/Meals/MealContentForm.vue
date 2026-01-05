@@ -107,17 +107,19 @@ async function addRecord() {
   }
 
   const isExecuted = await useSweetAlertAddRecord(
-    addMealOption,
+    [addMealOption],
     [
-      {
-        userId: user.value.uid,
-        meal: mealInfo.value.meal,
-        protein: mealInfo.value.protein,
-        carbohydrate: mealInfo.value.carbohydrate,
-        fat: mealInfo.value.fat,
-        weight: mealInfo.value.weight,
-        unitCost: mealInfo.value.unitCost,
-      }
+      [
+        {
+          userId: user.value.uid,
+          meal: mealInfo.value.meal,
+          protein: mealInfo.value.protein,
+          carbohydrate: mealInfo.value.carbohydrate,
+          fat: mealInfo.value.fat,
+          weight: mealInfo.value.weight,
+          unitCost: mealInfo.value.unitCost,
+        }
+      ]
     ]
   )
 
@@ -140,17 +142,19 @@ async function updateRecord() {
   }
 
   const isExecuted = await useSweetAlertUpdateRecord(
-    updateMealOption,
+    [updateMealOption],
     [
-      {
-        userId: user.value.uid,
-        meal: mealInfo.value.meal,
-        protein: mealInfo.value.protein,
-        carbohydrate: mealInfo.value.carbohydrate,
-        fat: mealInfo.value.fat,
-        weight: mealInfo.value.weight,
-        unitCost: mealInfo.value.unitCost,
-      }, meal.value.id
+      [
+        {
+          userId: user.value.uid,
+          meal: mealInfo.value.meal,
+          protein: mealInfo.value.protein,
+          carbohydrate: mealInfo.value.carbohydrate,
+          fat: mealInfo.value.fat,
+          weight: mealInfo.value.weight,
+          unitCost: mealInfo.value.unitCost,
+        }, meal.value.id
+      ]
     ]
   )
 
@@ -173,8 +177,10 @@ async function deleteRecord() {
   }
   
   const isExecuted = await useSweetAlertDeleteRecord(
-    deleteMealOption,
-    meal.value.id
+    [deleteMealOption],
+    [
+      [meal.value.id]
+    ]
   )
 
   if (!isExecuted) {

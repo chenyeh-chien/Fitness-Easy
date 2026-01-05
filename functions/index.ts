@@ -1,7 +1,7 @@
 import { getTfdaFoodData } from "./src/api_search";
-//import { syncLatestWeight } from "./src/observers";
+import { calculateVolumnLoad } from "./src/observers";
 
 export {
   getTfdaFoodData,
-  //syncLatestWeight,
+  calculateVolumnLoad,
 };

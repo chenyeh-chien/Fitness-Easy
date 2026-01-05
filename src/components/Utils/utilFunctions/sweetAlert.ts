@@ -31,8 +31,8 @@ const DEFAULT_REPLY_CONFIG: SweetAlertOptions = {
 }
 
 export const useSweetAlert = async (
-  callback: (...args: any[]) => Promise<any>,
-  args: any[],
+  callbacks: ((...args: any[]) => Promise<any>)[],
+  args: any[][],
   checkConfig: SweetAlertOptions = {},
   replyConfig: SweetAlertOptions = {}
 ): Promise<boolean> => {
@@ -43,7 +43,17 @@ export const useSweetAlert = async (
   } as SweetAlertOptions);
   if (checkResult.isDismissed) return false;
 
-  await callback(...args);
+  for (let i = 0; i < callbacks.length; i++) {
+    if (!callbacks[i] || !args[i]) continue;
+
+    try {
+      await callbacks[i]!(...args[i]!);
+    } catch (e) {
+      console.error("Error in callback:", e);
+      return false;
+    }
+  }
+
   await Swal.fire({
     target: document.getElementById('drawer-content-area') || 'body',
     ...DEFAULT_REPLY_CONFIG,
@@ -54,8 +64,8 @@ export const useSweetAlert = async (
 }
 
 export const useSweetAlertAddRecord = async (
-  callback: (...args: any[]) => Promise<any>,
-  args: any[]
+  callbacks: ((...args: any[]) => Promise<any>)[],
+  args: any[][]
 ): Promise<boolean> => {
   const checkConfig: SweetAlertOptions = {
     width: 400,
@@ -68,7 +78,7 @@ export const useSweetAlertAddRecord = async (
   }
 
   return await useSweetAlert(
-    callback,
+    callbacks,
     args,
     checkConfig,
     replyConfig
@@ -76,8 +86,8 @@ export const useSweetAlertAddRecord = async (
 }
 
 export const useSweetAlertUpdateRecord = async (
-  callback: (...args: any[]) => Promise<any>,
-  args: any[]
+  callbacks: ((...args: any[]) => Promise<any>)[],
+  args: any[][],
 ): Promise<boolean> => {
   const checkConfig: SweetAlertOptions = {
     width: 400,
@@ -90,7 +100,7 @@ export const useSweetAlertUpdateRecord = async (
   }
 
   return await useSweetAlert(
-    callback,
+    callbacks,
     args,
     checkConfig,
     replyConfig
@@ -98,8 +108,8 @@ export const useSweetAlertUpdateRecord = async (
 }
 
 export const useSweetAlertDeleteRecord = async (
-  callback: (...args: any[]) => Promise<any>,
-  args: any[]
+  callbacks: ((...args: any[]) => Promise<any>)[],
+  args: any[][],  
 ): Promise<boolean> => {
   const checkConfig: SweetAlertOptions = {
     width: 400,
@@ -112,7 +122,7 @@ export const useSweetAlertDeleteRecord = async (
   }
 
   return await useSweetAlert(
-    callback,
+    callbacks,
     args,
     checkConfig,
     replyConfig

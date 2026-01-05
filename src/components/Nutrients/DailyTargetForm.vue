@@ -143,15 +143,17 @@ async function addRecord() {
   }
 
   const isExecuted = await useSweetAlertAddRecord(
-    addDailyTarget,
+    [addDailyTarget],
     [
-      {
-        userId: user.value.uid,
-        date: targetInfo.value.date,
-        protein: targetInfo.value.protein,
-        carbohydrate: targetInfo.value.carbohydrate,
-        fat: targetInfo.value.fat,
-      }
+      [
+        {
+          userId: user.value.uid,
+          date: targetInfo.value.date,
+          protein: targetInfo.value.protein,
+          carbohydrate: targetInfo.value.carbohydrate,
+          fat: targetInfo.value.fat,
+        }
+      ]
     ]
   );
 
@@ -174,16 +176,18 @@ async function updateRecord() {
   }
 
   const isExecuted = await useSweetAlertUpdateRecord(
-    updateDailyTarget,
+    [updateDailyTarget],
     [
-      {
-        userId: user.value.uid,
-        date: targetInfo.value.date,
-        protein: targetInfo.value.protein,
-        carbohydrate: targetInfo.value.carbohydrate,
-        fat: targetInfo.value.fat,
-      },
-      targetInfo.value.id
+      [
+        {
+          userId: user.value.uid,
+          date: targetInfo.value.date,
+          protein: targetInfo.value.protein,
+          carbohydrate: targetInfo.value.carbohydrate,
+          fat: targetInfo.value.fat,
+        },
+        targetInfo.value.id
+      ]
     ]
   );
 
@@ -206,8 +210,10 @@ async function deleteRecord() {
   }
 
   const isExecuted = await useSweetAlertDeleteRecord(
-    deleteDailyTarget,
-    [targetInfo.value.id]
+    [deleteDailyTarget],
+    [
+      [targetInfo.value.id]
+    ]
   );
 
   if (!isExecuted) {
