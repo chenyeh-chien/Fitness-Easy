@@ -303,28 +303,23 @@ watch(
           <LabeledTextbox 
             v-model:text.number="mealInfo.protein"
             :label="'Protein (g)'"
-            :name="'Protein'"
-            :readonly="true"/>
+            :name="'Protein'" />
           <LabeledTextbox 
             v-model:text.number="mealInfo.carbohydrate"
             :label="'Carbohydrate (g)'"
-            :name="'Carbohydrate'"
-            :readonly="true"/>
+            :name="'Carbohydrate'"/>
           <LabeledTextbox 
             v-model:text.number="mealInfo.fat"
             :label="'Fat (g)'"
-            :name="'Fat'"
-            :readonly="true"/>
+            :name="'Fat'"/>
           <LabeledTextbox 
             v-model:text.number="mealInfo.weight"
             :label="'Weight (g)'"
-            :name="'Weight'"
-            :readonly="true"/>
+            :name="'Weight'"/>
           <LabeledTextbox 
             v-model:text.number="mealInfo.unitCost"
             :label="'Unit Cost (NTD)'"
-            :name="'Unit Cost'"
-            :readonly="true"/>
+            :name="'Unit Cost'"/>
         </template>
         <LabeledTextbox 
           v-model:text.number="mealInfo!.quantity"

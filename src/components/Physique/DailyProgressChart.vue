@@ -41,7 +41,6 @@ const chartData = computed(() => {
         backgroundColor: '#FF0000',
         barThickness: 2,
       }]"
-      :round-to="1" 
-      :display-legend="false"/>
+      :round-to="1"/>
   </div>
 </template>

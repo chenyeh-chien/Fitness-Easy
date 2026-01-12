@@ -40,7 +40,7 @@ onUnmounted(() => {
         :class="clsx(
           'flex flex-col rounded-t-[20px]',
           'bg-(--drawer-bg) text-(--drawer-color)',
-          'max-h-[90%] min-h-[50%] mt-24 fixed bottom-0 left-0 right-0 z-50 outline-none'
+          'h-[90%] mt-24 fixed bottom-0 left-0 right-0 z-50 outline-none'
         )">
         <div 
           class="mx-auto w-12 h-1.5 shrink-0 rounded-full bg-zinc-300 my-4">
