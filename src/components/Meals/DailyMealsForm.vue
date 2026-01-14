@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted, toRefs } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useDatetimeStore } from '@/stores/common'
 import { useAuth } from '@/composables/useAuth'
 import { useDailyMeals } from '@/composables/useDailyMeals'
 import { useMealOptions } from '@/composables/useMealOptions'
 import CommonDrawer from '@/components/Utils/drawer/CommonDrawer.vue'
-import DatetimeSelectorWithLabel from '@/components/Utils/dates/DatetimeSelectorWithLabel.vue'
 import LabeledSearchBoxWithResult from '@/components/Utils/textboxes/LabeledSearchBoxWithResult.vue'
 import LabeledTextbox from '@/components/Utils/textboxes/LabeledTextbox.vue'
 import RightAlignContainer from '@/components/Utils/containers/RightAlignContainer.vue'
@@ -17,6 +18,7 @@ import {
   useSweetAlertDeleteRecord
 } from '@/components/Utils/utilFunctions/index'
 import { roundTo2 } from '@/components/Utils/utilFunctions/index'
+
 
 interface Props {
   open: boolean;
@@ -45,6 +47,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const { open, action, meal } = toRefs(props);
 const emits = defineEmits<Emits>();
+const { currTime } = storeToRefs(useDatetimeStore());
 const { user, isAuthReady } = useAuth();
 const { 
   addDailyMeal, 
@@ -55,6 +58,7 @@ const { getMealOptions } = useMealOptions();
 const mealInfo = ref<Record<string, any> | null>(null)
 const mealsInfo = ref<any[]>([])
 const selectedMeal = ref<string | null>(null);
+
 
 const formTitle = computed(() => {
   return action.value === "add" ? "Add daily meal" : "Update daily meal";
@@ -73,8 +77,16 @@ const calculatedCost = computed(() => {
 })
 
 onMounted(() => {
+  if (action.value === "add") {
+    setDefaultTime();
+  }
+
   setMealOptions();
 })
+
+function setDefaultTime() {
+  mealInfo.value!.time = currTime.value.getTime();
+}
 
 async function setMealOptions() {
   if (user.value === null) {
@@ -90,10 +102,6 @@ async function setMealOptions() {
   } catch (error) {
     console.error("Error querying daily meals:", error);
   }
-}
-
-function changeTime(time: Date) {
-  mealInfo.value!.time = time.getTime();
 }
 
 function setMealInfo(info: Record<string, any>) {
@@ -283,10 +291,6 @@ watch(
       class="flex flex-col gap-6"
       @submit.prevent="handleSubmitForm">
       <div class="flex flex-col gap-4 md:flex-row md:flex-wrap">
-        <DatetimeSelectorWithLabel 
-          :label="'Time'"
-          :time="new Date(mealInfo!.time)"
-          @change-time="changeTime"/>
         <LabeledSearchBoxWithResult
           v-if="action === 'add'" 
           v-model:text="mealInfo!.meal"
