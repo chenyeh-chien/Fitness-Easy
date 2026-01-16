@@ -1,12 +1,18 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import { RouterView } from "vue-router"
 import { clsx } from "clsx"
 import NavbarMain from "./components/Navbar/NavbarMain.vue"
 import SidebarMain from "./components/Sidebar/SidebarMain.vue"
+import { useDatetimeStore } from '@/stores';
 
-
+const datetimeStore = useDatetimeStore();
 // dark mode
 document.documentElement.className = "dark";
+
+onMounted(() => {
+  datetimeStore.init();
+});
 </script>
 
 <template>
